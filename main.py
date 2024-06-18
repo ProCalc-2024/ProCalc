@@ -1,20 +1,51 @@
-import streamlit as st
+import streamlit as st 
+import database 
 
-color = st.color_picker('Pick A Color', '#00f900')
-st.write('The current color is', color)
+with open("styles.css") as f:
+    st.markdown(f"<style>{f.read()}</style>", unsafe_allow_html = True)
 
-page_bg_img = f"""
-<style>
-[data-testid="stAppViewContainer"] > .main {{
-background-image: url("https://img.hotimg.com/imgec6c25bbde259922.png");
-background-size: cover;
-}}
+def Tela_login():
+    
+    col1, col2, col3 = st.columns([1, 4, 1])
+    
+    with col2:
+        with st.form("lo1"):
+            
+            st.title("ProCalc")
+        
+            email = st.text_input("Email", placeholder= "digite aqui seu Email")
+            senha = st.text_input("Senha", placeholder= "digite aqui sua Senha", type="password")
+            
+            st.write("")
 
-[data-testid="stHeader"] {{
-background-color: rgba(0,0,0,0);
-}}</style>
-"""
+            buton_login = st.form_submit_button("Logar", type="primary")
 
-st.sidebar.success("escolha uma das opções!")
-st.write(r"""Resolva a expressão $$ a + ar + a r^2 + a r^3 + \cdots + a r^{n-1} = \sum_{k=0}^{n-1} ar^k = a \left(\frac{1-r^{n}}{1-r}\right) $$ abaixo com o devido cuidado par simplificar utilizando os metodos adequados de agrupamento das expressões""")
-st.latex(r''' a + ar + a r^2 + a r^3 + \cdots + a r^{n-1} = \sum_{k=0}^{n-1} ar^k = a \left(\frac{1-r^{n}}{1-r}\right) ''')
+            if buton_login:
+                database.read_user(email, senha)
+            
+            buton_cadastrar = st.form_submit_button("Cadastrar", type="primary")
+            
+            st.write(buton_cadastrar)
+
+            return buton_cadastrar
+
+            
+
+
+def Tela_cadastro():
+    
+    col1, col2, col3 = st.columns([1, 4, 1])
+    
+    with col2:
+        with st.form("lo2"):
+           
+            st.title("Registro")
+        
+            usuario = st.text_input("Nome", placeholder= "digite aqui seu Nome")
+            email = st.text_input("Email", placeholder= "digite aqui seu Email")
+            senha = st.text_input("Senha", placeholder= "digite aqui sua Senha", type="password")
+
+            buton_cadastrar = st.form_submit_button("Cadastrar")
+
+            if buton_cadastrar:
+                database.create_login(usuario, email, senha)
