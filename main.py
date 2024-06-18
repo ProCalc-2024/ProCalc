@@ -1,51 +1,35 @@
 import streamlit as st 
-import database 
+import login
+from streamlit_option_menu import option_menu
+import streamlit as st
+import streamlit_authenticator as stauth
+import time
 
-with open("styles.css") as f:
-    st.markdown(f"<style>{f.read()}</style>", unsafe_allow_html = True)
+import streamlit as st
 
-def Tela_login():
-    
-    col1, col2, col3 = st.columns([1, 4, 1])
-    
-    with col2:
-        with st.form("lo1"):
-            
-            st.title("ProCalc")
-        
-            email = st.text_input("Email", placeholder= "digite aqui seu Email")
-            senha = st.text_input("Senha", placeholder= "digite aqui sua Senha", type="password")
-            
-            st.write("")
+# Funções para cada página
+def pagina_inicial():
+    st.title("Página Inicial")
+    st.write("Bem-vindo à Página Inicial!")
 
-            buton_login = st.form_submit_button("Logar", type="primary")
+def pagina_sobre():
+    st.title("Sobre")
+    st.write("Esta é a página Sobre.")
 
-            if buton_login:
-                database.read_user(email, senha)
-            
-            buton_cadastrar = st.form_submit_button("Cadastrar", type="primary")
-            
-            st.write(buton_cadastrar)
+def pagina_contato():
+    st.title("Contato")
+    st.write("Esta é a página de Contato.")
 
-            return buton_cadastrar
+# Criar menu de navegação
+paginas = {
+    "Página Inicial": pagina_inicial,
+    "Sobre": pagina_sobre,
+    "Contato": pagina_contato
+}
 
-            
+# Adicionar um seletor para o menu de navegação
+escolha = st.sidebar.selectbox("Navegação", list(paginas.keys()))
 
+# Executar a função da página selecionada
+paginas[escolha]()
 
-def Tela_cadastro():
-    
-    col1, col2, col3 = st.columns([1, 4, 1])
-    
-    with col2:
-        with st.form("lo2"):
-           
-            st.title("Registro")
-        
-            usuario = st.text_input("Nome", placeholder= "digite aqui seu Nome")
-            email = st.text_input("Email", placeholder= "digite aqui seu Email")
-            senha = st.text_input("Senha", placeholder= "digite aqui sua Senha", type="password")
-
-            buton_cadastrar = st.form_submit_button("Cadastrar")
-
-            if buton_cadastrar:
-                database.create_login(usuario, email, senha)

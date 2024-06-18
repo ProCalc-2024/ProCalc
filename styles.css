@@ -1,0 +1,63 @@
+
+/* cores dos botões sem clicar */
+.stButton > button{
+    color: rgb(255, 255, 255);
+    background-color: rgb(0, 0, 0);
+    font-size: 20px;
+    height: 60px;
+    width: 100%;
+    border-color: rgb(255, 255, 255);
+}
+/* cores dos botões com o mouse em cima */
+.stButton > button:hover{
+    color: rgb(255, 255, 255);
+    background-color: rgb(87, 87, 87);
+    font-size: 20px;
+    height: 60px;
+    width: 100%;
+    border-color: rgb(87, 87, 87);
+}
+/* cores dos botões ao clicar */
+.stButton > button:active{
+    color: rgb(255, 255, 255);
+    background-color: rgb(0, 0, 0);
+    font-size: 20px;
+    height: 60px;
+    width: 100%;
+    border-color: rgb(255, 255, 255);
+}
+
+/* cores dos botões se type = "secondary" */
+.st-emotion-cache-19rxjzo:focus:not(:active) {
+    border-color: rgb(87, 87, 87);
+    color: rgb(255, 255, 255);
+    background-color: rgb(87, 87, 87);
+}
+.st-emotion-cache-1x5kdwo:focus:not(:active) {
+    border-color: rgb(87, 87, 87);
+    color: rgb(255, 255, 255);
+    background-color: rgb(87, 87, 87);
+}
+
+/* altura do input na tela de login */
+.st-bu {
+    height: 60px;
+}
+/* tamanho da font do input na tela de login */
+.st-ay {
+    font-size: 20px;
+}
+/* tamanho da distancia entre a borda e o texto do input na tela de login */
+.st-bs {
+    padding-left: 20px;
+}
+
+.stMarkdown{
+    text-align: center;
+}
+
+.st-by {
+    position: unset;
+    line-height: 50%;
+    height: 60px;
+}

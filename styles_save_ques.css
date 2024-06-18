@@ -1,0 +1,65 @@
+
+/* cores dos botões sem clicar */
+.stButton > button{
+    color: rgb(255, 255, 255);
+    background-color: rgb(0, 0, 0);
+    font-size: 20px;
+    height: 60px;
+    width: 100%;
+    border-color: rgb(255, 255, 255);
+}
+/* cores dos botões com o mouse em cima */
+.stButton > button:hover{
+    color: rgb(255, 255, 255);
+    background-color: rgb(87, 87, 87);
+    font-size: 20px;
+    height: 60px;
+    width: 100%;
+    border-color: rgb(87, 87, 87);
+}
+/* cores dos botões ao clicar */
+.stButton > button:active{
+    color: rgb(255, 255, 255);
+    background-color: rgb(0, 0, 0);
+    font-size: 20px;
+    height: 60px;
+    width: 100%;
+    border-color: rgb(255, 255, 255);
+}
+
+/* cores dos botões se type = "secondary" */
+.st-emotion-cache-19rxjzo:focus:not(:active) {
+    border-color: rgb(87, 87, 87);
+    color: rgb(255, 255, 255);
+    background-color: rgb(87, 87, 87);
+}
+.st-emotion-cache-1x5kdwo:focus:not(:active) {
+    border-color: rgb(87, 87, 87);
+    color: rgb(255, 255, 255);
+    background-color: rgb(87, 87, 87);
+}
+
+.row-widget.stButton{
+
+    text-align: center;
+}
+
+/* tamanho dos inputs e selectbox */
+
+.st-at.st-au.st-av.st-aw.st-ae.st-ag.st-ah.st-af.st-c2.st-bo.st-c3.st-c4.st-c5.st-c6.st-am.st-an.st-ao.st-ap.st-c7.st-ar.st-as.st-bb.st-ax.st-ay.st-az.st-b0.st-b1 {
+    height: 45px;
+}
+
+.st-ci {
+    align-content: center;
+}
+
+.st-bu {
+    line-height: 45px;
+}
+
+/* centtraliza o texto superior */
+
+.stMarkdown{
+    text-align: center;
+}
