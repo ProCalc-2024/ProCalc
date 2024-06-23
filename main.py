@@ -1,5 +1,5 @@
 import streamlit as st 
-import login
+from pages import login
 from streamlit_option_menu import option_menu
 import streamlit as st
 import streamlit_authenticator as stauth
