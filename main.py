@@ -40,3 +40,4 @@ def Tela_cadastro():
 
             buton_cadastrar = st.form_submit_button("Cadastrar")
 
+Tela_login()
