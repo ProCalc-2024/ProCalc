@@ -1,5 +1,8 @@
 import streamlit as st 
 
+with open("styles.css") as f:
+    st.markdown(f"<style>{f.read()}</style>", unsafe_allow_html = True)
+
 def Tela_login():
 
     col1, col2, col3 = st.columns([1, 4, 1])
@@ -39,5 +42,4 @@ def Tela_cadastro():
             senha = st.text_input("Senha", placeholder= "digite aqui sua Senha", type="password")
 
             buton_cadastrar = st.form_submit_button("Cadastrar")
-
 Tela_login()
