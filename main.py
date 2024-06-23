@@ -1,11 +1,8 @@
 import streamlit as st 
-from pages import login
+import login
 from streamlit_option_menu import option_menu
-import streamlit as st
 import streamlit_authenticator as stauth
 import time
-
-import streamlit as st
 
 # Funções para cada página
 def pagina_inicial():
