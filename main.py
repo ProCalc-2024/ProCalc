@@ -1,6 +1,5 @@
 import streamlit as st
 import streamlit_authenticator as stauth
-from dependancies import sign_up, fetch_users
 import yaml
 from yaml.loader import SafeLoader
 from streamlit_option_menu import option_menu
