@@ -1,46 +1,66 @@
 import streamlit as st
-import login
+import streamlit_authenticator as stauth
+from dependancies import sign_up, fetch_users
+import yaml
+from yaml.loader import SafeLoader
+from streamlit_option_menu import option_menu
 
-with open("styles.css") as f:
-    st.markdown(f"<style>{f.read()}</style>", unsafe_allow_html = True)
+def local_css(file_name):
+        with open(file_name) as f:
+            st.markdown(f"<style>{f.read()}</style>", unsafe_allow_html=True)
+            
+local_css(r"styles.css")
 
-def Tela_login():
+with open('config.yaml') as file:
+    config = yaml.load(file, Loader=SafeLoader)
 
-    col1, col2, col3 = st.columns([1, 4, 1])
+col1, col2, col3, col4 = st.columns([1, 1, 1, 1])
 
-    with col2:
-        with st.form("lo1"):
+authenticator = stauth.Authenticate(
+    config['credentials'],
+    config['cookie']['name'],
+    config['cookie']['key'],
+    config['cookie']['expiry_days'],
+    config['pre-authorized']
+)
 
-            st.title("ProCalc")
+authenticator.login()
 
-            email = st.text_input("Email", placeholder= "digite aqui seu Email")
-            senha = st.text_input("Senha", placeholder= "digite aqui sua Senha", type="password")
+if st.session_state["authentication_status"]:
+    
+    # CSS menu 
+    selected3 = option_menu(None, ["Home", "Save",  "Questions", "Settings"], 
+        icons=['house', 'cloud-upload', "list-task", 'gear'], 
+        menu_icon="cast", default_index=0, orientation="horizontal",
+        styles={
+            "icon": {"color": "orange", "font-size": "25px"}, 
+            "nav-link": {"margin":"0px", "--hover-color": "#868686"},
+            "nav-link-selected": {"background-color": "black"},
+        }
+    )
+    if selected3 == "Settings":
+        
+        authenticator.logout()
 
-            st.write("")
+elif st.session_state["authentication_status"] is False:
+    st.error('O nome de usuário/senha está incorreto')
+elif st.session_state["authentication_status"] is None:
+    st.warning('Por favor insira seu nome de usuário e senha')
 
-            buton_login = st.form_submit_button("Logar", type="primary")
+def new_senha():
+    try:
+        if authenticator.reset_password(st.session_state["username"]):
+            st.success('Senha modificada com sucesso')
+    except Exception as e:
+        st.error(e)
 
-            buton_cadastrar = st.form_submit_button("Cadastrar", type="primary")
+def register_user():
+    try:
+        email_of_registered_user, username_of_registered_user, name_of_registered_user = authenticator.register_user(pre_authorization=False)
+        if email_of_registered_user:
+            st.success('Usuário cadastrado com sucesso')
+    except Exception as e:
+        st.error(e)
 
-            st.write(buton_cadastrar)
-
-            return buton_cadastrar
-
-
-
-
-def Tela_cadastro():
-
-    col1, col2, col3 = st.columns([1, 4, 1])
-
-    with col2:
-        with st.form("lo2"):
-
-            st.title("Registro")
-
-            usuario = st.text_input("Nome", placeholder= "digite aqui seu Nome")
-            email = st.text_input("Email", placeholder= "digite aqui seu Email")
-            senha = st.text_input("Senha", placeholder= "digite aqui sua Senha", type="password")
-
-            buton_cadastrar = st.form_submit_button("Cadastrar")
-Tela_login()
+with open('config.yaml', 'w') as file:
+    yaml.dump(config, file, default_flow_style=False)
