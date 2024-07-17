@@ -26,6 +26,16 @@ authenticator = stauth.Authenticate(
 authenticator.login()
 
 if st.session_state["authentication_status"]:
+    
+    selected3 = option_menu(None, ["Home", "Save",  "Questions", 'Settings'], 
+    icons=['house', 'cloud-upload', "list-task", 'gear'], 
+    menu_icon="cast", default_index=0, orientation="horizontal",
+    styles={
+        "icon": {"color": "orange", "font-size": "25px"}, 
+        "nav-link": {"margin":"0px", "--hover-color": "#868686"},
+        "nav-link-selected": {"background-color": "black"},
+    }
+    )
     authenticator.logout()
 
 elif st.session_state["authentication_status"] is False:
