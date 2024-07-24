@@ -51,3 +51,10 @@
 .stMarkdown{
     text-align: center;
 }
+.st-by {
+    position: unset;
+    line-height: 50%; 
+}
+.st-dd {
+    margin-bottom: 60px;
+}
