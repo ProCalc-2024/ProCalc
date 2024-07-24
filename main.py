@@ -27,16 +27,14 @@ authenticator.login()
 
 if st.session_state["authentication_status"]:
     
-    selected3 = option_menu(None, ["Home", "Save",  "Questions", 'Settings'], 
-    icons=['house', 'cloud-upload', "list-task", 'gear'], 
-    menu_icon="cast", default_index=0, orientation="horizontal",
-    styles={
-        "icon": {"color": "orange", "font-size": "25px"}, 
-        "nav-link": {"margin":"0px", "--hover-color": "#868686"},
-        "nav-link-selected": {"background-color": "black"},
-    }
-    )
-    authenticator.logout()
+    tab1, tab2, tab3, tab4 = st.tabs([" Home", "Save", "Questions", "Settings"])
+
+    with tab2:
+        save_questoes.inserir_assun()
+        save_questoes.inserir_ques()
+
+    with tab4:
+        authenticator.logout()
 
 elif st.session_state["authentication_status"] is False:
     st.error('O nome de usuário/senha está incorreto')
