@@ -68,7 +68,7 @@ def inserir_assun():
 
     result.update(config['questoes']['assuntos'])
 
-    config['questoes']['assuntos'] = { st.text_area("assunto", placeholder= "digite aqui o enunciado da questão") : 
+    config['questoes']['assuntos'] = { st.text_area("assunto", placeholder= "digite aqui o assunto") : 
                                                 {1 : 
                                                 {'enunciado':"", 
                                                     'alternativa_a':"", 
