@@ -34,6 +34,9 @@ if st.session_state["authentication_status"]:
         save_questoes.inserir_assun()
         save_questoes.inserir_ques()
 
+    with tab3:
+        questoes.read_questao()
+ 
     with tab4:
         authenticator.logout()
 
