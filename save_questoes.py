@@ -34,12 +34,12 @@ def inserir_ques():
 
     result.update(config['questoes']['assuntos'][materia])
 
-    config['questoes']['assuntos'][materia] = { n + 1 : {'enunciado':st.text_area("Enunciado", placeholder= "digite aqui o enunciado da questão"), 
-                                                    'alternativa_a':st.text_input("Resposta1", placeholder= "digite aqui a resposta correta"), 
-                                                    'alternativa_b':st.text_input("Resposta2", placeholder= "digite aqui a resposta2"), 
-                                                    'alternativa_c':st.text_input("Resposta3", placeholder= "digite aqui a resposta3"), 
-                                                    'alternativa_d':st.text_input("Resposta4", placeholder= "digite aqui a resposta4"), 
-                                                    'alternativa_e':st.text_input("Resposta5", placeholder= "digite aqui a resposta5")
+    config['questoes']['assuntos'][materia] = { n + 1 : {'enunciado':st.text_area("Enunciado", placeholder= "enunciado da questão"), 
+                                                    'alternativa_a':st.text_input("Resposta1", placeholder= "resposta correta"), 
+                                                    'alternativa_b':st.text_input("Resposta2", placeholder= "resposta2"), 
+                                                    'alternativa_c':st.text_input("Resposta3", placeholder= "resposta3"), 
+                                                    'alternativa_d':st.text_input("Resposta4", placeholder= "resposta4"), 
+                                                    'alternativa_e':st.text_input("Resposta5", placeholder= "resposta5")
                                                     }
                                                 }
 
