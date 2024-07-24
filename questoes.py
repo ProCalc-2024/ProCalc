@@ -23,7 +23,7 @@ def read_questao():
     lista = [ linha for linha in config['questoes']['assuntos'] ]
 
     with col2:    
-        materia = st.selectbox("selecione uma materia",lista)    
+        materia = st.selectbox("selecione um assunto",lista)    
     
     with col1:
         st.title("Perguntas")
