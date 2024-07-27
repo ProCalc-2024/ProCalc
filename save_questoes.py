@@ -1,8 +1,19 @@
 import streamlit as st
-import streamlit_authenticator as stauth
 import yaml
 from yaml.loader import SafeLoader
 import numpy as np
+from github import Github
+
+GITHUB_TOKEN = "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"
+REPO_NAME = "ProCalc-2024/ProCalc"
+ARQUIVO_PATH = "questoes.yaml"
+COMMIT_MESSAGE = "Atualização via Streamlit"
+
+def atualizar_repositorio(conteudo_novo):
+    g = Github(GITHUB_TOKEN)
+    repo = g.get_repo(REPO_NAME)
+    arquivo = repo.get_contents(ARQUIVO_PATH)
+    repo.update_file(ARQUIVO_PATH, COMMIT_MESSAGE, conteudo_novo, arquivo.sha)
 
 def local_css(file_name):
         with open(file_name) as f:
@@ -34,12 +45,12 @@ def inserir_ques():
 
     result.update(config['questoes']['assuntos'][materia])
 
-    config['questoes']['assuntos'][materia] = { n + 1 : {'enunciado':st.text_area("Enunciado", placeholder= "enunciado da questão"), 
-                                                    'alternativa_a':st.text_input("Resposta1", placeholder= "resposta correta"), 
-                                                    'alternativa_b':st.text_input("Resposta2", placeholder= "resposta2"), 
-                                                    'alternativa_c':st.text_input("Resposta3", placeholder= "resposta3"), 
-                                                    'alternativa_d':st.text_input("Resposta4", placeholder= "resposta4"), 
-                                                    'alternativa_e':st.text_input("Resposta5", placeholder= "resposta5")
+    config['questoes']['assuntos'][materia] = { n + 1 : {'enunciado':st.text_area("Enunciado", placeholder= "digite aqui o enunciado da questão"), 
+                                                    'alternativa_a':st.text_input("Resposta1", placeholder= "digite aqui a resposta correta"), 
+                                                    'alternativa_b':st.text_input("Resposta2", placeholder= "digite aqui a resposta2"), 
+                                                    'alternativa_c':st.text_input("Resposta3", placeholder= "digite aqui a resposta3"), 
+                                                    'alternativa_d':st.text_input("Resposta4", placeholder= "digite aqui a resposta4"), 
+                                                    'alternativa_e':st.text_input("Resposta5", placeholder= "digite aqui a resposta5")
                                                     }
                                                 }
 
@@ -48,11 +59,15 @@ def inserir_ques():
     result.update(questao)
 
     if st.button("Salvar"):
-
+        
         config['questoes']['assuntos'][materia] = result
 
         with open('questoes.yaml', 'w') as file:
             yaml.dump(config, file)
+
+        yaml_string = yaml.dump(config)
+
+        atualizar_repositorio(yaml_string)
 
         st.write(config['questoes']['assuntos'])
 
@@ -68,7 +83,7 @@ def inserir_assun():
 
     result.update(config['questoes']['assuntos'])
 
-    config['questoes']['assuntos'] = { st.text_area("assunto", placeholder= "digite aqui o assunto") : 
+    config['questoes']['assuntos'] = { st.text_area("assunto", placeholder= "digite aqui o enunciado da questão") : 
                                                 {1 : 
                                                 {'enunciado':"", 
                                                     'alternativa_a':"", 
@@ -90,5 +105,9 @@ def inserir_assun():
 
         with open('questoes.yaml', 'w') as file:
             yaml.dump(config, file)
+
+        yaml_string = yaml.dump(config)
+
+        atualizar_repositorio(yaml_string)
 
         st.write(config['questoes']['assuntos'])         
