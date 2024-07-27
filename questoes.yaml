@@ -28,6 +28,13 @@ questoes:
         alternativa_d: ''
         alternativa_e: ''
         enunciado: ''
+      4:
+        alternativa_a: e
+        alternativa_b: r
+        alternativa_c: t
+        alternativa_d: e
+        alternativa_e: i
+        enunciado: w
     "divis\xE3o":
       1:
         alternativa_a: ''
