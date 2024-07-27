@@ -21,27 +21,6 @@ questoes:
         alternativa_d: '4'
         alternativa_e: '5'
         enunciado: q
-      3:
-        alternativa_a: a
-        alternativa_b: e
-        alternativa_c: i
-        alternativa_d: o
-        alternativa_e: u
-        enunciado: \log
-      4:
-        alternativa_a: ol
-        alternativa_b: ko
-        alternativa_c: uh
-        alternativa_d: yt
-        alternativa_e: w
-        enunciado: bol
-      5:
-        alternativa_a: ol
-        alternativa_b: ko
-        alternativa_c: uh
-        alternativa_d: yt
-        alternativa_e: w
-        enunciado: bol
     "divis\xE3o":
       1:
         alternativa_a: ''
