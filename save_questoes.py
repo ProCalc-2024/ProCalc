@@ -4,7 +4,7 @@ from yaml.loader import SafeLoader
 import numpy as np
 from github import Github
 
-GITHUB_TOKEN = "120"
+GITHUB_TOKEN = "2120"
 REPO_NAME = "ProCalc-2024/ProCalc"
 ARQUIVO_PATH = "questoes.yaml"
 COMMIT_MESSAGE = "Atualização via Streamlit"
