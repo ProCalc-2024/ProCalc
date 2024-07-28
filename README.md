@@ -1,4 +1,4 @@
-# ProCalc
+# ProCalc 2024
 
 Este projeto visa o desenvolvimento de um aplicativo voltado para os alunos da rede básica de ensino, de todos os níveis, especialmente
 concluintes do ensino médio, cujo enfoque seja a aprendizagem de matemática básica para o ensino superior, por vezes, denotada de pré-cálculo.
