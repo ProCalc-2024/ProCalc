@@ -21,6 +21,13 @@ questoes:
         alternativa_d: '4'
         alternativa_e: '5'
         enunciado: c
+      3:
+        alternativa_a: ''
+        alternativa_b: ''
+        alternativa_c: ''
+        alternativa_d: ''
+        alternativa_e: '1151515'
+        enunciado: ''
     "divis\xE3o":
       1:
         alternativa_a: ''
