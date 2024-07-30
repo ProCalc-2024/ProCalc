@@ -5,8 +5,6 @@ from yaml.loader import SafeLoader
 from streamlit_option_menu import option_menu
 import save_questoes
 import questoes
-import secrets
-st.write(secrets.token)
 
 def local_css(file_name):
         with open(file_name) as f:
