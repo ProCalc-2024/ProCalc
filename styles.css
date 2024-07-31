@@ -41,7 +41,7 @@
 
 /* altura do input na tela de login */
 .st-bu {
-   
+   height: 60px;
 }
 /* tamanho da font do input na tela de login */
 .st-ay {
@@ -54,8 +54,4 @@
 
 .stMarkdown{
     text-align: center;
-}
-
-.st-by {
-    
 }
