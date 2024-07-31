@@ -15,12 +15,6 @@ def atualizar_repositorio(conteudo_novo):
     arquivo = repo.get_contents(ARQUIVO_PATH)
     repo.update_file(ARQUIVO_PATH, COMMIT_MESSAGE, conteudo_novo, arquivo.sha)
 
-def local_css(file_name):
-        with open(file_name) as f:
-            st.markdown(f"<style>{f.read()}</style>", unsafe_allow_html=True)
-            
-local_css(r"styles.css")
-
 def inserir_ques():    
     
     with open('questoes.yaml') as file:
