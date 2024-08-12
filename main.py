@@ -15,7 +15,7 @@ local_css(r"styles.css")
 with open('config.yaml') as file:
     config = yaml.load(file, Loader=SafeLoader)
 
-with open('senha.yml') as fil:
+with open('.github/workflows/senha.yml') as fil:
     con = yaml.load(fil, Loader=SafeLoader)
 
 st.write(con)
