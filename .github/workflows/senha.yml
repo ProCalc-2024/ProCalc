@@ -1,4 +1,26 @@
 name: Deploy Application
 
+# Define em que eventos o workflow será acionado (ex: push para a branch main)
+on:
+  push:
+    branches:
+      - main
 
-MY_SECRET_PASSWORD: ${{ secrets.MY_SECRET_PASSWORD }}
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Check out the repository
+      uses: actions/checkout@v2
+
+    - name: Run a command that uses the secret
+      run: echo "My secret password is ${{ secrets.MY_SECRET_PASSWORD }}"
+
+    - name: Use secret in a script
+      run: |
+        echo "Connecting to the database..."
+        # Aqui estamos usando o segredo como variável de ambiente
+        ./connect-to-database.sh
+      env:
+        DB_PASSWORD: ${{ secrets.MY_SECRET_PASSWORD }}
