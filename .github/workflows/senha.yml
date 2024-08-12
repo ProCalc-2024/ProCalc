@@ -1,5 +1,4 @@
-name: Deploy Application
-
+name: CI
 # Define em que eventos o workflow será acionado (ex: push para a branch main)
 on:
   push:
