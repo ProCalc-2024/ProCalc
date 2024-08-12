@@ -1,5 +1,0 @@
-name: Deploy Application
-
-on: [push]
-
-MY_SECRET_PASSWORD: ${{ secrets.MY_SECRET_PASSWORD }}
