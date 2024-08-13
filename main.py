@@ -8,6 +8,7 @@ import questoes
 import os
 
 GITHUB_TOKEN = os.getenv('MY_SECRET_PASSWORD')
+st.write(GITHUB_TOKEN)
 
 def local_css(file_name):
         with open(file_name) as f:
