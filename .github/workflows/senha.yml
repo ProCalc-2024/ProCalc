@@ -13,5 +13,6 @@ jobs:
     - name: Use secret in a script
       run: echo "Using secret password"
       env:
-        MY_SECRET_PASSWORD:  '${{ secrets.MY_SECRET_PASSWORD }}'
-
+        MY_SECRET_PASSWORD:  '${{ secrets.MY_SECRET_PASSWORD }}'    
+      run: |
+        python -c "import os; print(os.getenv('MY_SECRET_VARIABLE'))"
