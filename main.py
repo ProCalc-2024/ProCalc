@@ -7,6 +7,7 @@ import save_questoes
 import questoes
 import os
 
+GITHUB_TOKEN = os.getenv('MY_SECRET_PASSWORD')
 
 def local_css(file_name):
         with open(file_name) as f:
