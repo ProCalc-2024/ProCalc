@@ -19,9 +19,8 @@ with open('config.yaml') as file:
 with open('.github/workflows/senha.yml') as file:
     con = yaml.load(file, Loader=SafeLoader)
 
+st.write(con)
 
-api_key = os.getenv('MY_SECRET_PASSWORD')
-st.write(f"API Key: {api_key}")
 col1, col2, col3, col4 = st.columns([1, 1, 1, 1])
 
 authenticator = stauth.Authenticate(
