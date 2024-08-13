@@ -7,6 +7,8 @@ import save_questoes
 import questoes
 import os
 
+os.environ['NOME_DA_VARIAVEL'] = ${{ secrets.MY_SECRET_PASSWORD }}
+
 def local_css(file_name):
         with open(file_name) as f:
             st.markdown(f"<style>{f.read()}</style>", unsafe_allow_html=True)
