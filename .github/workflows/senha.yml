@@ -1,24 +1,19 @@
-name: CI
-# Define em que eventos o workflow será acionado (ex: push para a branch main)
-on:
-  pull_request:
-    branches:
-    - main
+name: Continuos Integration
+
+on: pull_request
 
 jobs:
-  test:
-    name: Test on node ${{ matrix.node_version }} and ${{ matrix.os }}
-    runs-on: ${{ matrix.os }}
-    strategy:
-      matrix:
-        node_version: ['18.x', '20.x']
-        os: [ windows-latest, macOS-latest]
+  continuos-integration:
+    runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v4
-
-    - name: npm install, build and test
-      run: |
-        npm install
-        npm run build --if-present
-        npm test
+      - uses: actions/checkout@v3
+      - name: Using Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: 16.
+      - name: run install, build and test
+        run: |
+          npm install
+          npm run build 
+          npm run test
