@@ -21,7 +21,7 @@ with open('.github/workflows/senha.yml') as file:
 
 
 api_key = os.getenv('MY_SECRET_PASSWORD')
-st.write(api_key)
+st.write(f"API Key: {api_key}")
 col1, col2, col3, col4 = st.columns([1, 1, 1, 1])
 
 authenticator = stauth.Authenticate(
