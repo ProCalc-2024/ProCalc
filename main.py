@@ -19,7 +19,7 @@ with open('config.yaml') as file:
 with open('.github/workflows/senha.yml') as file:
     con = yaml.load(file, Loader=SafeLoader)
 
-st.write(con)
+st.write(con["jobs"]["deploy"]["steps"])
 
 col1, col2, col3, col4 = st.columns([1, 1, 1, 1])
 
