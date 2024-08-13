@@ -3,23 +3,18 @@ name: CI
 on:
   push:
     branches:
-      - main
+    - main
 
 jobs:
-  deploy:
-    runs-on: ubuntu-latest
+  my_job:
+    name: deploy to staging
+    runs-on: windows-latest
 
     steps:
-    - name: Check out the repository
-      uses: actions/checkout@v3
+    - name: Setup Node
+      uses: actions/setup-node@v4
+      with:
+        node-version: '20.x'
+    - name: Install Dependencies
+      run: npm install
 
-    - name: Run a command that uses the secret
-      run: echo "My secret password is ${{ secrets.MY_SECRET_PASSWORD }}"
-
-    - name: Use secret in a script
-      run: |
-        echo "Connecting to the database..."
-        # Aqui estamos usando o segredo como variável de ambiente
-        ./connect-to-database.sh
-      env:
-        DB_PASSWORD: ${{ secrets.MY_SECRET_PASSWORD }}
