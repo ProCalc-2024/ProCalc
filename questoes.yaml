@@ -1,20 +1,5 @@
 questoes:
   assuntos:
-    ? ''
-    : 1:
-        alternativa_a: ''
-        alternativa_b: ''
-        alternativa_c: ''
-        alternativa_d: ''
-        alternativa_e: ''
-        enunciado: ''
-      ? ''
-      : alternativa_a: ''
-        alternativa_b: ''
-        alternativa_c: ''
-        alternativa_d: ''
-        alternativa_e: ''
-        enunciado: sksksksk
     "Fra\xE7\xE3o":
       1:
         alternativa_a: "Resolva a express\xE3o $$ a + ar + a r^2 + a r^3 + \\cdots\
@@ -36,48 +21,6 @@ questoes:
         alternativa_d: '4'
         alternativa_e: '5'
         enunciado: c
-      3:
-        alternativa_a: ''
-        alternativa_b: ''
-        alternativa_c: ''
-        alternativa_d: ''
-        alternativa_e: '1151515'
-        enunciado: ''
-      4:
-        alternativa_a: ''
-        alternativa_b: ''
-        alternativa_c: ''
-        alternativa_d: ''
-        alternativa_e: ''
-        enunciado: ''
-      5:
-        alternativa_a: a
-        alternativa_b: qqq
-        alternativa_c: qq
-        alternativa_d: q
-        alternativa_e: q
-        enunciado: qqqqqq
-      6:
-        alternativa_a: ''
-        alternativa_b: ''
-        alternativa_c: ''
-        alternativa_d: ''
-        alternativa_e: ''
-        enunciado: ww
-      ww:
-        alternativa_a: ''
-        alternativa_b: ''
-        alternativa_c: ''
-        alternativa_d: ''
-        alternativa_e: ''
-        enunciado: erde
-      ? ''
-      : alternativa_a: ''
-        alternativa_b: ''
-        alternativa_c: ''
-        alternativa_d: ''
-        alternativa_e: ''
-        enunciado: teste1
     "divis\xE3o":
       1:
         alternativa_a: ''
