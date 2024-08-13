@@ -1,18 +1,17 @@
-name: Deploy Application
+name: My Workflow
 
 on: [push]
 
-
 jobs:
-  deploy:
+  build:
     runs-on: ubuntu-latest
+    
     steps:
     - name: Checkout code
-      uses: actions/checkout@v3
+      uses: actions/checkout@v2
 
-    - name: Use secret in a script
-      run: echo "Using secret password"
+    - name: Run Python script
       env:
-        MY_SECRET_PASSWORD:  '${{ secrets.MY_SECRET_PASSWORD }}'    
+        MY_SECRET_VARIABLE: ${{ secrets.MY_SECRET_VARIABLE }}
       run: |
         python -c "import os; print(os.getenv('MY_SECRET_VARIABLE'))"
