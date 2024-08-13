@@ -5,9 +5,6 @@ import numpy as np
 from github import Github
 import os
 
-with open('.github/workflows/senha.yml') as file:
-    con = yaml.load(file, Loader=SafeLoader)
-
 GITHUB_TOKEN = os.getenv('MY_SECRET_PASSWORD')
 REPO_NAME = "ProCalc-2024/ProCalc"
 ARQUIVO_PATH = "questoes.yaml"
