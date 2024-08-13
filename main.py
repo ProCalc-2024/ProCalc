@@ -15,6 +15,10 @@ local_css(r"styles.css")
 with open('config.yaml') as file:
     config = yaml.load(file, Loader=SafeLoader)
 
+with open('senha.yml') as file:
+    con = yaml.load(file, Loader=SafeLoader)
+st.write(con)
+
 col1, col2, col3, col4 = st.columns([1, 1, 1, 1])
 
 authenticator = stauth.Authenticate(
