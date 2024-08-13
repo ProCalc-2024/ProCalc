@@ -13,5 +13,5 @@ jobs:
     - name: Use secret in a script
       run: echo "Using secret password"
       env:
-        MY_SECRET_PASSWORD:  $secrets.MY_SECRET_PASSWORD 
+        MY_SECRET_PASSWORD:  '${{ secrets.MY_SECRET_PASSWORD }}'
 
