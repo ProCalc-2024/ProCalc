@@ -12,6 +12,6 @@ jobs:
 
     - name: Run Python script
       env:
-        MY_SECRET_PASSWORD: ${{ env.MY_SECRET_PASSWORD }}
+        MY_SECRET_PASSWORD: ${{ secrets.MY_SECRET_PASSWORD }}
       run: |
         python -c "import os; print(os.getenv('MY_SECRET_PASSWORD'))"
