@@ -5,7 +5,7 @@ import numpy as np
 from github import Github
 import os
 
-GITHUB_TOKEN = os.getenv('MY_SECRET_PASSWORD')
+GITHUB_TOKEN = os.getenv(${{ secrets.MY_SECRET_PASSWORD }})
 REPO_NAME = "ProCalc-2024/ProCalc"
 ARQUIVO_PATH = "questoes.yaml"
 COMMIT_MESSAGE = "Atualização via Streamlit"
