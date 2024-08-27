@@ -6,7 +6,9 @@ from streamlit_option_menu import option_menu
 import save_questoes
 import questoes
 import os
+from dotenv import load_dotenv
 
+load_dotenv(override = True)
 GITHUB_TOKEN = os.getenv('MY_SECRET_PASSWORD')
 st.write(GITHUB_TOKEN)
 
