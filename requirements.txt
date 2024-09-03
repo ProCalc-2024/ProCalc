@@ -79,7 +79,7 @@ Pygments==2.18.0
 PyJWT==2.8.0
 PyNaCl==1.5.0
 pyparsing==3.1.4
-python-dateutil==2.9.0.post0
+
 pywin32==306
 PyYAML==6.0.1
 pyzmq==26.0.3
