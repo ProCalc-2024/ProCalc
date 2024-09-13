@@ -7,10 +7,10 @@ import save_questoes
 import questoes
 import os
 from dotenv import load_dotenv
+import streamlit as st
+from google.oauth2 import service_account
+import gspread
 
-load_dotenv(override = True)
-GITHUB_TOKEN = os.getenv('MY_SECRET_PASSWORD')
-st.write(GITHUB_TOKEN)
 
 def local_css(file_name):
         with open(file_name) as f:
@@ -45,6 +45,25 @@ if st.session_state["authentication_status"]:
         questoes.read_questao()
  
     with tab4:
+        import json
+
+
+        # Carregar as credenciais do secrets
+        creds = service_account.Credentials.from_service_account_info(
+            st.secrets["gcp_service_account"]
+        )
+
+        # Autenticação e conexão com o Google Sheets
+        client = gspread.authorize(creds)
+
+        # Acessar a planilha
+        sheet = client.open("Nome_da_sua_planilha").sheet1
+
+        # Ler todos os registros
+        records = sheet.get_all_records()
+
+        # Exibir os dados
+        st.write(records)
         authenticator.logout()
 
 elif st.session_state["authentication_status"] is False:
