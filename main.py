@@ -45,9 +45,6 @@ if st.session_state["authentication_status"]:
         questoes.read_questao()
  
     with tab4:
-        import json
-
-
         # Carregar as credenciais do secrets
         creds = service_account.Credentials.from_service_account_info(
             st.secrets["gcp_service_account"]
@@ -57,7 +54,7 @@ if st.session_state["authentication_status"]:
         client = gspread.authorize(creds)
 
         # Acessar a planilha
-        sheet = client.open("Nome_da_sua_planilha").sheet1
+        sheet = client.open("Bd_ProCalc").sheet1
 
         # Ler todos os registros
         records = sheet.get_all_records()
