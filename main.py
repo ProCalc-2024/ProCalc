@@ -1,35 +1,11 @@
 import streamlit as st
-import gspread
-from google.oauth2.service_account import Credentials
+from streamlit_gsheets import GSheetsConnection
 
-# Carregue as credenciais diretamente do secrets do Streamlit
-credentials = Credentials.from_service_account_info(
-    st.secrets["gsheets"]
-)
+# Create a connection object.
+conn = st.connection("gsheets", type=GSheetsConnection)
 
-# Autenticação e conexão com a planilha
-client = gspread.authorize(credentials)
+df = conn.read()
 
-# Acesse a planilha
-sheet = client.open('Bd_ProCalc').sheet1
-
-# Leia dados da planilha
-df = sheet.get_all_records()
-
-# Exiba os dados no Streamlit
-st.write(df)
-
-# Interface para entrada de novos dados
-enunciado = st.text_input('Enunciado')
-assunto = st.text_input('Assunto')
-
-# Adicione nova linha na planilha quando clicar no botão
-if st.button('Adicionar na planilha'):
-    sheet.append_row([enunciado, assunto])
-    st.success('Linha adicionada com sucesso!')
-
-
-# Adicione nova linha na planilha quando clicar no botão
-if st.button('Adicionar na planilha'):
-    sheet.append_row([enunciado, assunto])
-    st.success('Linha adicionada com sucesso!')
+# Print results.
+for row in df.itertuples():
+    st.write(f"{row.Enunciado} has a :{row.Assunto}:")
