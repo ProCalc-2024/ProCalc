@@ -2,7 +2,7 @@ import streamlit as st
 from streamlit_gsheets import GSheetsConnection
 
 # Create a connection object.
-conn = st.connection("Bd_ProCalc", type=GSheetsConnection)
+conn = st.connection("Questões", type=GSheetsConnection)
 
 df = conn.read()
 
