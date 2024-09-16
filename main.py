@@ -4,7 +4,7 @@ from google.oauth2.service_account import Credentials
 
 # Carregue as credenciais diretamente do secrets do Streamlit
 credentials = Credentials.from_service_account_info(
-    st.secrets["connections.gsheets"]
+    st.secrets["gsheets"]
 )
 
 # Autenticação e conexão com a planilha
