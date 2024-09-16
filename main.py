@@ -11,7 +11,7 @@ credentials = Credentials.from_service_account_info(
 client = gspread.authorize(credentials)
 
 # Acesse a planilha
-sheet = client.open("Bd_ProCalc").sheet1
+sheet = client.open("https://docs.google.com/spreadsheets/d/1p3hkgibRMU0OVGCPBEos2hzOJux9DR-0QvvxX2z4hcU/edit?gid=0#gid=0").sheet1
 
 # Leia dados da planilha
 df = sheet.get_all_records()
