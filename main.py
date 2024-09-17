@@ -32,7 +32,7 @@ with st.expander("Data ⤵"):
 st.divider()
 st.write("CRUD Operations:")
 # Establishing a Google Sheets connection
-conn = st.experimental_connection("gsheets", type=GSheetsConnection)
+conn = st.connection("gsheets", type=GSheetsConnection)
 
 # Taking actions based on user input
 if st.button("New Worksheet"):
