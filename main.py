@@ -1,6 +1,7 @@
 import streamlit as st
 import pandas as pd
 import seaborn as sns
+import gspread
 from streamlit_gsheets import GSheetsConnection
 
 # Create GSheets connection
