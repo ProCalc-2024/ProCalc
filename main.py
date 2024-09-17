@@ -18,7 +18,7 @@ if st.button("Update worksheet"):
     )
     # Clear cache after updating
     st.cache_data.clear()
-    st.experimental_rerun()
+    st.rerun()
 
 # Display our Spreadsheet as st.dataframe
 st.dataframe(df.head(10))
