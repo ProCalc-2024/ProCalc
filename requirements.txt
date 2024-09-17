@@ -117,4 +117,5 @@ yarg==0.1.9
 pytest
 mypy
 ruff
+seaborn
 
