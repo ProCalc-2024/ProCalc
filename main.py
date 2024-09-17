@@ -13,7 +13,7 @@ df = sns.load_dataset('mpg')
 # This is behind a button to avoid exceeding Google API Quota
 if st.button("Update worksheet"):
     df = conn.update(
-        worksheet="Example 1",
+        worksheet="Questões",
         data=df,
     )
     # Clear cache after updating
