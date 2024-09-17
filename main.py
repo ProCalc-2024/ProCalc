@@ -4,8 +4,6 @@ import seaborn as sns
 from streamlit_gsheets import GSheetsConnection
 
 # Create GSheets connection
-conn = st.connection("gsheets", type=GSheetsConnection)
-
 st.title("Google Sheets as a DataBase")
 
 # Function to create a sample Orders dataframe
@@ -38,18 +36,18 @@ conn = st.experimental_connection("gsheets", type=GSheetsConnection)
 
 # Taking actions based on user input
 if st.button("New Worksheet"):
-    conn.create(worksheet="Orders", data=orders)
+    conn.create(worksheet="Questões", data=orders)
     st.success("Worksheet Created 🎉")
 
 if st.button("Calculate Total Orders Sum"):
-    sql = 'SELECT SUM("TotalPrice") as "TotalOrdersPrice" FROM Orders;'
+    sql = 'SELECT SUM("TotalPrice") as "TotalOrdersPrice" FROM Questões;'
     total_orders = conn.query(sql=sql)  # default ttl=3600 seconds / 60 min
     st.dataframe(total_orders)
 
 if st.button("Update Worksheet"):
-    conn.update(worksheet="Orders", data=updated_orders)
+    conn.update(worksheet="Questões", data=updated_orders)
     st.success("Worksheet Updated 🤓")
 
 if st.button("Clear Worksheet"):
-    conn.clear(worksheet="Orders")
+    conn.clear(worksheet="Questões")
     st.success("Worksheet Cleared 🧹")
