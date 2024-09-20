@@ -1,104 +1,66 @@
 import streamlit as st
-import yaml
-from yaml.loader import SafeLoader
-import numpy as np
-from github import Github
-import os
+import pandas as pd
+import seaborn as sns
+import gspread
+from streamlit_gsheets import GSheetsConnection
 
-
-def atualizar_repositorio(conteudo_novo):
-    g = Github(GITHUB_TOKEN)
-    repo = g.get_repo(REPO_NAME)
-    arquivo = repo.get_contents(ARQUIVO_PATH)
-    repo.update_file(ARQUIVO_PATH, COMMIT_MESSAGE, conteudo_novo, arquivo.sha)
+# Create GSheets connection
+st.title("Google Sheets as a DataBase")
 
 def inserir_ques():    
-    
-    with open('questoes.yaml') as file:
-        config = yaml.load(file, Loader=SafeLoader)
 
     # adicionar uma nova pergunta
     result = {}
-
-    n = 0
 
     col1, col2 = st.columns([1, 1])
 
-    with col2:
-        lista = [ linha for linha in config['questoes']['assuntos'] ]
-        materia = st.selectbox("selecione uma materia",lista)
+    lista = [1,2,3]
 
-        for item in config['questoes']['assuntos'][materia]:
-            n = n+1
+    with col2:
+        assunto = st.selectbox("selecione uma materia", lista)
 
     with col1:
-        st.title("Questão " + str(n+1))
+        descricao = st.text_input("descrição")
 
-    result.update(config['questoes']['assuntos'][materia])
+    enunciado = st.text_area("Enunciado", placeholder= "digite aqui o enunciado da questão")
+    letra_a = st.text_input("Resposta1", placeholder= "digite aqui a resposta correta") 
+    letra_b = st.text_input("Resposta2", placeholder= "digite aqui a resposta2")
+    letra_c = st.text_input("Resposta3", placeholder= "digite aqui a resposta3") 
+    letra_d = st.text_input("Resposta4", placeholder= "digite aqui a resposta4") 
+    letra_e = st.text_input("Resposta5", placeholder= "digite aqui a resposta5")
 
-    config['questoes']['assuntos'][materia] = { n + 1 : {'enunciado':st.text_area("Enunciado", placeholder= "digite aqui o enunciado da questão"), 
-                                                    'alternativa_a':st.text_input("Resposta1", placeholder= "digite aqui a resposta correta"), 
-                                                    'alternativa_b':st.text_input("Resposta2", placeholder= "digite aqui a resposta2"), 
-                                                    'alternativa_c':st.text_input("Resposta3", placeholder= "digite aqui a resposta3"), 
-                                                    'alternativa_d':st.text_input("Resposta4", placeholder= "digite aqui a resposta4"), 
-                                                    'alternativa_e':st.text_input("Resposta5", placeholder= "digite aqui a resposta5")
-                                                    }
-                                                }
-
-    questao = config['questoes']['assuntos'][materia]
-
-    result.update(questao)
-
-    if st.button("Salvar"):
+    if st.button("Salvar"):   
         
-        config['questoes']['assuntos'][materia] = result
+        st.success("Questão salva")
 
-        with open('questoes.yaml', 'w') as file:
-            yaml.dump(config, file)
+# Function to create a sample Orders dataframe
+def create_orders_dataframe():
+    return pd.DataFrame({
+        'OrderID': [101, 102, 103, 104, 105],
+        'CustomerName': ['Alice', 'Bob', 'Charlie', 'David', 'Eve'],
+        'ProductList': ['ProductA, ProductB', 'ProductC', 'ProductA, ProductC', 'ProductB, ProductD', 'ProductD'],
+        'TotalPrice': [200, 150, 250, 300, 100],
+        'OrderDate': ['2023-08-18', '2023-08-19', '2023-08-19', '2023-08-20', '2023-08-20']
+    })
 
-        yaml_string = yaml.dump(config)
+# Create the Orders dataframe
+orders = create_orders_dataframe()
 
-        atualizar_repositorio(yaml_string)
+# Update the TotalPrice column in the orders dataframe to create updated_orders
+updated_orders = orders.copy()
+updated_orders['TotalPrice'] = updated_orders['TotalPrice'] * 100
 
-        st.write(config['questoes']['assuntos'])
+with st.expander("Data ⤵"):
+    st.write("Orders")
+    st.dataframe(orders)
+    st.write("Updated Orders")
+    st.dataframe(updated_orders)
 
-def inserir_assun():    
-    
-    with open('questoes.yaml') as file:
-        config = yaml.load(file, Loader=SafeLoader)
+st.divider()
+st.write("CRUD Operations:")
+# Establishing a Google Sheets connection
+conn = st.connection("gsheets", type=GSheetsConnection)
 
-    # adicionar uma nova pergunta
-    result = {}
-
-    st.title("Novo Assunto")
-
-    result.update(config['questoes']['assuntos'])
-
-    config['questoes']['assuntos'] = { st.text_area("assunto", placeholder= "digite aqui o enunciado da questão") : 
-                                                {1 : 
-                                                {'enunciado':"", 
-                                                    'alternativa_a':"", 
-                                                    'alternativa_b':"", 
-                                                    'alternativa_c':"", 
-                                                    'alternativa_d':"", 
-                                                    'alternativa_e':""
-                                                    }
-                                                }
-                                                }
-
-    questao = config['questoes']['assuntos']
-
-    result.update(questao)
-
-    if st.button("Save"):
-
-        config['questoes']['assuntos'] = result
-
-        with open('questoes.yaml', 'w') as file:
-            yaml.dump(config, file)
-
-        yaml_string = yaml.dump(config)
-
-        atualizar_repositorio(yaml_string)
-
-        st.write(config['questoes']['assuntos'])         
+if st.button("Update Worksheet"):
+    conn.update(worksheet="Questões", data=updated_orders)
+    st.success("Worksheet Updated 🤓")
