@@ -29,10 +29,7 @@ def inserir_ques():
     letra_e = st.text_input("Resposta5", placeholder= "digite aqui a resposta5")
 
     conn = st.connection("gsheets", type=GSheetsConnection)
-    sheet = conn.read(worksheet="Questões" ,
-                      ttl="10m",
-                      usecols=[0, 1],
-                      nrows=3,)
+    sheet = conn.read()
     st.write(sheet)
     novo = ({
         'Materia': [materia] + sheet['Materia'],
