@@ -29,8 +29,8 @@ def inserir_ques():
     letra_e = st.text_input("Resposta5", placeholder= "digite aqui a resposta5")
 
     conn = st.connection("gsheets", type=GSheetsConnection)
-    sheet = conn.read(worksheet="Questões")
-    st.write(sheet)
+    sheet = conn.write(worksheet="Questões")
+    
     novo = ({
         'Materia': [materia] + sheet['Materia'],
         'Descrição': [descricao] + sheet['Descrição'],
