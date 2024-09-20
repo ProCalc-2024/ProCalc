@@ -5,7 +5,11 @@ from streamlit_gsheets import GSheetsConnection
 
 # Create GSheets connection
 st.title("Google Sheets as a DataBase")
-
+def load_data():
+    return conn.read(
+        worksheet="Questões",  # Nome da planilha
+        ttl="10m"                  # Cache de 10 minutos
+    )
 def inserir_ques():    
 
     # adicionar uma nova pergunta
@@ -46,7 +50,9 @@ def inserir_ques():
     if st.button("Salvar"):   
     
         conn.update(worksheet="Questões", data=combined_data)
+       
+        updated_data = load_data()
+
         st.success("Questão salva")
-        st.cache_resource()
         
     
