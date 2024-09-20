@@ -31,15 +31,15 @@ def inserir_ques():
     conn = st.connection("gsheets", type=GSheetsConnection)
     sheet = conn.read()
     st.write(sheet)
-    novo = ({
-        'Materia': [materia] + sheet['Materia'],
-        'Descrição': [descricao] + sheet['Descrição'],
-        'Enunciado': [enunciado] + sheet['Enunciado'],
-        'Alternativa_A': [letra_a] + sheet['Alternativa_A'],
-        'Alternativa_B': [letra_b] + sheet['Alternativa_B'],
-        'Alternativa_C': [letra_c] + sheet['Alternativa_C'],
-        'Alternativa_D': [letra_d] + sheet['Alternativa_D'],
-        'Alternativa_E': [letra_e] + sheet['Alternativa_E']
+    novo = pd.DataFrame({
+        'Materia': [materia],
+        'Descrição': [descricao],
+        'Enunciado': [enunciado],
+        'Alternativa_A': [letra_a],
+        'Alternativa_B': [letra_b],
+        'Alternativa_C': [letra_c],
+        'Alternativa_D': [letra_d],
+        'Alternativa_E': [letra_e]
     })
     
     novo = pd.DataFrame(novo)
