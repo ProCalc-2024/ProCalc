@@ -29,8 +29,7 @@ def inserir_ques():
     letra_e = st.text_input("Resposta5", placeholder= "digite aqui a resposta5")
 
     conn = st.connection("gsheets", type=GSheetsConnection)
-    sheet = conn.read()
-    st.write(sheet)
+    existing_data = conn.read(worksheet="Questões")
     novo = pd.DataFrame({
         'Materia': [materia],
         'Descrição': [descricao],
@@ -42,10 +41,11 @@ def inserir_ques():
         'Alternativa_E': [letra_e]
     })
     
-    novo = pd.DataFrame(novo)
+    combined_data = pd.concat([existing_data, novo], ignore_index=True)
     
     if st.button("Salvar"):   
-
-        conn.update(worksheet="Questões", data=novo)
+    
+        conn.update(worksheet="Questões", data=combined_data)
         st.success("Questão salva")
+        
     
