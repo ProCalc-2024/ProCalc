@@ -46,6 +46,5 @@ def inserir_ques():
     
     if st.button("Salvar"):   
 
-        if st.button("Update Worksheet"):
-            conn.update(worksheet="Questões", data=novo)
+        conn.update(worksheet="Questões", data=novo)
         st.success("Questão salva")
