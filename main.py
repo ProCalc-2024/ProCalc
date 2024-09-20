@@ -40,7 +40,7 @@ if st.session_state["authentication_status"]:
 
     with col2:
         with tab2:
-            save_questoes.inserir_ques()
+            save_questoes()
 
         with tab3:
             questoes.read_questao()
