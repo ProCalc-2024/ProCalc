@@ -3,65 +3,72 @@ import pandas as pd
 import seaborn as sns
 import gspread
 from streamlit_gsheets import GSheetsConnection
+import save_questoes as save_questoes
+import questoes
+import streamlit_authenticator as stauth
+import yaml
+from yaml.loader import SafeLoader
+from streamlit_option_menu import option_menu
+from git import Repo
+import requests
 
-# Create GSheets connection
-st.title("Google Sheets as a DataBase")
 
-def inserir_ques():    
+def local_css(file_name):
+        with open(file_name) as f:
+            st.markdown(f"<style>{f.read()}</style>", unsafe_allow_html=True)
+            
+local_css(r"styles.css")
 
-    # adicionar uma nova pergunta
-    result = {}
+with open('config.yaml') as file:
+    config = yaml.load(file, Loader=SafeLoader)
 
-    col1, col2 = st.columns([1, 1])
+col1, col2, col3 = st.columns([1, 4, 1])
 
-    lista = [1,2,3]
+authenticator = stauth.Authenticate(
+    config['credentials'],
+    config['cookie']['name'],
+    config['cookie']['key'],
+    config['cookie']['expiry_days'],
+    config['pre-authorized']
+)
+
+authenticator.login()
+
+if st.session_state["authentication_status"]:
+    
+    tab1, tab2, tab3, tab4 = st.tabs([" Home", "Save", "Questions", "Settings"])
 
     with col2:
-        assunto = st.selectbox("selecione uma materia", lista)
+        with tab2:
+            save_questoes.inserir_ques()
 
-    with col1:
-        descricao = st.text_input("descrição")
+        with tab3:
+            questoes.read_questao()
 
-    enunciado = st.text_area("Enunciado", placeholder= "digite aqui o enunciado da questão")
-    letra_a = st.text_input("Resposta1", placeholder= "digite aqui a resposta correta") 
-    letra_b = st.text_input("Resposta2", placeholder= "digite aqui a resposta2")
-    letra_c = st.text_input("Resposta3", placeholder= "digite aqui a resposta3") 
-    letra_d = st.text_input("Resposta4", placeholder= "digite aqui a resposta4") 
-    letra_e = st.text_input("Resposta5", placeholder= "digite aqui a resposta5")
+        with tab4:
+            authenticator.logout()
 
-    if st.button("Salvar"):   
         
-        st.success("Questão salva")
 
-# Function to create a sample Orders dataframe
-def create_orders_dataframe():
-    return pd.DataFrame({
-        'OrderID': [101, 102, 103, 104, 105],
-        'CustomerName': ['Alice', 'Bob', 'Charlie', 'David', 'Eve'],
-        'ProductList': ['ProductA, ProductB', 'ProductC', 'ProductA, ProductC', 'ProductB, ProductD', 'ProductD'],
-        'TotalPrice': [200, 150, 250, 300, 100],
-        'OrderDate': ['2023-08-18', '2023-08-19', '2023-08-19', '2023-08-20', '2023-08-20']
-    })
+elif st.session_state["authentication_status"] is False:
+    st.error('O nome de usuário/senha está incorreto')
+elif st.session_state["authentication_status"] is None:
+    st.warning('Por favor insira seu nome de usuário e senha')
 
-# Create the Orders dataframe
-orders = create_orders_dataframe()
+def new_senha():
+    try:
+        if authenticator.reset_password(st.session_state["username"]):
+            st.success('Senha modificada com sucesso')
+    except Exception as e:
+        st.error(e)
 
-# Update the TotalPrice column in the orders dataframe to create updated_orders
-updated_orders = orders.copy()
-updated_orders['TotalPrice'] = updated_orders['TotalPrice'] * 100
+def register_user():
+    try:
+        email_of_registered_user, username_of_registered_user, name_of_registered_user = authenticator.register_user(pre_authorization=False)
+        if email_of_registered_user:
+            st.success('Usuário cadastrado com sucesso')
+    except Exception as e:
+        st.error(e)
 
-with st.expander("Data ⤵"):
-    st.write("Orders")
-    st.dataframe(orders)
-    st.write("Updated Orders")
-    st.dataframe(updated_orders)
-
-st.divider()
-st.write("CRUD Operations:")
-# Establishing a Google Sheets connection
-conn = st.connection("gsheets", type=GSheetsConnection)
-
-if st.button("Update Worksheet"):
-    conn.update(worksheet="Questões", data=updated_orders)
-    st.success("Worksheet Updated 🤓")
-
+with open('config.yaml', 'w') as file:
+    yaml.dump(config, file, default_flow_style=False)
