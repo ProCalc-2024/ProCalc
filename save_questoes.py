@@ -49,4 +49,3 @@ def inserir_ques():
         conn.update(worksheet="Questões", data=novo)
         st.success("Questão salva")
     
-inserir_ques()
