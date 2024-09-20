@@ -52,7 +52,7 @@ def inserir_ques():
     # New functionality to read the worksheet data
     if st.button("Read Worksheet"):
     # Fetch data from the Google Sheet
-    sheet_data = conn.read(worksheet="Questões")
+        sheet_data = conn.read(worksheet="Questões")
     
     # Check if data is returned
     if not sheet_data.empty:
