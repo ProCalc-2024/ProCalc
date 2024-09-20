@@ -47,6 +47,6 @@ def inserir_ques():
     
         conn.update(worksheet="Questões", data=combined_data)
         st.success("Questão salva")
-        st.ache_resource()
+        st.cache_resource()
         
     
