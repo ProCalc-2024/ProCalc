@@ -16,7 +16,7 @@ def inserir_ques():
     lista = [1,2,3]
 
     with col2:
-        assunto = st.selectbox("selecione uma materia", lista)
+        materia = st.selectbox("selecione uma materia", lista)
 
     with col1:
         descricao = st.text_input("descrição")
@@ -27,13 +27,25 @@ def inserir_ques():
     letra_c = st.text_input("Resposta3", placeholder= "digite aqui a resposta3") 
     letra_d = st.text_input("Resposta4", placeholder= "digite aqui a resposta4") 
     letra_e = st.text_input("Resposta5", placeholder= "digite aqui a resposta5")
+
+    conn = st.connection("gsheets", type=GSheetsConnection)
+    updated_orders = conn.copy()
+    
+    novo = ({
+        'Materia': [materia] + updated_orders['Materia'],
+        'Descrição': [descricao] + updated_orders['Descrição'],
+        'Enunciado': [enunciado] + updated_orders['Enunciado'],
+        'Alternativa_A': [letra_a] + updated_orders['Alternativa_A'],
+        'Alternativa_B': [letra_b] + updated_orders['Alternativa_B'],
+        'Alternativa_C': [letra_c] + updated_orders['Alternativa_C'],
+        'Alternativa_D': [letra_d] + updated_orders['Alternativa_D'],
+        'Alternativa_E': [letra_e] + updated_orders['Alternativa_E']
+    })
+    
+    novo = pd.DataFrame(novo)
     
     if st.button("Salvar"):   
-        conn = st.connection("gsheets", type=GSheetsConnection)
-        
-        updated_orders = conn.copy()
-        updated_orders['Materia'] = updated_orders['Materia'] + assunto
-        
+
         if st.button("Update Worksheet"):
-            conn.update(worksheet="Questões", data=updated_orders)
+            conn.update(worksheet="Questões", data=novo)
         st.success("Questão salva")
