@@ -29,16 +29,16 @@ def inserir_ques():
     letra_e = st.text_input("Resposta5", placeholder= "digite aqui a resposta5")
 
     conn = st.connection("gsheets", type=GSheetsConnection)
-    
+    sheet = conn.read(worksheet="Questões")
     novo = ({
-        'Materia': [materia] + conn['Materia'],
-        'Descrição': [descricao] + conn['Descrição'],
-        'Enunciado': [enunciado] + conn['Enunciado'],
-        'Alternativa_A': [letra_a] + conn['Alternativa_A'],
-        'Alternativa_B': [letra_b] + conn['Alternativa_B'],
-        'Alternativa_C': [letra_c] + conn['Alternativa_C'],
-        'Alternativa_D': [letra_d] + conn['Alternativa_D'],
-        'Alternativa_E': [letra_e] + conn['Alternativa_E']
+        'Materia': [materia] + sheet['Materia'],
+        'Descrição': [descricao] + sheet['Descrição'],
+        'Enunciado': [enunciado] + sheet['Enunciado'],
+        'Alternativa_A': [letra_a] + sheet['Alternativa_A'],
+        'Alternativa_B': [letra_b] + sheet['Alternativa_B'],
+        'Alternativa_C': [letra_c] + sheet['Alternativa_C'],
+        'Alternativa_D': [letra_d] + sheet['Alternativa_D'],
+        'Alternativa_E': [letra_e] + sheet['Alternativa_E']
     })
     
     novo = pd.DataFrame(novo)
