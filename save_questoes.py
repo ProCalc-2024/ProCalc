@@ -30,7 +30,7 @@ def inserir_ques():
 
     conn = st.connection("gsheets", type=GSheetsConnection)
     sheet = conn.read(worksheet="Questões")
-    
+    st.write(sheet)
     novo = ({
         'Materia': [materia] + sheet['Materia'],
         'Descrição': [descricao] + sheet['Descrição'],
