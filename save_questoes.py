@@ -49,17 +49,4 @@ def inserir_ques():
         conn.update(worksheet="Questões", data=novo)
         st.success("Questão salva")
     
-    # New functionality to read the worksheet data
-    if st.button("Read Worksheet"):
-    # Fetch data from the Google Sheet
-        sheet_data = conn.read(worksheet="Questões")
-    
-    # Check if data is returned
-    if not sheet_data.empty:
-        st.write("Data from Google Sheets:")
-        st.dataframe(sheet_data)
-    else:
-        st.warning("No data found in the worksheet.")
-
-# Executar a função principal
 inserir_ques()
