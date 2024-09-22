@@ -15,6 +15,7 @@ def read_questao():
     conn = st.connection("gsheets", type=GSheetsConnection)
     sheet = conn.read(worksheet="Questões")
     dict = pd.DataFrame(sheet)
+    dict = dict.to_dict()
     st.write(dict)
     
     col1, col2 = st.columns([1, 1])
@@ -22,7 +23,7 @@ def read_questao():
     resul = {}
 
     # lista de materias
-    lista = [ linha for linha in dict["Materia"]['1']]
+    lista = [ linha for linha in dict["Materia"]]
 
     with col2:    
         materia = st.selectbox("selecione um assunto",lista)    
