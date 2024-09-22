@@ -14,8 +14,7 @@ def read_questao():
     
     conn = st.connection("gsheets", type=GSheetsConnection)
     sheet = conn.read(worksheet="Questões")
-    sheet = sheet.get_all_records()
-    st.write(sheet)
+    st.write(sheet["Enunciado"])
     col1, col2 = st.columns([1, 1])
 
     resul = {}
