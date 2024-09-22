@@ -17,12 +17,13 @@ def read_questao():
     dict = pd.DataFrame(sheet)
     dict = dict.to_dict()
     st.write(dict)
+    
     col1, col2 = st.columns([1, 1])
 
     resul = {}
 
     # lista de materias
-    lista = [ linha for linha in config['questoes']['assuntos'] ]
+    lista = [ linha for linha in dict["Materia"]]
 
     with col2:    
         materia = st.selectbox("selecione um assunto",lista)    
@@ -35,11 +36,11 @@ def read_questao():
     #numero de questoes
     n=0
     
-    for linha in config['questoes']['assuntos'][materia]:
+    for linha in dict["Materia"][materia]:
         n = n+1  
 
     # salvar as questoes de acordo com a materia escolhida 
-    comando = config['questoes']['assuntos'][materia]
+    comando = dict["Materia"][materia]
 
     # embaralha as alternativas independente da questão 
     lista = [0,1,2,3,4]
