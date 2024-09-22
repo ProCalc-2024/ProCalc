@@ -13,8 +13,9 @@ local_css(r"styles_questao.css")
 def read_questao():
     
     conn = st.connection("gsheets", type=GSheetsConnection)
-    conn_read = conn.read(worksheet="Questões")
-    st.write(conn_read)
+    sheet = conn.read(worksheet="Questões")
+    sheet = sheet.get_all_records()
+    st.write(sheet)
     col1, col2 = st.columns([1, 1])
 
     resul = {}
