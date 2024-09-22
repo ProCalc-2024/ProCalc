@@ -22,7 +22,7 @@ def read_questao():
     resul = {}
 
     # lista de materias
-    lista = [ linha for linha in dict["Materia"][1]]
+    lista = [ linha for linha in dict["Materia"]['1']]
 
     with col2:    
         materia = st.selectbox("selecione um assunto",lista)    
