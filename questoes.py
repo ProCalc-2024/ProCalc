@@ -1,8 +1,8 @@
 import streamlit as st
-import yaml
-from yaml.loader import SafeLoader
+import pandas as pd
+import gspread
+from streamlit_gsheets import GSheetsConnection
 import numpy as np
-import time
 
 def local_css(file_name):
         with open(file_name) as f:
@@ -12,12 +12,12 @@ local_css(r"styles_questao.css")
 
 def read_questao():
     
+    conn = st.connection("gsheets", type=GSheetsConnection)
+    conn_read = conn.read(worksheet="Questões")
+    st.write(conn_read)
     col1, col2 = st.columns([1, 1])
 
     resul = {}
-
-    with open('questoes.yaml') as file:
-        config = yaml.load(file, Loader=SafeLoader)
 
     # lista de materias
     lista = [ linha for linha in config['questoes']['assuntos'] ]
@@ -93,7 +93,6 @@ def read_questao():
     if butao and resposta:         
         st.toast(':green-background[Resposta Certa]', icon='🎉')
         lis = [ lin for lin in resul ]
-        time.sleep(2)
         new_ques(lista,n)
         st.rerun()
 
