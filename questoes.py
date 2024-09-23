@@ -22,11 +22,9 @@ def read_questao():
 
     resul = {}
 
-    # lista de materias
-    lista = []  # Inicializa uma lista vazia
+    # lista de questões
+    lista = list(set(dict["Materia"]))
 
-    for linha in dict.iloc:
-        lista.append(linha)
         
     st.write(lista)
         
@@ -34,7 +32,10 @@ def read_questao():
         materia = st.selectbox("selecione um assunto",lista)    
 
     # lista de questões
-    lista_ques = [linha for linha in dict["Materia"] if linha == materia]    
+    lista_ques = []  # Inicializa uma lista vazia
+
+    for linha in dict.iloc:
+        lista_ques.append(linha)
     
     with col1:
         st.title("Perguntas")
