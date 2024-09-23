@@ -83,7 +83,7 @@ def read_questao():
         
     resul.update(sequencia)
 
-    st.write(sequencia)
+    st.write(resul)
     # sequendcia de questões
     # st.write(resul)
     
