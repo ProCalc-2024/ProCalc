@@ -25,7 +25,7 @@ def read_questao():
     # lista de materias
     lista = []  # Inicializa uma lista vazia
 
-    for linha in dict:
+    for linha in dict.iloc:
         lista.append(linha)
         
     st.write(lista)
