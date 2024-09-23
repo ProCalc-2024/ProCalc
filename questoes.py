@@ -23,10 +23,13 @@ def read_questao():
     resul = {}
 
     # lista de materias
-    lista = [linha for linha in dict if linha == "rdsf"]
+    lista = [linha for linha in dict["Materia"]]
     st.write(lista)
     with col2:    
-        materia = st.selectbox("selecione um assunto",lista["Materia"])    
+        materia = st.selectbox("selecione um assunto",lista)    
+
+    # lista de questões
+    lista_ques = [linha for linha in dict["Materia"] if linha == materia]    
     
     with col1:
         st.title("Perguntas")
@@ -35,7 +38,6 @@ def read_questao():
     
     #numero de questoes
     n=0
-    
     for linha in dict2:
         n = n+1  
 
