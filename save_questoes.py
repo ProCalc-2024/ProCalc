@@ -10,6 +10,7 @@ def inserir_ques():
     
     conn = st.connection("gsheets", type=GSheetsConnection)
     sheet = conn.read(worksheet="Materias")
+    dict = pd.DataFrame(sheet)
     # adicionar uma nova pergunta
     result = {}
     
