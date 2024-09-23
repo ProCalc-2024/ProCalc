@@ -69,10 +69,10 @@ def read_questao():
         
     st.subheader('', divider = 'gray')
     
-    opções = [dic[list(dic)[embaralho[0]]], dic[list(dic)[embaralho[1]]],dic[list(dic)[embaralho[2]]], dic[list(dic)[embaralho[3]]], dic[list(dic)[embaralho[4]]]]    
+    opções = [questao[embaralho[0]], questao[embaralho[1]], questao[embaralho[2]], questao[embaralho[3]], questao[embaralho[4]]]    
     alternativa = st.radio("", options = opções)
         
-    st.session_state["resposta"] = alternativa
+    st.session_state["resposta"] = questao["Alternativa_A"]
 
     butao = st.button("Submeter") 
             
