@@ -24,9 +24,6 @@ def read_questao():
 
     # lista de questões
     lista = list(set(dict["Materia"]))
-
-        
-    st.write(lista)
         
     with col2:    
         materia = st.selectbox("selecione um assunto",lista)    
@@ -36,7 +33,7 @@ def read_questao():
 
     for linha in dict.iloc:
         lista_ques.append(linha)
-    
+    st.write(lista_ques)
     with col1:
         st.title("Perguntas")
     
