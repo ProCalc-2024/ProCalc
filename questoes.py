@@ -29,10 +29,13 @@ def read_questao():
         materia = st.selectbox("selecione um assunto",lista)    
 
     # lista de questões
-    lista_ques = []  # Inicializa uma lista vazia
-
-    for linha in dict.iloc:
-        lista_ques.append(linha)
+    # Itera sobre cada dicionário na lista
+    for dicionario in dict:
+    # Verifica se o valor da chave "Materia" é igual à string desejada
+        if dicionario["Materia"] == materia:
+                lista_ques.append(dicionario)
+    
+        
     st.write(lista_ques)
     with col1:
         st.title("Perguntas")
