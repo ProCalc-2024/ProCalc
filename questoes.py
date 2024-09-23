@@ -77,12 +77,10 @@ def read_questao():
     butao = st.button("Submeter") 
             
     # salva a sequencia de questoes
-    resul.update(st.session_state["save"])
-    
-    st.session_state["save"] = { st.session_state["numero"] + 1 : st.session_state["ques"]                                                
-                                                }
+    resul.update(st.session_state["save"])                                                
 
-    resul.update(questao)
+    sequencia = st.session_state["ques"]
+    resul.update(sequencia)
 
     st.write(resul)
     # sequendcia de questões
