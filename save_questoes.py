@@ -7,13 +7,15 @@ from streamlit_gsheets import GSheetsConnection
 st.title("Google Sheets as a DataBase")
 
 def inserir_ques():    
-
+    
+    conn = st.connection("gsheets", type=GSheetsConnection)
+    sheet = conn.read(worksheet="Materias")
     # adicionar uma nova pergunta
     result = {}
-
+    
     col1, col2 = st.columns([1, 1])
 
-    lista = [1,2,3]
+    lista =  [ linha for linha in dict["Materia"]]
 
     with col2:
         materia = st.selectbox("selecione uma materia", lista)
@@ -28,7 +30,6 @@ def inserir_ques():
     letra_d = st.text_input("Resposta4", placeholder= "digite aqui a resposta4") 
     letra_e = st.text_input("Resposta5", placeholder= "digite aqui a resposta5")
 
-    conn = st.connection("gsheets", type=GSheetsConnection)
     existing_data = conn.read(worksheet="Questões")
     novo = pd.DataFrame({
         'Materia': [materia],
