@@ -15,8 +15,6 @@ def read_questao():
     conn = st.connection("gsheets", type=GSheetsConnection)
     sheet = conn.read(worksheet="Questões")
     dict = pd.DataFrame(sheet)
-    dict2 = dict.iloc[0]
-    st.write(dict2["Alternativa_A"])
     
     col1, col2 = st.columns([1, 1])
 
@@ -78,7 +76,7 @@ def read_questao():
             
     # salva a sequencia de questoes
     resul.update(st.session_state["save"])                                                
-    st.write(resul)
+    st.write(st.session_state["save"])
     st.session_state["save"] = { st.session_state["numero"] + 1 : st.session_state["ques"] }
 
     sequencia = st.session_state["save"]
