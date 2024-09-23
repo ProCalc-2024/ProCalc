@@ -30,11 +30,11 @@ def read_questao():
 
     # lista de questões
     lista_ques = []
-    # Itera sobre cada dicionário na lista
-    for dicionario in dict:
-    # Verifica se o valor da chave "Materia" é igual à string desejada
-        if dicionario == materia:
-                lista_ques.append(dicionario)
+    
+
+    for linha in dict["Materia"]:
+            lista_ques.append(linha)  
+
      
     st.write(lista_ques)
         
