@@ -12,7 +12,7 @@ def inserir_ques():
     sheet = conn.read(worksheet="Materias")
     dict = pd.DataFrame(sheet)
     # adicionar uma nova pergunta
-    st.write(dict)
+    st.write(dict["Materia"])
     result = {}
     
     col1, col2 = st.columns([1, 1])
