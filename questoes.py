@@ -62,9 +62,6 @@ def read_questao():
     # escolha de questão aleatoria
     Questão = st.session_state["ques"]
 
-    # salva a questão aleatoria na variavel dic 
-    dic = comando[list(comando)[Questão]]
-
     #comando da questão  
     questao = lista_ques[Questão]    
     st.write("")
