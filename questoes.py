@@ -68,6 +68,7 @@ def read_questao():
     st.subheader('', divider = 'gray')
     
     opções = [questao[embaralho[0]], questao[embaralho[1]], questao[embaralho[2]], questao[embaralho[3]], questao[embaralho[4]]]    
+    
     alternativa = st.radio("", options = opções)
         
     st.session_state["resposta"] = questao["Alternativa_A"]
@@ -89,7 +90,7 @@ def read_questao():
     
     st.session_state["save"] = resul
 
-    resposta = alternativa == dic[list(dic)[0]]
+    resposta = alternativa == questao["Alternativa_A"]
 
     if butao and resposta:         
         st.toast(':green-background[Resposta Certa]', icon='🎉')
@@ -102,7 +103,6 @@ def read_questao():
 
 
 def new_ques(lista,n):
-    
     # salve as questões que foram feitas pelo usuario
     # so salvar questões que não foram feitas ainda 
     st.session_state["numero"] = st.session_state["numero"] + 1
