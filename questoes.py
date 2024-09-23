@@ -58,17 +58,17 @@ def read_questao():
         st.session_state["ques"] = np.random.randint(0,n)
          
     embaralho = st.session_state["embaralho"]
-    st.write(n)
+    
     # escolha de questão aleatoria
     Questão = st.session_state["ques"]
 
     # salva a questão aleatoria na variavel dic 
     dic = comando[list(comando)[Questão]]
 
-    #comando da questão     
+    #comando da questão  
+    questao = lista_ques[Questão]    
     st.write("")
-    
-    st.write(dic['enunciado'])
+    st.write(questao["Enunciado"])
         
     st.subheader('', divider = 'gray')
     
