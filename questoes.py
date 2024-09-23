@@ -26,7 +26,7 @@ def read_questao():
     lista = [linha for linha in dict if linha == "rdsf"]
 
     with col2:    
-        materia = st.selectbox("selecione um assunto",lista)    
+        materia = st.selectbox("selecione um assunto",lista["Materia"])    
     
     with col1:
         st.title("Perguntas")
