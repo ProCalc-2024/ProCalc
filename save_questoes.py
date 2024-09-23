@@ -12,12 +12,11 @@ def inserir_ques():
     sheet = conn.read(worksheet="Materias")
     dict = pd.DataFrame(sheet)
     # adicionar uma nova pergunta
-    st.write(dict)
     result = {}
     
     col1, col2 = st.columns([1, 1])
 
-    lista =  [ linha for linha in dict["Materia"]]
+    lista =  [linha for linha in dict["Materia"]]
 
     with col2:
         materia = st.selectbox("selecione uma materia", lista)
@@ -56,5 +55,32 @@ def inserir_ques():
         )
 
         st.success("Questão salva")
+
+def inserir_assun():    
+    
+    conn = st.connection("gsheets", type=GSheetsConnection)
+    existing = conn.read(worksheet="Materias")
+    # adicionar uma nova pergunta
+    result = {}
+
+    st.title("Novo Assunto")
+    
+    assunto = st.text_area("assunto", placeholder= "digite aqui o enunciado da questão") 
+    
+    new = pd.DataFrame({
+        'Materia': [assunto],
+     })
+    
+    combined = pd.concat([existing, new], ignore_index=True)
+    
+    if st.button("Save"):
         
+        conn.update(worksheet="Materias", data=combined)
+       
+        conn.read(
+        worksheet="Questões",  # Nome da planilha
+        ttl="10m"                  # Cache de 10 minutos
+        )
+        
+        st.write("")        
     
