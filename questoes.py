@@ -16,7 +16,7 @@ def read_questao():
     sheet = conn.read(worksheet="Questões")
     dict = pd.DataFrame(sheet)
     dict2 = dict.iloc[0]
-    st.write(dict2)
+    st.write(dict2["Alternativa_A"])
     
     col1, col2 = st.columns([1, 1])
 
