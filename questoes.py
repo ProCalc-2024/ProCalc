@@ -32,7 +32,7 @@ def read_questao():
     lista_ques = []
     
 
-    for linha in dict["Materia"]:
+    for linha in dict.iloc:
             lista_ques.append(linha)  
 
      
