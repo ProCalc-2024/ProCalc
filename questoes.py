@@ -78,12 +78,12 @@ def read_questao():
     resul.update(st.session_state["save"])                                                
     
     st.session_state["save"] = { st.session_state["numero"] + 1 : st.session_state["ques"] }
-    st.write(st.session_state["save"])
+    
     sequencia = st.session_state["save"]
         
     resul.update(sequencia)
 
-    
+    st.write(st.session_state["save"])
     # sequendcia de questões
     # st.write(resul)
     
