@@ -33,7 +33,7 @@ def read_questao():
     # Itera sobre cada dicionário na lista
     for dicionario in dict:
     # Verifica se o valor da chave "Materia" é igual à string desejada
-        if dicionario["Materia"] == materia:
+        if dicionario == materia:
                 lista_ques.append(dicionario)
      
     st.write(lista_ques)
