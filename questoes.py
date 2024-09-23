@@ -46,7 +46,7 @@ def read_questao():
         n = n+1  
 
     # embaralha as alternativas independente da questão 
-    lista = [0,1,2,3,4]
+    lista = ["Alternativa_A","Alternativa_B","Alternativa_C","Alternativa_D","Alternativa_E"]
     
     if "embaralho" not in st.session_state:
         
