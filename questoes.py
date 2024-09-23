@@ -3,7 +3,7 @@ import pandas as pd
 import gspread
 from streamlit_gsheets import GSheetsConnection
 import numpy as np
-
+import time
 def local_css(file_name):
         with open(file_name) as f:
             st.markdown(f"<style>{f.read()}</style>", unsafe_allow_html=True)
@@ -96,6 +96,7 @@ def read_questao():
         st.toast(':green-background[Resposta Certa]', icon='🎉')
         lis = [ lin for lin in resul ]
         new_ques(lista,n)
+        time.sleep(5)
         st.rerun()
 
     elif butao and (resposta is False):
