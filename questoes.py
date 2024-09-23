@@ -31,10 +31,10 @@ def read_questao():
     # lista de questões
     lista_ques = []
     
-
     for linha in dict.iloc:
-            lista_ques.append(linha)  
-
+        lista_ques.append(linha)
+            
+        st.write(linha)
      
     st.write(lista_ques)
         
