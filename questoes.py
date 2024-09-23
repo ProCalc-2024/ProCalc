@@ -83,7 +83,7 @@ def read_questao():
         
     resul.update(sequencia)
 
-    st.write(st.session_state["save"])
+    st.write(sequencia)
     # sequendcia de questões
     # st.write(resul)
     
