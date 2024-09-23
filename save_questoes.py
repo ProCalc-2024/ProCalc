@@ -12,12 +12,12 @@ def inserir_ques():
     sheet = conn.read(worksheet="Materias")
     dict = pd.DataFrame(sheet)
     # adicionar uma nova pergunta
-    st.write(dict["Materia"])
+    st.write(dict)
     result = {}
     
     col1, col2 = st.columns([1, 1])
 
-    lista =  [ linha for linha in dict["Materia"]]
+    lista =  [ linha for linha in dict]
 
     with col2:
         materia = st.selectbox("selecione uma materia", lista)
