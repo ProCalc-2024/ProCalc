@@ -17,7 +17,7 @@ def inserir_ques():
     
     col1, col2 = st.columns([1, 1])
 
-    lista =  [ linha for linha in dict]
+    lista =  [ linha for linha in dict["Materia"]]
 
     with col2:
         materia = st.selectbox("selecione uma materia", lista)
