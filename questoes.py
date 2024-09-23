@@ -81,7 +81,6 @@ def read_questao():
     
     st.session_state["save"] = { st.session_state["numero"] + 1 : st.session_state["ques"]                                                
                                                 }
-    questao = st.session_state["save"]
 
     resul.update(questao)
 
