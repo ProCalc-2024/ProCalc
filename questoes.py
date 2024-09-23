@@ -58,7 +58,7 @@ def read_questao():
         st.session_state["ques"] = np.random.randint(0,n)
          
     embaralho = st.session_state["embaralho"]
-    
+    st.write(embaralho)
     # escolha de questão aleatoria
     Questão = st.session_state["ques"]
 
