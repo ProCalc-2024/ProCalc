@@ -32,9 +32,9 @@ def read_questao():
     lista_ques = []
     
     for linha in dict.iloc:
-        lista_ques.append(linha)
-            
-        st.write(linha)
+       
+        if linha["Materia"] == materia:
+                 lista_ques.append(linha)
      
     st.write(lista_ques)
         
