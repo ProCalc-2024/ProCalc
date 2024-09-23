@@ -28,15 +28,12 @@ def read_questao():
     with col2:    
         materia = st.selectbox("selecione um assunto",lista)    
 
-    # lista de questões
+    # lista de questoes de acordo com a materia escolhida 
     lista_ques = []
     
-    for linha in dict.iloc:
-       
+    for linha in dict.iloc: 
         if linha["Materia"] == materia:
-                 lista_ques.append(linha)
-     
-    st.write(lista_ques)
+                lista_ques.append(linha)
         
     with col1:
         st.title("Perguntas")
@@ -45,11 +42,8 @@ def read_questao():
     
     #numero de questoes
     n=0
-    for linha in dict2:
+    for linha in lista_ques:
         n = n+1  
-
-    # salvar as questoes de acordo com a materia escolhida 
-    comando = dict["Materia"][materia]
 
     # embaralha as alternativas independente da questão 
     lista = [0,1,2,3,4]
