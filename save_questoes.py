@@ -69,7 +69,7 @@ def inserir_assun():
      })
     
     combined = pd.concat([existing, new], ignore_index=True)
-    
+    st.write(combined)  
     if st.button("Save"):
         
         conn.update(worksheet="Materias", data=combined)
@@ -79,5 +79,5 @@ def inserir_assun():
         ttl="10m"                  # Cache de 10 minutos
         )
         
-        st.write("")        
+              
     
