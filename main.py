@@ -42,9 +42,10 @@ if st.session_state["authentication_status"]:
             
         with tab2:
 
-            option = st.selectbox("",("Inserir Questões", "Inserir Materias"), index=None, placeholder="Editar App")
-
             co1, co2 = st.columns([1, 1])
+
+            with co1:
+                    option = st.selectbox("",("Inserir Questões", "Inserir Materias"), placeholder="Editar App")
 
             match option:
                 case "Inserir Questões":
