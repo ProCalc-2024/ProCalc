@@ -53,8 +53,8 @@ if st.session_state["authentication_status"]:
                     
             with co2:
                     
-            if st.button("Inserir Materias"):     
-                save_questoes.inserir_assun()
+                    if st.button("Inserir Materias"):     
+                        save_questoes.inserir_assun()
 
         with tab3:
             questoes.read_questao()
