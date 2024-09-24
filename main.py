@@ -45,11 +45,16 @@ if st.session_state["authentication_status"]:
             co1, co2 = st.columns([1, 1])
                 
             with co1:
-                if st.button("Inserir Questões"):    
-                    save_questoes.inserir_ques()
+               bt = st.button("Inserir Questões")     
+            if bt or press:    
+               press = True 
+                
+               save_questoes.inserir_ques()
+                    
             with co2:
-                if st.button("Inserir Materias"):     
-                    save_questoes.inserir_assun()
+                    
+            if st.button("Inserir Materias"):     
+                save_questoes.inserir_assun()
 
         with tab3:
             questoes.read_questao()
