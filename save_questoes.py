@@ -68,8 +68,7 @@ def inserir_assun():
         'Materia': [assun]
      })
     
-    combined = pd.concat([existing, new], ignore_index=True)
-    st.write(combined)  
+    combined = pd.concat([existing, new], ignore_index=True) 
     
     if st.button("Save"):
         
