@@ -47,7 +47,7 @@ if st.session_state["authentication_status"]:
                 image_url = f"https://drive.google.com/uc?export=view&id={file_id}"
 
                 # Exibir a imagem no Streamlit
-                st.image(image_url, caption='Imagem do Google Drive', use_column_width=True)
+                st.image(image_url, caption='Imagem do Google Drive')
             
         with tab2:
 
