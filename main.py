@@ -39,10 +39,11 @@ if st.session_state["authentication_status"]:
     tab1, tab2, tab3, tab4 = st.tabs([" Home", "Save", "Questions", "Settings"])
 
     with col2:
-        
-        co1, co2 = st.columns([1, 1])
             
         with tab2:
+
+            co1, co2 = st.columns([1, 1])
+                
             with co1:
                 if st.button("Inserir Questões"):    
                     save_questoes.inserir_ques()
