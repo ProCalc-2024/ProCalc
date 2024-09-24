@@ -75,7 +75,7 @@ def inserir_assun():
         conn.update(worksheet="Materias", data=combined)
        
         conn.read(
-        worksheet="Questões",  # Nome da planilha
+        worksheet="Materias",  # Nome da planilha
         ttl="10m"                  # Cache de 10 minutos
         )
         
