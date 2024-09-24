@@ -62,14 +62,15 @@ def inserir_assun():
 
     st.title("Novo Assunto")
     
-    assunto = st.text_area("assunto", placeholder= "digite aqui o enunciado da questão") 
+    assun = st.text_area("assunto", placeholder= "digite aqui o enunciado da questão") 
     
     new = pd.DataFrame({
-        'Materia': [assunto]
+        'Materia': [assun]
      })
     
     combined = pd.concat([existing, new], ignore_index=True)
     st.write(combined)  
+    
     if st.button("Save"):
         
         conn.update(worksheet="Materias", data=combined)
