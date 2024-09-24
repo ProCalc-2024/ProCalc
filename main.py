@@ -41,7 +41,7 @@ if st.session_state["authentication_status"]:
     with col2:
         with tab1:
                 # ID da imagem no Google Drive
-                file_id = '1EqyiEn05Yi6xqjA_e2qOzcq-IgcT-zZr'
+                file_id = "1EqyiEn05Yi6xqjA_e2qOzcq-IgcT-zZr"
 
                 # Link direto da imagem
                 image_url = f"https://drive.google.com/uc?export=view&id={file_id}"
