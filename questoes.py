@@ -25,7 +25,7 @@ def read_questao():
     lista = list(set(dict["Materia"]))
         
     with col2:    
-        materia = st.selectbox("selecione um assunto",lista)    
+        materia = st.selectbox("selecione um assunto",lista,)    
 
     # lista de questoes de acordo com a materia escolhida 
     lista_ques = []
@@ -70,7 +70,7 @@ def read_questao():
     
     opções = [questao[embaralho[0]], questao[embaralho[1]], questao[embaralho[2]], questao[embaralho[3]], questao[embaralho[4]]]    
     
-    alternativa = st.radio("", options = opções)
+    alternativa = st.radio("", options = opções, index=None)
         
     st.session_state["resposta"] = questao["Alternativa_A"]
 
