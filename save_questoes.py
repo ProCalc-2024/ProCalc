@@ -65,7 +65,7 @@ def inserir_assun():
     assunto = st.text_area("assunto", placeholder= "digite aqui o enunciado da questão") 
     
     new = pd.DataFrame({
-        'Materia': [assunto],
+        'Materia': [assunto]
      })
     
     combined = pd.concat([existing, new], ignore_index=True)
