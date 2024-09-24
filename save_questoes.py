@@ -3,9 +3,6 @@ import pandas as pd
 import gspread
 from streamlit_gsheets import GSheetsConnection
 
-# Create GSheets connection
-st.title("Google Sheets as a DataBase")
-
 def inserir_ques():    
     
     conn = st.connection("gsheets", type=GSheetsConnection)
