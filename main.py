@@ -40,8 +40,14 @@ if st.session_state["authentication_status"]:
 
     with col2:
         with tab1:
-                image_url = "https://drive.google.com/file/d/1EqyiEn05Yi6xqjA_e2qOzcq-IgcT-zZr/view?usp=sharing"
-                st.image(image_url, caption='Minha Imagem', use_column_width=True)
+                # ID da imagem no Google Drive
+                file_id = '1EqyiEn05Yi6xqjA_e2qOzcq-IgcT-zZr'
+
+                # Link direto da imagem
+                image_url = f"https://drive.google.com/uc?export=view&id={file_id}"
+
+                # Exibir a imagem no Streamlit
+                st.image(image_url, caption='Imagem do Google Drive', use_column_width=True)
             
         with tab2:
 
