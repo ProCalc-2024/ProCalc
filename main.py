@@ -43,10 +43,10 @@ if st.session_state["authentication_status"]:
         co1, co2 = st.columns([2, 2])
             
         with tab2:
-            with co11:
+            with co1:
                 if st.button("Inserir Questões"):    
                     save_questoes.inserir_ques()
-            with col2:
+            with co2:
                 if st.button("Inserir Materias"):     
                     save_questoes.inserir_assun()
 
