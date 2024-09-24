@@ -40,7 +40,7 @@ if st.session_state["authentication_status"]:
 
     with col2:
         
-        co1, co2 = st.columns([2, 2])
+        co1, co2 = st.columns([1, 1])
             
         with tab2:
             with co1:
