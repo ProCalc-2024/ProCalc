@@ -4,6 +4,7 @@ import gspread
 from streamlit_gsheets import GSheetsConnection
 import numpy as np
 import time
+
 def local_css(file_name):
         with open(file_name) as f:
             st.markdown(f"<style>{f.read()}</style>", unsafe_allow_html=True)
@@ -62,7 +63,7 @@ def read_questao():
 
     #comando da questão  
     questao = lista_ques[Questão]    
-    st.write("")
+    st.write(" ")
     st.write(questao["Enunciado"])
         
     st.subheader('', divider = 'gray')
