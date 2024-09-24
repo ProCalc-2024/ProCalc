@@ -36,7 +36,7 @@ authenticator.login()
 
 if st.session_state["authentication_status"]:
     
-    tab1, tab2, tab3, tab4 = st.tabs([" Home", "Save", "Questions", "Settings"])
+    tab1, tab2, tab3, tab4 = st.tabs(["Home", "Edição", "Questionario", "Settings"])
 
     with col2:
         with tab1:
@@ -49,7 +49,7 @@ if st.session_state["authentication_status"]:
             co1, co2 = st.columns([1, 1])
 
             with co1:
-                    option = st.selectbox("",("Inserir Questões", "Inserir Materias"), index=None, placeholder="Editar App")
+                    option = st.selectbox("",("Adicionar Questões", "Adicionar Materias"), index=None, placeholder="Editar Questões")
 
             match option:
                 case "Inserir Questões":
