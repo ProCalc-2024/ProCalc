@@ -52,9 +52,9 @@ if st.session_state["authentication_status"]:
                     option = st.selectbox("",("Adicionar Questões", "Adicionar Materias"), index=None, placeholder="Editar Questões")
 
             match option:
-                case "Inserir Questões":
+                case "Adicionar Questões":
                         save_questoes.inserir_ques()
-                case "Inserir Materias":
+                case "Adicionar Materias":
                         with co1:
                                 save_questoes.inserir_assun()
                      
