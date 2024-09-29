@@ -24,7 +24,7 @@ def read_questao():
     # lista de questões
     lista = list(set(dict["Materia"]))
 
-     with col2:    
+    with col2:    
         numero = st.selectbox("selecione um assunto",[5,10,15,20])
         
     with col2:    
