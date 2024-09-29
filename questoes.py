@@ -17,12 +17,15 @@ def read_questao():
     sheet = conn.read(worksheet="Questões")
     dict = pd.DataFrame(sheet)
     
-    col1, col2 = st.columns([1, 1])
+    col1, col2, col3 = st.columns([1, 1, 1])
 
     resul = {}
 
     # lista de questões
     lista = list(set(dict["Materia"]))
+
+     with col2:    
+        numero = st.selectbox("selecione um assunto",[5,10,15,20])
         
     with col2:    
         materia = st.selectbox("selecione um assunto",lista)    
@@ -74,7 +77,7 @@ def read_questao():
         
     st.session_state["resposta"] = questao["Alternativa_A"]
 
-    butao = st.button("Submeter") 
+    butao = st.button("Visualizar Questão") 
             
     # salva a sequencia de questoes
     resul.update(st.session_state["save"])                                                
@@ -91,16 +94,19 @@ def read_questao():
     st.session_state["save"] = resul
 
     resposta = alternativa == questao["Alternativa_A"]
+    
+    if butao:
+            
+            butao1 = st.button("Adicionar Questão") 
+            if butao1 and resposta:         
+                st.toast(':green-background[Resposta Certa]', icon='🎉')
+                lis = [ lin for lin in resul ]
+                new_ques(lista,n)
+                time.sleep(5)
+                st.rerun()
 
-    if butao and resposta:         
-        st.toast(':green-background[Resposta Certa]', icon='🎉')
-        lis = [ lin for lin in resul ]
-        new_ques(lista,n)
-        time.sleep(5)
-        st.rerun()
-
-    elif butao and (resposta is False):
-        st.toast(':red-background[Resposta Errada]', icon="⚠️")
+            elif butao and (resposta is False):
+                st.toast(':red-background[Resposta Errada]', icon="⚠️")
 
 
 def new_ques(lista,n):
