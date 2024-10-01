@@ -33,17 +33,16 @@ def read_questao():
     for linha in dict.iloc: 
         if linha["Materia"] == materia:
                 lista_ques.append(linha)
-
-
-    # Cria uma lista de nomes para as Questões
-    tab_names = [f"Q{i + 1}" for i in range(num_tabs)]
-    # Cria as abas dinamicamente
-    tabs = st.tabs(tab_names)
-        
+    
     with col3:    
         # Pergunta ao usuário quantas Questões deseja criar
         numero = st.number_input("Quantas Questões você gostaria fazer?", min_value=1, max_value=20, value=1)
-            
+    nun_tabs = numero
+    # Cria uma lista de nomes para as Questões
+    tab_names = [f"Q{i + 1}" for i in range(num_tabs)]
+    # Cria as abas dinamicamente
+    tabs = st.tabs(tab_names) 
+        
     with col1:
         st.title("Perguntas")
     
