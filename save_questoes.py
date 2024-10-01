@@ -66,7 +66,7 @@ def inserir_ques():
         #comando da questão  
         questao = lista_ques
         
-        st.write(lista_ques["Materia"])
+        st.write(lista_ques)
         st.write(questao["Enunciado"])
             
         st.subheader('', divider = 'gray')
