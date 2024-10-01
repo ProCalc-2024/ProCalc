@@ -66,7 +66,7 @@ def inserir_ques():
         #comando da questão  
         questao = lista_ques[0]
         
-        st.write(questao["Materia"])
+        st.write("")
         st.write(questao["Enunciado"])
             
         st.subheader('', divider = 'gray')
@@ -80,30 +80,17 @@ def inserir_ques():
         butao = st.button("Submeter") 
                 
         # salva a sequencia de questoes
-        resul.update(st.session_state["save"])                                                
-        
-        st.session_state["save"] = { st.session_state["numero"] + 1 : st.session_state["ques"] }
-        
-        sequencia = st.session_state["save"]
-            
-        resul.update(sequencia)
-    
-        # sequendcia de questões
-        # st.write(resul)
-        
-        st.session_state["save"] = resul
-    
+
         resposta = alternativa == questao["Alternativa_A"]
         
         if butao and resposta:         
             st.toast(':green-background[Resposta Certa]', icon='🎉')
-            lis = [ lin for lin in resul ]
-            new_ques(lista,n)
             time.sleep(5)
             st.rerun()
     
         elif butao and (resposta is False):
             st.toast(':red-background[Resposta Errada]', icon="⚠️")
+            time.sleep(5)
         
     if st.button("Salvar"):   
         
