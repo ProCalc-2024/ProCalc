@@ -41,15 +41,10 @@ def inserir_ques():
     })
     
     combined_data = pd.concat([existing_data, novo], ignore_index=True)
-    
+    lista_ques = novo
     with st.expander("Visualização da Questão"):
         
         st.subheader('', divider = 'gray')
-        
-        #numero de questoes
-        n=0
-        for linha in lista_ques:
-            n = n+1  
     
         # embaralha as alternativas independente da questão 
         lista = ["Alternativa_A","Alternativa_B","Alternativa_C","Alternativa_D","Alternativa_E"]
@@ -61,15 +56,14 @@ def inserir_ques():
         if "ques" not in st.session_state:
             st.session_state["save"] = {}
             st.session_state["numero"] = 0
-            st.session_state["ques"] = np.random.randint(0,n)
              
         embaralho = st.session_state["embaralho"]
         
         # escolha de questão aleatoria
-        Questão = st.session_state["ques"]
+        
     
         #comando da questão  
-        questao = lista_ques[Questão]    
+        questao = lista_ques   
         st.write('')
         st.write(questao["Enunciado"])
             
