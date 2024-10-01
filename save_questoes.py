@@ -41,7 +41,7 @@ def inserir_ques():
     })
     
     combined_data = pd.concat([existing_data, novo], ignore_index=True)
-    lista_q = novo
+    lista_ques = []
     with st.expander("Visualização da Questão"):
         
         st.subheader('', divider = 'gray')
@@ -60,7 +60,7 @@ def inserir_ques():
         embaralho = st.session_state["embaralho"]
         
         # escolha de questão aleatoria
-        for linha in lista_q.iloc: 
+        for linha in novo.iloc: 
             lista_ques.append(linha)
     
         #comando da questão  
