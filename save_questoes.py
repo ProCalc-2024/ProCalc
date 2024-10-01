@@ -101,8 +101,11 @@ def inserir_ques():
         worksheet="Questões",  # Nome da planilha
         ttl="10m"                  # Cache de 10 minutos
         )
-
-        st.success("Questão salva")
+        st.toast(':green-background[Questão salva]', icon='✔️')
+        time.sleep(2)
+        st.experimental_rerun()
+        
+        
 
 def inserir_assun():    
     
