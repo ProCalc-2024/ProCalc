@@ -61,13 +61,12 @@ def inserir_ques():
         
         # escolha de questão aleatoria
         for linha in lista_q.iloc: 
-
             lista_ques.append(linha)
     
         #comando da questão  
-        questao = lista_q
+        questao = lista_ques
         
-        st.write(lista_ques["Materia"])
+        st.write(questao["Materia"])
         st.write(questao["Enunciado"])
             
         st.subheader('', divider = 'gray')
