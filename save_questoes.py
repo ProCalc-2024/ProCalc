@@ -64,7 +64,7 @@ def inserir_ques():
             lista_ques.append(linha)
     
         #comando da questão  
-        questao = lista_ques
+        questao = lista_ques[0]
         
         st.write(questao["Materia"])
         st.write(questao["Enunciado"])
