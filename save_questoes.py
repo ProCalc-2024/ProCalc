@@ -42,7 +42,7 @@ def inserir_ques():
     
     combined_data = pd.concat([existing_data, novo], ignore_index=True)
     lista_ques = []
-    with st.expander("Visualização da Questão"):
+    with st.expander("Visualizar Questão"):
         
         st.subheader('', divider = 'gray')
     
