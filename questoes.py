@@ -92,7 +92,7 @@ def read_questao():
                     # escolha de questão aleatoria
                     Questão = b[i]    
                     #comando da questão  
-                    questao = lista_ques[Questão] 
+                    questao = lista_ques[b[i]] 
                     st.write('')
                     st.write(questao["Enunciado"])
                         
