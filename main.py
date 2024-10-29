@@ -36,7 +36,7 @@ authenticator.login()
 
 if st.session_state["authentication_status"]:
     
-    tab1, tab2, tab3, tab4, tabteste = st.tabs(["Home", "Edição", "Questionario", "Configurações", "Teste"])
+    tab1, tab2, tab3, tab4 = st.tabs(["Home", "Edição", "Questionario", "Configurações"])
 
     with col2:
         with tab1:
@@ -63,9 +63,6 @@ if st.session_state["authentication_status"]:
 
         with tab4:
             authenticator.logout()
-
-        with tabteste:
-                testea
 
 elif st.session_state["authentication_status"] is False:
     st.error('O nome de usuário/senha está incorreto')
