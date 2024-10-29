@@ -236,5 +236,3 @@ def deletar_ques():
         # Atualiza a interface após a deleção
         st.experimental_rerun()  # Isso recarrega a página atual para refletir as alterações
 
-# Chamada da função para deletar questões
-deletar_ques()
