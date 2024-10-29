@@ -148,19 +148,9 @@ def editar_ques():
     questao_selecionada = st.selectbox("Selecione uma questão para editar", existing_data['Enunciado'])
     questao_atual = existing_data[existing_data['Enunciado'] == questao_selecionada].iloc[0]
     
-    # Ajusta os inputs com valores pré-existentes
-  # Lista de matérias únicas disponíveis
-materias_unicas = existing_data["Materia"].unique()
+ 
 
-# Verifica se a matéria da questão selecionada está na lista de matérias
-if materia_atual in materias_unicas:
-    index_inicial = list(materias_unicas).index(materia_atual)
-else:
-    index_inicial = 0  # Índice padrão caso a matéria não esteja na lista
-
-# Selectbox de matérias com índice seguro
-materia = st.selectbox("Matéria", options=materias_unicas, index=index_inicial)
-
+    materia = st.selectbox("Matéria", options=existing_data["Materia"].unique(), index=existing_data["Materia"].tolist().index(questao_atual['Materia']))
     descricao = st.text_input("Descrição", value=questao_atual['Descrição'])
     enunciado = st.text_area("Enunciado", value=questao_atual['Enunciado'])
     letra_a = st.text_input("Resposta1", value=questao_atual['Alternativa_A'])
