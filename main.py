@@ -60,7 +60,7 @@ if st.session_state["authentication_status"]:
                 case "Editar Questões":
                     save_questoes.editar_ques()  # Chama a função para editar questões
                 case "Deletar Questão":
-            # Implementar a função de deletar questão, se necessário
+                    save_questoes.deletar_ques()
                     pass
 
         with tab3:
