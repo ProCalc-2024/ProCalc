@@ -67,7 +67,7 @@ def read_questao():
 
                     # Filtra os números que não estão na lista de exclusão
                     opcoes_validas = [num for num in b if num not in evitar]
-                    
+                    opcoes_validas=list(set(opcoes_validas))
                     if "ques" not in st.session_state:
                         st.session_state["save"] = {}
                         st.session_state["numero"] = 0
