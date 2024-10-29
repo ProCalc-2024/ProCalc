@@ -225,5 +225,5 @@ def deletar_ques():
         # Mensagem de sucesso
         st.success("Questão deletada com sucesso!")
 
-        # Redesenhar a interface para que as alterações sejam refletidas
+        # Redesenhar a interface, removendo o botão de deletar
         st.experimental_rerun()  # Isso recarrega a página atual para refletir as alterações
