@@ -45,23 +45,23 @@ if st.session_state["authentication_status"]:
                 st.image("grafico.png", caption='Imagem do Google Drive')
             
         with tab2:
-    co1, co2 = st.columns([1, 1])
+            co1, co2 = st.columns([1, 1])
 
-    with co1:
+            with co1:
         # Adiciona "Editar Questões" como uma opção no selectbox
-        option = st.selectbox("", ("Adicionar Questões", "Adicionar Materias", "Editar Questões", "Deletar Questão"), 
+                option = st.selectbox("", ("Adicionar Questões", "Adicionar Materias", "Editar Questões", "Deletar Questão"), 
                               index=None, placeholder="Escolha uma ação")
 
-    match option:
-        case "Adicionar Questões":
-            save_questoes.inserir_ques()
-        case "Adicionar Materias":
-            save_questoes.inserir_assun()
-        case "Editar Questões":
-            save_questoes.editar_ques()  # Chama a função para editar questões
-        case "Deletar Questão":
+            match option:
+                case "Adicionar Questões":
+                    save_questoes.inserir_ques()
+                case "Adicionar Materias":
+                    save_questoes.inserir_assun()
+                case "Editar Questões":
+                    save_questoes.editar_ques()  # Chama a função para editar questões
+                case "Deletar Questão":
             # Implementar a função de deletar questão, se necessário
-            pass
+                    pass
 
         with tab3:
             questoes.read_questao()
