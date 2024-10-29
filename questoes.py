@@ -4,7 +4,7 @@ import gspread
 from streamlit_gsheets import GSheetsConnection
 import numpy as np
 import time
-
+import random
 def local_css(file_name):
         with open(file_name) as f:
             st.markdown(f"<style>{f.read()}</style>", unsafe_allow_html=True)
