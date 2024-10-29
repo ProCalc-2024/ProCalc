@@ -185,16 +185,6 @@ def editar_ques():
         conn.update(worksheet="Questões", data=existing_data)
         st.success("Questão editada com sucesso!")
 
-# Definição da função para carregar questões
-def carregar_questoes():
-    # Conexão com a planilha
-    conn = st.connection("gsheets", type=GSheetsConnection)
-    existing_data = conn.read(worksheet="Questões")
-
-    # Filtra para mostrar apenas questões ativas
-    questoes_ativas = existing_data[existing_data["Ativo"] == True]
-    
-    return questoes_ativas
 def deletar_ques():
     # Conexão com a planilha
     conn = st.connection("gsheets", type=GSheetsConnection)
@@ -214,8 +204,8 @@ def deletar_ques():
         materia = st.selectbox("Matéria", options=materias_unicas)
 
     with col2:
-        # Filtra questões pela matéria selecionada que estão ativas
-        questoes_filtradas = existing_data[(existing_data["Materia"] == materia) & (existing_data["Ativo"] == True)]
+        # Filtra questões pela matéria selecionada
+        questoes_filtradas = existing_data[existing_data["Materia"] == materia]
 
         # Verifica se há questões para a matéria selecionada
         if questoes_filtradas.empty:
@@ -228,14 +218,16 @@ def deletar_ques():
 
     # Confirmação de deleção
     if st.button("Deletar"):
-        # Marca a linha correspondente à questão selecionada como inativa
-        existing_data.loc[existing_data["Enunciado"] == questao_selecionada, "Ativo"] = False
+        # Remove a linha correspondente à questão selecionada
+        existing_data = existing_data[existing_data["Enunciado"] != questao_selecionada]
 
-        # Atualiza a planilha com as questões restantes
-        conn.update(worksheet="Questões", data=existing_data)
+        # Verifica se a questão foi deletada com sucesso
+        if questao_selecionada not in existing_data["Enunciado"].values:
+            # Atualiza a planilha com as questões restantes
+            conn.update(worksheet="Questões", data=existing_data)
 
-        # Mensagem de sucesso
-        st.success("Questão deletada com sucesso!")
+            # Mensagem de sucesso
+            st.success("Questão deletada com sucesso!")
 
         # Atualiza a interface após a deleção
         st.experimental_rerun()  # Isso recarrega a página atual para refletir as alterações
