@@ -220,7 +220,7 @@ def deletar_ques():
         # Remove a linha correspondente à questão selecionada
         existing_data = existing_data[existing_data["Enunciado"] != questao_selecionada]
 
-        # Atualiza a planilha
+        # Atualiza a planilha com as questões restantes
         conn.update(worksheet="Questões", data=existing_data)
 
         # Mensagem de sucesso
