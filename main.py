@@ -36,7 +36,7 @@ authenticator.login()
 
 if st.session_state["authentication_status"]:
     
-    tab1, tab2, tab3, tab4, tab5 = st.tabs(["Home", "Edição", "Questionario", "Configurações", "Teste"])
+    tab1, tab2, tab3, tab4 = st.tabs(["Home", "Edição", "Questionario", "Configurações"])
 
     with col2:
         with tab1:
@@ -57,8 +57,7 @@ if st.session_state["authentication_status"]:
                 case "Adicionar Materias":
                         with co1:
                                 save_questoes.inserir_assun()
-                case "Deletar Questão":
-                        save_questoes.editar_quest()
+
         with tab3:
             questoes.read_questao()
 
