@@ -221,9 +221,17 @@ def deletar_ques():
 
         # Atualiza a planilha
         conn.update(worksheet="Questões", data=existing_data)
-        
+
         # Mensagem de sucesso
         st.success("Questão deletada com sucesso!")
 
-        # Redesenhar a interface, removendo o botão de deletar
+        # Atualiza a interface após a deleção
         st.experimental_rerun()  # Isso recarrega a página atual para refletir as alterações
+
+    # Adiciona a lógica para mostrar as questões restantes após a deleção
+    # (Essa parte deve ser chamada após o botão de deletar)
+    questoes_filtradas_atualizadas = existing_data[existing_data["Materia"] == materia]
+    if not questoes_filtradas_atualizadas.empty:
+        questoes_list_atualizadas = questoes_filtradas_atualizadas["Enunciado"].tolist()
+        st.write("Questões restantes:")
+        st.write(questoes_list_atualizadas)
