@@ -2,6 +2,7 @@ import streamlit as st
 import pandas as pd
 import gspread
 from streamlit_gsheets import GSheetsConnection
+from gsheetsdb import connect
 import numpy as np
 def inserir_ques():   
     
