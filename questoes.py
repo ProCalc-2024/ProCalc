@@ -88,7 +88,7 @@ def read_questao():
                     
                     # escolha de questão aleatoria
                     Questão = st.session_state["ques"]
-                    st.write(Questão)          
+                    st.write(st.session_state["ques"])          
                     #comando da questão  
                     questao = lista_ques[Questão] 
                     st.write('')
