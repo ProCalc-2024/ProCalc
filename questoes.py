@@ -74,7 +74,7 @@ def read_questao():
                         
                         random.shuffle(b)    
                         st.session_state["ques"] = b
-                        st.write(b)      
+                        st.write(st.session_state["ques"])      
 
                     # Verifique se há opções válidas disponíveis
                     if opcoes_validas:
