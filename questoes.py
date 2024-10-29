@@ -21,6 +21,7 @@ def read_questao():
 
     resul = {}
     b = []
+    b.append(0)
     evitar = []
     # lista de questões
     lista = list(set(dict["Materia"]))
@@ -64,13 +65,14 @@ def read_questao():
                     if "embaralho" not in st.session_state:
                         
                         st.session_state["embaralho"] = np.random.choice(lista, 5, replace = False)
-                
+
+                    # Filtra os números que não estão na lista de exclusão
+                    opcoes_validas = [num for num in b if num not in evitar]
+                    
                     if "ques" not in st.session_state:
                         st.session_state["save"] = {}
                         st.session_state["numero"] = 0
-                        st.session_state["ques"] = np.random.randint(0,n)
-                    # Filtra os números que não estão na lista de exclusão
-                    opcoes_validas = [num for num in b if num not in evitar]
+                        st.session_state["ques"] = np.random.choice(b)
 
                     # Verifique se há opções válidas disponíveis
                     if opcoes_validas:
