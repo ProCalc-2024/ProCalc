@@ -122,16 +122,16 @@ def read_questao():
                     resposta = alternativa == questao["Alternativa_A"]
     
         
-  butao = st.button("Submeter")    
-    if butao and resposta:         
-        st.toast(':green-background[Resposta Certa]', icon='🎉')
-        lis = [ lin for lin in resul ]
-        new_ques(lista,n)
-        time.sleep(5)
-        st.rerun()
+         butao = st.button("Submeter")    
+                 if butao and resposta:         
+                st.toast(':green-background[Resposta Certa]', icon='🎉')
+                lis = [ lin for lin in resul ]
+                new_ques(lista,n)
+                time.sleep(5)
+                st.rerun()
 
-    elif butao and (resposta is False):
-        st.toast(':red-background[Resposta Errada]', icon="⚠️")
+            elif butao and (resposta is False):
+                st.toast(':red-background[Resposta Errada]', icon="⚠️")
 
 
 
