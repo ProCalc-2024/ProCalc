@@ -142,20 +142,20 @@ def editar_ques():
         st.warning("Nenhuma questão disponível para editar.")
         return
     
-    # Materias disponíveis
+    
     materias_unicas = existing_data["Materia"].unique()
     
-    # Criação de colunas para Materia e Questão
+    
     col1, col2 = st.columns(2)
 
     with col1:
         materia = st.selectbox("Matéria", options=materias_unicas)
 
     with col2:
-        # Filtra questões pela matéria selecionada
+        
         questoes_filtradas = existing_data[existing_data["Materia"] == materia]
         
-        # Verifica se há questões para a matéria selecionada
+        
         if questoes_filtradas.empty:
             st.warning(f"Nenhuma questão disponível para a matéria '{materia}'.")
             return
@@ -163,10 +163,10 @@ def editar_ques():
         questoes_list = questoes_filtradas["Enunciado"].tolist()
         questao_selecionada = st.selectbox("Selecione a questão a editar", options=questoes_list)
 
-    # Obter dados da questão selecionada
+    
     questao_atual = questoes_filtradas[questoes_filtradas["Enunciado"] == questao_selecionada].iloc[0]
 
-    # Campos para edição
+    
     descricao = st.text_input("Descrição", value=questao_atual["Descrição"])
     enunciado = st.text_area("Enunciado", value=questao_atual["Enunciado"])
     letra_a = st.text_input("Resposta1", value=questao_atual["Alternativa_A"])
@@ -175,9 +175,9 @@ def editar_ques():
     letra_d = st.text_input("Resposta4", value=questao_atual["Alternativa_D"])
     letra_e = st.text_input("Resposta5", value=questao_atual["Alternativa_E"])
 
-    # Botão para salvar alterações
+    
     if st.button("Salvar"):
-        # Atualiza os dados da questão
+        
         existing_data.loc[existing_data["Enunciado"] == questao_selecionada, ["Materia", "Descrição", "Enunciado", "Alternativa_A", "Alternativa_B", "Alternativa_C", "Alternativa_D", "Alternativa_E"]] = [
             materia, descricao, enunciado, letra_a, letra_b, letra_c, letra_d, letra_e
         ]
@@ -186,7 +186,7 @@ def editar_ques():
         st.success("Questão editada com sucesso!")
 
 def deletar_ques():
-    # Conexão com a planilha
+    
     conn = st.connection("gsheets", type=GSheetsConnection)
     existing_data = conn.read(worksheet="Questões")
 
@@ -194,40 +194,40 @@ def deletar_ques():
         st.warning("Nenhuma questão disponível para deletar.")
         return
 
-    # Materias disponíveis
+    
     materias_unicas = existing_data["Materia"].unique()
 
-    # Criação de colunas para Matéria e Questão
+    
     col1, col2 = st.columns(2)
 
     with col1:
         materia = st.selectbox("Matéria", options=materias_unicas)
 
     with col2:
-        # Filtra questões pela matéria selecionada
+        
         questoes_filtradas = existing_data[existing_data["Materia"] == materia]
 
-        # Verifica se há questões para a matéria selecionada
+       
         if questoes_filtradas.empty:
             st.warning(f"Nenhuma questão disponível para a matéria '{materia}'.")
             return
 
-        # Lista de questões para excluir
+       
         questoes_list = questoes_filtradas["Enunciado"].tolist()
         questao_selecionada = st.selectbox("Selecione a questão a deletar", options=questoes_list)
 
-    # Confirmação de deleção
+ 
     if st.button("Deletar"):
-        # Remove a linha correspondente à questão selecionada
+      
         existing_data = existing_data[existing_data["Enunciado"] != questao_selecionada]
 
-        # Verifica se a questão foi deletada com sucesso
+      
         if questao_selecionada not in existing_data["Enunciado"].values:
-            # Atualiza a planilha com as questões restantes
+            
             conn.update(worksheet="Questões", data=existing_data)
 
-            # Mensagem de sucesso
+          
             st.success("Questão deletada com sucesso!")
 
-        # Atualiza a interface após a deleção
+        
         st.experimental_rerun()  # Isso recarrega a página atual para refletir as alterações
