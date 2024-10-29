@@ -47,7 +47,7 @@ def read_questao():
 
     for i in range(num_tabs):
         with tabs[i]:
-            st.subheader('', divider='gray')
+            
             
             # Número de questões
             n = len(lista_ques)
