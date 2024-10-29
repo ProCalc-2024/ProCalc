@@ -49,14 +49,10 @@ def read_questao():
         st.title("Perguntas")
 
     resultados = {}
-    
-    for i in range(numero):
+    questoes_rodada = selecionar_questoes(questoes_materia, numero)
+
+    for i, questao in enumerate(questoes_rodada):
         with tabs[i]:
-            questao = selecionar_questao(questoes_materia)
-            if not questao:
-                st.write("Você respondeu todas as perguntas dessa matéria!")
-                break
-            
             st.write('')
             st.write(questao["Enunciado"])
 
@@ -71,18 +67,22 @@ def read_questao():
     if st.button("Submeter"):
         verificar_respostas(resultados)
 
-def selecionar_questao(questoes_materia):
-    # Seleciona uma questão que ainda não foi respondida
-    opcoes_validas = [q for idx, q in enumerate(questoes_materia) if idx not in st.session_state["respondidas"]]
-    
-    if opcoes_validas:
-        questao_selecionada = np.random.choice(opcoes_validas)
-        st.session_state["respondidas"].add(questoes_materia.index(questao_selecionada))
-        return questao_selecionada
-    else:
-        # Redefine as questões respondidas para permitir que o usuário recomece
+def selecionar_questoes(questoes_materia, numero):
+    # Redefine questões respondidas caso todas as questões já tenham sido vistas
+    if len(st.session_state["respondidas"]) >= len(questoes_materia):
         st.session_state["respondidas"] = set()
-        return None
+
+    # Seleciona questões que ainda não foram respondidas
+    questoes_disponiveis = [q for idx, q in enumerate(questoes_materia) if idx not in st.session_state["respondidas"]]
+    questoes_selecionadas = []
+
+    for _ in range(min(numero, len(questoes_disponiveis))):
+        questao_selecionada = np.random.choice(questoes_disponiveis)
+        questoes_selecionadas.append(questao_selecionada)
+        st.session_state["respondidas"].add(questoes_materia.index(questao_selecionada))
+        questoes_disponiveis.remove(questao_selecionada)
+
+    return questoes_selecionadas
 
 def verificar_respostas(resultados):
     respostas_certas = 0
@@ -100,6 +100,7 @@ def verificar_respostas(resultados):
     st.write(f"Você acertou {respostas_certas} de {len(resultados)} questões!")
 
 local_css(r"styles_questao.css")
+
 
 
     
