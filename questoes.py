@@ -21,7 +21,6 @@ def read_questao():
 
     resul = {}
     b = []
-    b.append(0)
     evitar = []
     # lista de questões
     lista = list(set(dict["Materia"]))
@@ -56,6 +55,7 @@ def read_questao():
                     #numero de questoes
                     n=0
                     for linha in lista_ques:
+                        st.write(linha)
                         n = n+1
                         b.append(n)
                    
