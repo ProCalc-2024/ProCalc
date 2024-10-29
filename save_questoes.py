@@ -239,7 +239,8 @@ def deletar_ques():
 
         # Tente atualizar a planilha e trate possíveis erros
         try:
-            conn.update(worksheet="Questões", data=existing_data.values.tolist())  # Atualiza a planilha
+            # Atualiza a planilha com os dados restantes
+            conn.update(worksheet="Questões", data=existing_data.values.tolist())  
             st.success("Questão deletada com sucesso!")
         except Exception as e:
             st.error(f"Erro ao atualizar a planilha: {str(e)}")
