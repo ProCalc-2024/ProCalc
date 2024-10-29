@@ -33,7 +33,7 @@ def read_questao():
     for linha in dict.iloc: 
         if linha["Materia"] == materia:
                 lista_ques.append(linha)
-    
+    st.write(lista_ques)
     with col3:    
         # Pergunta ao usuário quantas Questões deseja criar
         numero = st.number_input("Quantas Questões você gostaria fazer?", min_value=1, max_value=20, value=1)
@@ -79,7 +79,7 @@ def read_questao():
                     st.write(questao["Enunciado"])
                         
                     st.subheader('', divider = 'gray')
-                    st.write(questao)
+                    
                     opções = [questao[embaralho[0]], questao[embaralho[1]], questao[embaralho[2]], questao[embaralho[3]], questao[embaralho[4]]]    
                     
                     alternativa = st.radio("", options = opções, index=questao["Enunciado"])
