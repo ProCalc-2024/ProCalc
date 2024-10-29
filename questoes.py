@@ -57,7 +57,7 @@ def read_questao():
                     n=0
                     for linha in lista_ques:
                         n = n+1
-                        b.append(n)
+                        b.append(n-1)
                     
                     # embaralha as alternativas independente da questão 
                     lista = ["Alternativa_A","Alternativa_B","Alternativa_C","Alternativa_D","Alternativa_E"]
@@ -69,6 +69,7 @@ def read_questao():
                     # Filtra os números que não estão na lista de exclusão
                     opcoes_validas = [num for num in b if num not in evitar]
                     opcoes_validas=list(set(opcoes_validas))
+                    
                     if "ques" not in st.session_state:
                         st.session_state["save"] = {}
                         st.session_state["numero"] = 0
