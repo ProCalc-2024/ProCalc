@@ -222,8 +222,8 @@ def deletar_ques():
         # Atualiza a planilha
         conn.update(worksheet="Questões", data=existing_data)
         
-        # Após a deleção, atualiza a seleção de questões
+        # Mensagem de sucesso
         st.success("Questão deletada com sucesso!")
-        
+
         # Redesenhar a interface para que as alterações sejam refletidas
         st.experimental_rerun()  # Isso recarrega a página atual para refletir as alterações
