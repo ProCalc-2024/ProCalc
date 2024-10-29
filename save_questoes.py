@@ -227,3 +227,6 @@ def deletar_ques():
 
         # Atualiza a interface após a deleção
         st.experimental_rerun()  # Isso recarrega a página atual para refletir as alterações
+
+        # ** ADICIONANDO AQUI **: Atualiza a lista de questões após a remoção
+        st.session_state["questoes_atualizadas"] = existing_data[existing_data["Materia"] == materia]["Enunciado"].tolist()
