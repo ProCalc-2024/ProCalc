@@ -134,7 +134,6 @@ def inserir_assun():
         )
         
               
-# Função para Editar Questões
 def editar_ques():
     conn = st.connection("gsheets", type=GSheetsConnection)
     existing_data = conn.read(worksheet="Questões")
@@ -143,21 +142,24 @@ def editar_ques():
         st.warning("Nenhuma questão disponível para editar.")
         return
     
+    # Materias disponíveis
+    materias_unicas = existing_data["Materia"].unique()
+    materia = st.selectbox("Matéria", options=materias_unicas)
+
+    # Filtra questões pela matéria selecionada
+    questoes_filtradas = existing_data[existing_data["Materia"] == materia]
+
+    # Verifica se há questões para a matéria selecionada
+    if questoes_filtradas.empty:
+        st.warning(f"Nenhuma questão disponível para a matéria '{materia}'.")
+        return
+
     # Lista de questões para edição
-    questoes_list = existing_data["Enunciado"].tolist()
+    questoes_list = questoes_filtradas["Enunciado"].tolist()
     questao_selecionada = st.selectbox("Selecione a questão a editar", options=questoes_list)
 
     # Obter dados da questão selecionada
-    questao_atual = existing_data[existing_data["Enunciado"] == questao_selecionada].iloc[0]
-
-    # Materias disponíveis
-    materias_unicas = existing_data["Materia"].unique()
-    
-    # Define o índice inicial baseado na matéria atual
-    index_inicial = list(materias_unicas).index(questao_atual["Materia"]) if questao_atual["Materia"] in materias_unicas else 0
-
-    # Selecionar matéria
-    materia = st.selectbox("Matéria", options=materias_unicas, index=index_inicial)
+    questao_atual = questoes_filtradas[questoes_filtradas["Enunciado"] == questao_selecionada].iloc[0]
 
     # Campos para edição
     descricao = st.text_input("Descrição", value=questao_atual["Descrição"])
