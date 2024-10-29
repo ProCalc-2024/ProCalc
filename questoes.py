@@ -79,10 +79,10 @@ def read_questao():
                     st.write(questao["Enunciado"])
                         
                     st.subheader('', divider = 'gray')
-                    
+                    st.write(questao)
                     opções = [questao[embaralho[0]], questao[embaralho[1]], questao[embaralho[2]], questao[embaralho[3]], questao[embaralho[4]]]    
                     
-                    alternativa = st.radio("", options = opções, index=None)
+                    alternativa = st.radio("", options = opções, index=questao["Enunciado"])
                         
                     st.session_state["resposta"] = questao["Alternativa_A"]
                 
