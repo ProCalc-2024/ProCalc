@@ -185,3 +185,39 @@ def editar_ques():
         conn.update(worksheet="Questões", data=existing_data)
         st.success("Questão editada com sucesso!")
 
+def deletar_ques():
+    conn = st.connection("gsheets", type=GSheetsConnection)
+    existing_data = conn.read(worksheet="Questões")
+    
+    if existing_data.empty:
+        st.warning("Nenhuma questão disponível para deletar.")
+        return
+
+    # Materias disponíveis
+    materias_unicas = existing_data["Materia"].unique()
+    
+    # Criação de colunas para Matéria e Questão
+    col1, col2 = st.columns(2)
+
+    with col1:
+        materia = st.selectbox("Matéria", options=materias_unicas)
+
+    with col2:
+        # Filtra questões pela matéria selecionada
+        questoes_filtradas = existing_data[existing_data["Materia"] == materia]
+        
+        # Verifica se há questões para a matéria selecionada
+        if questoes_filtradas.empty:
+            st.warning(f"Nenhuma questão disponível para a matéria '{materia}'.")
+            return
+
+        questoes_list = questoes_filtradas["Enunciado"].tolist()
+        questao_selecionada = st.selectbox("Selecione a questão a deletar", options=questoes_list)
+
+    # Confirmação de deleção
+    if st.button("Deletar"):
+        existing_data = existing_data[existing_data["Enunciado"] != questao_selecionada]
+        
+        # Atualiza a planilha
+        conn.update(worksheet="Questões", data=existing_data)
+        st.success("Questão deletada com sucesso!")
