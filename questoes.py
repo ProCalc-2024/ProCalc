@@ -81,7 +81,8 @@ def read_questao():
                     st.write("opcoes_validas")
                     st.write(opcoes_validas)
 
-                    evitar.append(Questão[i])
+                    evitar.append(st.session_state["ques"])
+                    
                     st.write("evitar")
                     st.write(evitar)
 
