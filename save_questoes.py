@@ -204,8 +204,8 @@ def deletar_ques():
         materia = st.selectbox("Matéria", options=materias_unicas)
 
     with col2:
-        # Filtra questões pela matéria selecionada
-        questoes_filtradas = existing_data[existing_data["Materia"] == materia]
+        # Filtra questões pela matéria selecionada que estão ativas
+        questoes_filtradas = existing_data[(existing_data["Materia"] == materia) & (existing_data["Ativo"] == True)]
 
         # Verifica se há questões para a matéria selecionada
         if questoes_filtradas.empty:
@@ -218,17 +218,14 @@ def deletar_ques():
 
     # Confirmação de deleção
     if st.button("Deletar"):
-        # Remove a linha correspondente à questão selecionada
-        existing_data = existing_data[existing_data["Enunciado"] != questao_selecionada]
+        # Marca a linha correspondente à questão selecionada como inativa
+        existing_data.loc[existing_data["Enunciado"] == questao_selecionada, "Ativo"] = False
 
-        # Verifica se a questão foi deletada com sucesso
-        if questao_selecionada not in existing_data["Enunciado"].values:
-            # Atualiza a planilha com as questões restantes
-            conn.update(worksheet="Questões", data=existing_data)
+        # Atualiza a planilha com as questões restantes
+        conn.update(worksheet="Questões", data=existing_data)
 
-            # Mensagem de sucesso
-            st.success("Questão deletada com sucesso!")
+        # Mensagem de sucesso
+        st.success("Questão deletada com sucesso!")
 
         # Atualiza a interface após a deleção
         st.experimental_rerun()  # Isso recarrega a página atual para refletir as alterações
-
