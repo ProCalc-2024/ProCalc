@@ -219,11 +219,11 @@ def deletar_ques():
         # Remove a linha correspondente à questão selecionada
         existing_data = existing_data[existing_data["Enunciado"] != questao_selecionada]
 
-        # ** ATUALIZA A PLANILHA AQUI **
-        conn.update(worksheet="Questões", data=existing_data)
+        # Se você não precisa atualizar a planilha, não faça isso.
+        # conn.update(worksheet="Questões", data=existing_data)
 
         # Mensagem de sucesso
         st.success("Questão deletada com sucesso!")
 
-        # Atualiza a lista de questões após a remoção
+        # Recarrega a lista de questões
         st.experimental_rerun()  # Isso recarrega a página atual para refletir as alterações
