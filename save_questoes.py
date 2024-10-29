@@ -197,8 +197,8 @@ def deletar_ques():
     # Conexão com a planilha
     conn = st.connection("gsheets", type=GSheetsConnection)
 
-    # Verifica se as questões já estão carregadas no session state
-    if 'questoes' not in st.session_state or st.session_state.questoes.empty:
+    # Carrega as questões se não estiverem no session state
+    if 'questoes' not in st.session_state:
         st.session_state.questoes = carregar_questoes()
 
     existing_data = st.session_state.questoes
@@ -259,4 +259,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-
