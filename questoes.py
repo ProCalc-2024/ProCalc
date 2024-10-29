@@ -83,7 +83,7 @@ def read_questao():
                     
                     opções = [questao[embaralho[0]], questao[embaralho[1]], questao[embaralho[2]], questao[embaralho[3]], questao[embaralho[4]]]    
                     
-                    alternativa = st.radio("", options = opções, index=questao["Enunciado"])
+                    alternativa = st.radio("", options = opções, index=None)
                         
                     st.session_state["resposta"] = questao["Alternativa_A"]
                 
