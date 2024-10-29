@@ -216,7 +216,7 @@ def deletar_ques():
 
     # Confirmação de deleção
     if st.button("Deletar"):
-        # Remove a questão e todas as suas alternativas
+        # Remove a linha correspondente à questão selecionada
         existing_data = existing_data[existing_data["Enunciado"] != questao_selecionada]
 
         # Atualiza a planilha
@@ -227,10 +227,3 @@ def deletar_ques():
 
         # Atualiza a interface após a deleção
         st.experimental_rerun()  # Isso recarrega a página atual para refletir as alterações
-
-    # Adiciona a lógica para mostrar as questões restantes após a deleção
-    questoes_filtradas_atualizadas = existing_data[existing_data["Materia"] == materia]
-    if not questoes_filtradas_atualizadas.empty:
-        questoes_list_atualizadas = questoes_filtradas_atualizadas["Enunciado"].tolist()
-        st.write("Questões restantes:")
-        st.write(questoes_list_atualizadas)
