@@ -54,14 +54,27 @@ def read_questao():
     for i, questao in enumerate(questoes_rodada):
         with tabs[i]:
             st.write('')
-            st.write(questao["Enunciado"])
+
+            # Chave para salvar a seleção no session_state
+            questao_key = f"alternativa_{i}"
 
             # Embaralha as alternativas
             alternativas_embaralhadas = [questao[alt] for alt in st.session_state["embaralho"]]
             resposta_correta = questao["Alternativa_A"]
 
-            # Exibe alternativas
-            alternativa_escolhida = st.radio("Escolha a alternativa correta:", options=alternativas_embaralhadas, key=f"alternativa_{i}")
+            # Exibe o enunciado e alternativas
+            st.write(questao["Enunciado"])
+            if questao_key not in st.session_state:
+                st.session_state[questao_key] = alternativas_embaralhadas[0]  # Valor inicial
+
+            # Radio button com sessão para armazenar seleção
+            alternativa_escolhida = st.radio(
+                "Escolha a alternativa correta:", 
+                options=alternativas_embaralhadas, 
+                key=questao_key,
+                index=alternativas_embaralhadas.index(st.session_state[questao_key]) if questao_key in st.session_state else 0
+            )
+            st.session_state[questao_key] = alternativa_escolhida  # Atualiza a seleção
             resultados[f"Q{i+1}"] = (alternativa_escolhida, resposta_correta)
     
     if st.button("Submeter"):
@@ -98,8 +111,6 @@ def verificar_respostas(resultados):
     st.session_state["respondidas"] = set()
     st.session_state["embaralho"] = np.random.permutation(["Alternativa_A", "Alternativa_B", "Alternativa_C", "Alternativa_D", "Alternativa_E"])
     st.write(f"Você acertou {respostas_certas} de {len(resultados)} questões!")
-
-local_css(r"styles_questao.css")
 
 
 
