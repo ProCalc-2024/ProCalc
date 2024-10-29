@@ -71,10 +71,8 @@ def read_questao():
                     if "ques" not in st.session_state:
                         st.session_state["save"] = {}
                         st.session_state["numero"] = 0
-                        
                         random.shuffle(b)    
-                        st.session_state["ques"] = b
-                        st.write(st.session_state["ques"])      
+                        st.session_state["ques"] = b     
 
                     # Verifique se há opções válidas disponíveis
                     if opcoes_validas:
@@ -91,7 +89,7 @@ def read_questao():
                     
                     # escolha de questão aleatoria
                     Questão = st.session_state["ques"]
-                            
+                    st.write(Questão[i])        
                     #comando da questão  
                     questao = lista_ques[Questão[i]] 
                     st.write('')
