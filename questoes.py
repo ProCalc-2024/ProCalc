@@ -52,7 +52,7 @@ def read_questao():
             # Número de questões
             n = len(lista_ques)
             b = list(range(n))
-            st.write(b)
+            
             
             # Embaralha as alternativas
             lista = ["Alternativa_A", "Alternativa_B", "Alternativa_C", "Alternativa_D", "Alternativa_E"]
