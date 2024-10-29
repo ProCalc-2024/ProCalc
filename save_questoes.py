@@ -140,7 +140,7 @@ def editar_ques():
     
     # Conectar e carregar as questões da planilha
     conn = st.connection("gsheets", type=GSheetsConnection)
-    existing_data = conn.read(worksheet="Questões")
+    existing_data = conn.read(worksheet="Materias")
     if existing_data.empty:
         st.warning("Nenhuma questão disponível para editar.")
         return
