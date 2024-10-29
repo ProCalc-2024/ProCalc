@@ -23,13 +23,13 @@ def read_questao():
     b = []
     evitar = []
     
-    # Lista de matérias
+    # lista de matérias
     lista = list(set(dict["Materia"]))
         
     with col2:    
         materia = st.selectbox("Selecione um assunto", lista)    
 
-    # Lista de questões de acordo com a matéria escolhida
+    # lista de questões de acordo com a matéria escolhida
     lista_ques = [linha for linha in dict.iloc if linha["Materia"] == materia]
     
     with col3:    
@@ -45,75 +45,71 @@ def read_questao():
     with col1:
         st.title("Perguntas")
 
-    # Variável de controle para o índice da questão atual
-    if "current_question" not in st.session_state:
-        st.session_state["current_question"] = 0
-
-    # Exibe apenas a aba da questão atual
     for i in range(num_tabs):
-        if i == st.session_state["current_question"]:
-            with tabs[i]:
-                st.subheader('', divider='gray')
-                
-                # Número de questões
-                n = len(lista_ques)
-                b = list(range(n))
-                
-                # Embaralha as alternativas
-                lista = ["Alternativa_A", "Alternativa_B", "Alternativa_C", "Alternativa_D", "Alternativa_E"]
-                if "embaralho" not in st.session_state:
-                    st.session_state["embaralho"] = np.random.choice(lista, 5, replace=False)
+        with tabs[i]:
+            st.subheader('', divider='gray')
+            
+            # Número de questões
+            n = len(lista_ques)
+            b = list(range(n))
+            st.write(b)
+            
+            # Embaralha as alternativas
+            lista = ["Alternativa_A", "Alternativa_B", "Alternativa_C", "Alternativa_D", "Alternativa_E"]
+            if "embaralho" not in st.session_state:
+                st.session_state["embaralho"] = np.random.choice(lista, 5, replace=False)
 
-                # Filtra os números que não estão na lista de exclusão
-                opcoes_validas = [num for num in b if num not in evitar]
-                opcoes_validas = list(set(opcoes_validas))
+            # Filtra os números que não estão na lista de exclusão
+            opcoes_validas = [num for num in b if num not in evitar]
+            opcoes_validas = list(set(opcoes_validas))
 
-                if "ques" not in st.session_state:
-                    st.session_state["save"] = {}
-                    st.session_state["numero"] = 0
-                    random.shuffle(b)
-                    st.session_state["ques"] = b
+            if "ques" not in st.session_state:
+                st.session_state["save"] = {}
+                st.session_state["numero"] = 0
+                random.shuffle(b)
+                st.session_state["ques"] = b
 
-                # Verifique se há opções válidas disponíveis
-                if opcoes_validas:
-                    numero_aleatorio = np.random.choice(opcoes_validas)
-                
-                embaralho = st.session_state["embaralho"]
-                
-                # Escolha de questão aleatória
-                questao = lista_ques[b[i]]
-                
-                st.write('')
-                st.write(questao["Enunciado"])
-                st.subheader('', divider='gray')
-                
-                # Exibe as alternativas embaralhadas
-                opcoes = [questao[embaralho[j]] for j in range(5)]
-                alternativa = st.radio("", options=opcoes, index=None)
-                
-                st.session_state["resposta"] = questao["Alternativa_A"]
-                resul.update(st.session_state["save"])                                                
-                st.session_state["save"] = {st.session_state["numero"] + 1: st.session_state["ques"]}
-                sequencia = st.session_state["save"]
-                resul.update(sequencia)
-                st.session_state["save"] = resul
-                resposta = alternativa == questao["Alternativa_A"]
+            # Verifique se há opções válidas disponíveis
+            if opcoes_validas:
+                numero_aleatorio = np.random.choice(opcoes_validas)
+            
+            st.write("opções válidas:", opcoes_validas)
+            evitar.append(b[i])
+            st.write("evitar:", evitar)
 
-                # Botão de submissão
-                butao = st.button("Submeter")
-                if butao:
-                    if resposta:
-                        st.toast(':green-background[Resposta Certa]', icon='🎉')
-                    else:
-                        st.toast(':red-background[Resposta Errada]', icon="⚠️")
+            embaralho = st.session_state["embaralho"]
+            st.write(st.session_state["ques"])
+            
+            # Escolha de questão aleatória
+            Questão = b[i]
+            questao = lista_ques[b[i]]
+            
+            st.write('')
+            st.write(questao["Enunciado"])
+            st.subheader('', divider='gray')
+            
+            # Exibe as alternativas embaralhadas
+            opcoes = [questao[embaralho[j]] for j in range(5)]
+            alternativa = st.radio("", options=opcoes, index=None)
+            
+            st.session_state["resposta"] = questao["Alternativa_A"]
+            resul.update(st.session_state["save"])                                                
+            st.session_state["save"] = {st.session_state["numero"] + 1: st.session_state["ques"]}
+            sequencia = st.session_state["save"]
+            resul.update(sequencia)
+            st.session_state["save"] = resul
+            resposta = alternativa == questao["Alternativa_A"]
 
-                # Botão "Próximo" para ir para a próxima questão
-                if i < num_tabs - 1:
-                    if st.button("Próximo", key=f"next_{i}"):
-                        st.session_state["current_question"] += 1
-                        st.rerun()
-                else:
-                    st.write("Parabéns, você completou todas as questões!")
+    # Botão de submissão
+    butao = st.button("Submeter")
+    if butao:
+        if resposta:
+            st.toast(':green-background[Resposta Certa]', icon='🎉')
+            new_ques(lista, n)
+            time.sleep(5)
+            st.rerun()
+        else:
+            st.toast(':red-background[Resposta Errada]', icon="⚠️")
 
 def new_ques(lista, n):
     # Salva as questões que foram feitas pelo usuário
@@ -121,8 +117,3 @@ def new_ques(lista, n):
     st.session_state["embaralho"] = np.random.choice(lista, 5, replace=False)
     st.session_state["ques"] = np.random.randint(0, n)
 
-
-
-
-
-    
