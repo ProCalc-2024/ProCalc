@@ -185,17 +185,29 @@ def editar_ques():
         conn.update(worksheet="Questões", data=existing_data)
         st.success("Questão editada com sucesso!")
 
-def deletar_ques():
-    # Conexão com a planilha
-    conn = st.connection("gsheets", type=GSheetsConnection)
-    existing_data = conn.read(worksheet="Questões")
+def carregar_questoes():
+    if "questoes" not in st.session_state:
+        # Conexão com a planilha
+        conn = st.connection("gsheets", type=GSheetsConnection)
+        existing_data = conn.read(worksheet="Questões")
+        
+        # Filtra para mostrar apenas questões ativas
+        questoes_ativas = existing_data[existing_data["Ativo"] == True]
+        
+        st.session_state.questoes = questoes_ativas
+    
+    return st.session_state.questoes
 
-    if existing_data.empty:
+# Função para deletar questões
+def deletar_ques():
+    questoes_ativas = carregar_questoes()  # Carrega questões ativas
+
+    if questoes_ativas.empty:
         st.warning("Nenhuma questão disponível para deletar.")
         return
 
     # Materias disponíveis
-    materias_unicas = existing_data["Materia"].unique()
+    materias_unicas = questoes_ativas["Materia"].unique()
 
     # Criação de colunas para Matéria e Questão
     col1, col2 = st.columns(2)
@@ -204,8 +216,8 @@ def deletar_ques():
         materia = st.selectbox("Matéria", options=materias_unicas)
 
     with col2:
-        # Filtra questões pela matéria selecionada
-        questoes_filtradas = existing_data[existing_data["Materia"] == materia]
+        # Filtra questões pela matéria selecionada que estão ativas
+        questoes_filtradas = questoes_ativas[questoes_ativas["Materia"] == materia]
 
         # Verifica se há questões para a matéria selecionada
         if questoes_filtradas.empty:
@@ -218,16 +230,26 @@ def deletar_ques():
 
     # Confirmação de deleção
     if st.button("Deletar"):
-        # Remove a linha correspondente à questão selecionada
-        existing_data = existing_data[existing_data["Enunciado"] != questao_selecionada]
+        # Marca a linha correspondente à questão selecionada como inativa
+        questoes_ativas.loc[questoes_ativas["Enunciado"] == questao_selecionada, "Ativo"] = False
 
-        # Verifica se a questão foi deletada com sucesso
-        if questao_selecionada not in existing_data["Enunciado"].values:
-            # Atualiza a planilha com as questões restantes
-            conn.update(worksheet="Questões", data=existing_data)
+        # Atualiza o session state com as questões restantes
+        st.session_state.questoes = questoes_ativas[questoes_ativas["Ativo"] == True]
 
-            # Mensagem de sucesso
-            st.success("Questão deletada com sucesso!")
+        # Atualiza a planilha com as questões restantes
+        st.connection("gsheets", type=GSheetsConnection).update(worksheet="Questões", data=questoes_ativas)
+
+        # Mensagem de sucesso
+        st.success("Questão deletada com sucesso!")
 
         # Atualiza a interface após a deleção
         st.experimental_rerun()  # Isso recarrega a página atual para refletir as alterações
+
+# Código principal onde você chama a função de deletar
+def main():
+    st.title("Gerenciamento de Questões")
+    # Outras funções ou lógica que você tiver
+    deletar_ques()  # Chama a função para deletar questões
+
+if __name__ == "__main__":
+    main()
