@@ -185,6 +185,16 @@ def editar_ques():
         conn.update(worksheet="Questões", data=existing_data)
         st.success("Questão editada com sucesso!")
 
+# Definição da função para carregar questões
+def carregar_questoes():
+    # Conexão com a planilha
+    conn = st.connection("gsheets", type=GSheetsConnection)
+    existing_data = conn.read(worksheet="Questões")
+
+    # Filtra para mostrar apenas questões ativas
+    questoes_ativas = existing_data[existing_data["Ativo"] == True]
+    
+    return questoes_ativas
 def deletar_ques():
     # Conexão com a planilha
     conn = st.connection("gsheets", type=GSheetsConnection)
