@@ -184,23 +184,22 @@ def editar_ques():
         
         conn.update(worksheet="Questões", data=existing_data)
         st.success("Questão editada com sucesso!")
+import streamlit as st
+import pandas as pd
 
+# Função para carregar questões
 def carregar_questoes():
-    if "questoes" not in st.session_state:
-        # Conexão com a planilha
-        conn = st.connection("gsheets", type=GSheetsConnection)
-        existing_data = conn.read(worksheet="Questões")
-        
-        # Filtra para mostrar apenas questões ativas
-        questoes_ativas = existing_data[existing_data["Ativo"] == True]
-        
-        st.session_state.questoes = questoes_ativas
+    # Conexão com a planilha
+    conn = st.connection("gsheets", type=GSheetsConnection)
+    existing_data = conn.read(worksheet="Questões")
     
-    return st.session_state.questoes
+    # Salva as questões no session state
+    st.session_state.questoes = existing_data
+    return existing_data
 
 # Função para deletar questões
 def deletar_ques():
-    questoes_ativas = carregar_questoes()  # Carrega questões ativas
+    questoes_ativas = carregar_questoes()  # Carrega questões
 
     if questoes_ativas.empty:
         st.warning("Nenhuma questão disponível para deletar.")
@@ -216,7 +215,7 @@ def deletar_ques():
         materia = st.selectbox("Matéria", options=materias_unicas)
 
     with col2:
-        # Filtra questões pela matéria selecionada que estão ativas
+        # Filtra questões pela matéria selecionada
         questoes_filtradas = questoes_ativas[questoes_ativas["Materia"] == materia]
 
         # Verifica se há questões para a matéria selecionada
@@ -230,11 +229,11 @@ def deletar_ques():
 
     # Confirmação de deleção
     if st.button("Deletar"):
-        # Marca a linha correspondente à questão selecionada como inativa
-        questoes_ativas.loc[questoes_ativas["Enunciado"] == questao_selecionada, "Ativo"] = False
+        # Remove a linha correspondente à questão selecionada
+        questoes_ativas = questoes_ativas[questoes_ativas["Enunciado"] != questao_selecionada]
 
         # Atualiza o session state com as questões restantes
-        st.session_state.questoes = questoes_ativas[questoes_ativas["Ativo"] == True]
+        st.session_state.questoes = questoes_ativas
 
         # Atualiza a planilha com as questões restantes
         st.connection("gsheets", type=GSheetsConnection).update(worksheet="Questões", data=questoes_ativas)
