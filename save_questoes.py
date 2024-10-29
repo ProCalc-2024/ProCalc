@@ -186,79 +186,49 @@ def editar_ques():
         st.success("Questão editada com sucesso!")
 
 
-def carregar_questoes():
-    # Conexão com a planilha
+def deletar_ques():
+    
     conn = st.connection("gsheets", type=GSheetsConnection)
     existing_data = conn.read(worksheet="Questões")
-    
-    # Salva as questões no session state para uso contínuo
-    st.session_state.questoes = existing_data
-    return existing_data
-
-def deletar_ques():
-    # Conexão com a planilha
-    conn = st.connection("gsheets", type=GSheetsConnection)
-
-    # Carrega as questões se não estiverem no session state
-    if 'questoes' not in st.session_state:
-        st.session_state.questoes = carregar_questoes()
-
-    existing_data = st.session_state.questoes
 
     if existing_data.empty:
         st.warning("Nenhuma questão disponível para deletar.")
         return
 
-    # Materias disponíveis
+    
     materias_unicas = existing_data["Materia"].unique()
 
-    # Criação de colunas para Matéria e Questão
+    
     col1, col2 = st.columns(2)
 
     with col1:
         materia = st.selectbox("Matéria", options=materias_unicas)
 
     with col2:
-        # Filtra questões pela matéria selecionada
+        
         questoes_filtradas = existing_data[existing_data["Materia"] == materia]
 
-        # Verifica se há questões para a matéria selecionada
+       
         if questoes_filtradas.empty:
             st.warning(f"Nenhuma questão disponível para a matéria '{materia}'.")
             return
 
-        # Lista de questões para excluir
+       
         questoes_list = questoes_filtradas["Enunciado"].tolist()
         questao_selecionada = st.selectbox("Selecione a questão a deletar", options=questoes_list)
 
-    # Confirmação de deleção
+ 
     if st.button("Deletar"):
-        # Remove a linha correspondente à questão selecionada
+      
         existing_data = existing_data[existing_data["Enunciado"] != questao_selecionada]
 
-        # Atualiza o session state com as questões restantes
-        st.session_state.questoes = existing_data
+      
+        if questao_selecionada not in existing_data["Enunciado"].values:
+            
+            conn.update(worksheet="Questões", data=existing_data)
 
-        # Tente atualizar a planilha e trate possíveis erros
-        try:
-            # Atualiza a planilha com os dados restantes
-            conn.update(worksheet="Questões", data=existing_data.values.tolist())  
+          
             st.success("Questão deletada com sucesso!")
-        except Exception as e:
-            st.error(f"Erro ao atualizar a planilha: {str(e)}")
 
-        # Atualiza a interface após a deleção
+        
         st.experimental_rerun()  # Isso recarrega a página atual para refletir as alterações
-
-# Código principal onde você chama a função de deletar
-def main():
-    st.title("Gerenciamento de Questões")
-    
-    # Inicializa o session state para as questões se ainda não existir
-    if 'questoes' not in st.session_state:
-        st.session_state.questoes = pd.DataFrame()  # Cria um DataFrame vazio
-
-    deletar_ques()  # Chama a função para deletar questões
-
-if __name__ == "__main__":
-    main()
