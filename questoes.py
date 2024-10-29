@@ -57,7 +57,7 @@ def read_questao():
                     for linha in lista_ques:
                         n = n+1
                         b.append(n)
-                    c = np.array(b)
+                    
                     # embaralha as alternativas independente da questão 
                     lista = ["Alternativa_A","Alternativa_B","Alternativa_C","Alternativa_D","Alternativa_E"]
                     
@@ -71,7 +71,7 @@ def read_questao():
                     if "ques" not in st.session_state:
                         st.session_state["save"] = {}
                         st.session_state["numero"] = 0
-                        st.session_state["ques"] = np.random.shuffle(c)
+                        st.session_state["ques"] = random.shuffle(b)
                         st.write(st.session_state["ques"])      
 
                     # Verifique se há opções válidas disponíveis
