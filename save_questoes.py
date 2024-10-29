@@ -185,7 +185,6 @@ def editar_ques():
         conn.update(worksheet="Questões", data=existing_data)
         st.success("Questão editada com sucesso!")
 
-# Função para carregar questões
 def carregar_questoes():
     conn = st.connection("gsheets", type=GSheetsConnection)
     existing_data = conn.read(worksheet="Questões")
