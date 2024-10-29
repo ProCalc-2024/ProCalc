@@ -148,9 +148,31 @@ def editar_ques():
     questao_selecionada = st.selectbox("Selecione uma questão para editar", existing_data['Enunciado'])
     questao_atual = existing_data[existing_data['Enunciado'] == questao_selecionada].iloc[0]
     
- 
 
-    materia = st.selectbox("Matéria", options=existing_data["Materia"].unique(), index=existing_data["Materia"].tolist().index(questao_atual['Materia']))
+    # Suponha que existing_data seja o DataFrame que contém as questões
+    existing_data = carregar_questoes()  # Função fictícia que carrega o DataFrame de questões
+    
+    # Seleciona uma questão para editar
+    questao_atual = st.selectbox("Escolha uma questão para editar", existing_data["Questao"])
+
+    # Busca a matéria atual da questão selecionada
+    materia_atual = questao_atual['Materia']
+    
+    # Lista de matérias disponíveis
+    materias_unicas = existing_data["Materia"].unique()
+
+    # Verifica se a matéria atual está na lista de matérias; caso contrário, define o índice como 0
+    if materia_atual in materias_unicas:
+        index_inicial = list(materias_unicas).index(materia_atual)
+    else:
+        index_inicial = 0  # Definimos um índice padrão, caso não encontre a matéria atual
+    
+    # Selectbox de matérias com índice seguro
+    materia = st.selectbox("Matéria", options=materias_unicas, index=index_inicial)
+
+    # Lógica para editar a questão selecionada...
+    # Implementar as ações de edição conforme o necessário.
+
     descricao = st.text_input("Descrição", value=questao_atual['Descrição'])
     enunciado = st.text_area("Enunciado", value=questao_atual['Enunciado'])
     letra_a = st.text_input("Resposta1", value=questao_atual['Alternativa_A'])
