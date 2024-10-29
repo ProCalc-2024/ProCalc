@@ -189,7 +189,6 @@ import pandas as pd
 
 # Função para carregar questões
 def carregar_questoes():
-    # Conexão com a planilha
     conn = st.connection("gsheets", type=GSheetsConnection)
     existing_data = conn.read(worksheet="Questões")
     
@@ -235,11 +234,13 @@ def deletar_ques():
         # Atualiza o session state com as questões restantes
         st.session_state.questoes = questoes_ativas
 
-        # Atualiza a planilha com as questões restantes
-        st.connection("gsheets", type=GSheetsConnection).update(worksheet="Questões", data=questoes_ativas)
-
-        # Mensagem de sucesso
-        st.success("Questão deletada com sucesso!")
+        # Tente atualizar a planilha e trate possíveis erros
+        try:
+            conn = st.connection("gsheets", type=GSheetsConnection)
+            conn.update(worksheet="Questões", data=questoes_ativas.values.tolist())  # Convertendo para lista de listas
+            st.success("Questão deletada com sucesso!")
+        except Exception as e:
+            st.error(f"Erro ao atualizar a planilha: {str(e)}")
 
         # Atualiza a interface após a deleção
         st.experimental_rerun()  # Isso recarrega a página atual para refletir as alterações
@@ -250,5 +251,7 @@ def main():
     # Outras funções ou lógica que você tiver
     deletar_ques()  # Chama a função para deletar questões
 
+if __name__ == "__main__":
+    main()
 if __name__ == "__main__":
     main()
