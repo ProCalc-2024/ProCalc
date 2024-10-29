@@ -134,4 +134,52 @@ def inserir_assun():
         )
         
               
+# Função para Editar Questões
+def editar_ques():
+    st.title("Editar Questões")
     
+    conn = st.connection("gsheets", type=GSheetsConnection)
+    existing_data = conn.read(worksheet="Questões")
+    if existing_data.empty:
+        st.warning("Nenhuma questão disponível para editar.")
+        return
+    
+    questao_selecionada = st.selectbox("Selecione uma questão para editar", existing_data['Enunciado'])
+    questao_atual = existing_data[existing_data['Enunciado'] == questao_selecionada].iloc[0]
+    
+    materia = st.selectbox("Matéria", options=existing_data["Materia"].unique(), index=existing_data["Materia"].tolist().index(questao_atual['Materia']))
+    descricao = st.text_input("Descrição", value=questao_atual['Descrição'])
+    enunciado = st.text_area("Enunciado", value=questao_atual['Enunciado'])
+    letra_a = st.text_input("Resposta1", value=questao_atual['Alternativa_A'])
+    letra_b = st.text_input("Resposta2", value=questao_atual['Alternativa_B'])
+    letra_c = st.text_input("Resposta3", value=questao_atual['Alternativa_C'])
+    letra_d = st.text_input("Resposta4", value=questao_atual['Alternativa_D'])
+    letra_e = st.text_input("Resposta5", value=questao_atual['Alternativa_E'])
+    
+    if st.button("Salvar Alterações"):
+        index = existing_data.index[existing_data['Enunciado'] == questao_selecionada][0]
+        existing_data.at[index, 'Materia'] = materia
+        existing_data.at[index, 'Descrição'] = descricao
+        existing_data.at[index, 'Enunciado'] = enunciado
+        existing_data.at[index, 'Alternativa_A'] = letra_a
+        existing_data.at[index, 'Alternativa_B'] = letra_b
+        existing_data.at[index, 'Alternativa_C'] = letra_c
+        existing_data.at[index, 'Alternativa_D'] = letra_d
+        existing_data.at[index, 'Alternativa_E'] = letra_e
+
+        conn.update(worksheet="Questões", data=existing_data)
+        st.toast(':green-background[Alterações salvas com sucesso]', icon='✔️')
+        st.experimental_rerun()
+
+
+# Barra lateral para navegação
+st.sidebar.title("Menu")
+aba_selecionada = st.sidebar.radio("Ir para:", ("Adicionar Questões", "Adicionar Materias", "Editar Questões"))
+
+# Chama a função de acordo com a aba selecionada
+if aba_selecionada == "Adicionar Questões":
+    inserir_ques()
+elif aba_selecionada == "Adicionar Materias":
+    inserir_assun()
+elif aba_selecionada == "Editar Questões":
+    editar_ques()    
