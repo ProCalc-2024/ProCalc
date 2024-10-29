@@ -196,12 +196,7 @@ def carregar_questoes():
 def deletar_ques():
     # Conexão com a planilha
     conn = st.connection("gsheets", type=GSheetsConnection)
-
-    # Carrega as questões se não estiverem no session state
-    if 'questoes' not in st.session_state:
-        st.session_state.questoes = carregar_questoes()
-
-    existing_data = st.session_state.questoes
+    existing_data = conn.read(worksheet="Questões")
 
     if existing_data.empty:
         st.warning("Nenhuma questão disponível para deletar.")
@@ -234,16 +229,11 @@ def deletar_ques():
         # Remove a linha correspondente à questão selecionada
         existing_data = existing_data[existing_data["Enunciado"] != questao_selecionada]
 
-        # Atualiza o session state com as questões restantes
-        st.session_state.questoes = existing_data
+        # Verifica se a questão foi deletada com sucesso
+        if questao_selecionada not in existing_data["Enunciado"].values:
+            # Atualiza a planilha com as questões restantes
+            conn.update(worksheet="Questões", data=existing_data)
 
-        # Tente atualizar a planilha e trate possíveis erros
-        try:
-            # Atualiza a planilha com os dados restantes
-            conn.update(worksheet="Questões", data=existing_data.values.tolist())  
-            st.success("Questão deletada com sucesso!")
-        except Exception as e:
-            st.error(f"Erro ao atualizar a planilha: {str(e)}")
 
         # Atualiza a interface após a deleção
         st.experimental_rerun()  # Isso recarrega a página atual para refletir as alterações
