@@ -240,6 +240,3 @@ def deletar_ques():
         # Atualiza a interface após a deleção
         st.experimental_rerun()  # Isso recarrega a página atual para refletir as alterações
 
-if __name__ == "__main__":
-    main()
-
