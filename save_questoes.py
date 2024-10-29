@@ -136,39 +136,44 @@ def inserir_assun():
               
 # Função para Editar Questões
 def editar_ques():
-    st.title("Editar Questões")
-    
     conn = st.connection("gsheets", type=GSheetsConnection)
     existing_data = conn.read(worksheet="Questões")
-
+    
     if existing_data.empty:
         st.warning("Nenhuma questão disponível para editar.")
         return
     
-    questao_selecionada = st.selectbox("Selecione uma questão para editar", existing_data['Enunciado'])
-    questao_atual = existing_data[existing_data['Enunciado'] == questao_selecionada].iloc[0]
-    
-    materia = st.selectbox("Matéria", options=existing_data["Materia"].unique(), index=existing_data["Materia"].tolist().index(questao_atual['Materia']))
-    descricao = st.text_input("Descrição", value=questao_atual['Descrição'])
-    enunciado = st.text_area("Enunciado", value=questao_atual['Enunciado'])
-    letra_a = st.text_input("Resposta1", value=questao_atual['Alternativa_A'])
-    letra_b = st.text_input("Resposta2", value=questao_atual['Alternativa_B'])
-    letra_c = st.text_input("Resposta3", value=questao_atual['Alternativa_C'])
-    letra_d = st.text_input("Resposta4", value=questao_atual['Alternativa_D'])
-    letra_e = st.text_input("Resposta5", value=questao_atual['Alternativa_E'])
-    
-    if st.button("Salvar Alterações"):
-        # Encontra o índice da questão selecionada e atualiza o DataFrame com os novos valores
-        index = existing_data.index[existing_data['Enunciado'] == questao_selecionada][0]
-        existing_data.at[index, 'Materia'] = materia
-        existing_data.at[index, 'Descrição'] = descricao
-        existing_data.at[index, 'Enunciado'] = enunciado
-        existing_data.at[index, 'Alternativa_A'] = letra_a
-        existing_data.at[index, 'Alternativa_B'] = letra_b
-        existing_data.at[index, 'Alternativa_C'] = letra_c
-        existing_data.at[index, 'Alternativa_D'] = letra_d
-        existing_data.at[index, 'Alternativa_E'] = letra_e
+    # Lista de questões para edição
+    questoes_list = existing_data["Enunciado"].tolist()
+    questao_selecionada = st.selectbox("Selecione a questão a editar", options=questoes_list)
 
+    # Obter dados da questão selecionada
+    questao_atual = existing_data[existing_data["Enunciado"] == questao_selecionada].iloc[0]
+
+    # Materias disponíveis
+    materias_unicas = existing_data["Materia"].unique()
+    
+    # Define o índice inicial baseado na matéria atual
+    index_inicial = list(materias_unicas).index(questao_atual["Materia"]) if questao_atual["Materia"] in materias_unicas else 0
+
+    # Selecionar matéria
+    materia = st.selectbox("Matéria", options=materias_unicas, index=index_inicial)
+
+    # Campos para edição
+    descricao = st.text_input("Descrição", value=questao_atual["Descrição"])
+    enunciado = st.text_area("Enunciado", value=questao_atual["Enunciado"])
+    letra_a = st.text_input("Resposta1", value=questao_atual["Alternativa_A"])
+    letra_b = st.text_input("Resposta2", value=questao_atual["Alternativa_B"])
+    letra_c = st.text_input("Resposta3", value=questao_atual["Alternativa_C"])
+    letra_d = st.text_input("Resposta4", value=questao_atual["Alternativa_D"])
+    letra_e = st.text_input("Resposta5", value=questao_atual["Alternativa_E"])
+
+    # Botão para salvar alterações
+    if st.button("Salvar"):
+        # Atualiza os dados da questão
+        existing_data.loc[existing_data["Enunciado"] == questao_selecionada, ["Materia", "Descrição", "Enunciado", "Alternativa_A", "Alternativa_B", "Alternativa_C", "Alternativa_D", "Alternativa_E"]] = [
+            materia, descricao, enunciado, letra_a, letra_b, letra_c, letra_d, letra_e
+        ]
+        
         conn.update(worksheet="Questões", data=existing_data)
-        st.toast(':green-background[Alterações salvas com sucesso]', icon='✔️')
-        st.experimental_rerun()
+        st.success("Questão editada com sucesso!")
