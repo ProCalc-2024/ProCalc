@@ -53,9 +53,11 @@ def read_questao():
                     
                     #numero de questoes
                     n=0
+                    b = []
                     for linha in lista_ques:
-                        n = n+1  
-                
+                        n = n+1
+                        b.append(n)
+                    st.write(b)
                     # embaralha as alternativas independente da questão 
                     lista = ["Alternativa_A","Alternativa_B","Alternativa_C","Alternativa_D","Alternativa_E"]
                     
@@ -72,7 +74,7 @@ def read_questao():
                     
                     # escolha de questão aleatoria
                     Questão = st.session_state["ques"]
-                    st.write(Questão)
+        
                     #comando da questão  
                     questao = lista_ques[Questão] 
                     
