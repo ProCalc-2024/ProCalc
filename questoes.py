@@ -86,7 +86,7 @@ def read_questao():
                         
                     st.session_state["resposta"] = questao["Alternativa_A"]
                 
-                    butao = st.button("Submeter") 
+                    
                             
                     # salva a sequencia de questoes
                     resul.update(st.session_state["save"])                                                
@@ -104,15 +104,7 @@ def read_questao():
                 
                     resposta = alternativa == questao["Alternativa_A"]
     
-    if butao and resposta:         
-        st.toast(':green-background[Resposta Certa]', icon='🎉')
-        lis = [ lin for lin in resul ]
-        new_ques(lista,n)
-        time.sleep(5)
-        st.rerun()
 
-    elif butao and (resposta is False):
-        st.toast(':red-background[Resposta Errada]', icon="⚠️")
 
 
 def new_ques(lista,n):
