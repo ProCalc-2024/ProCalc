@@ -58,7 +58,7 @@ def read_questao():
                     for linha in lista_ques:
                         n = n+1
                         b.append(n-1)
-                    
+                    st.write(b)
                     # embaralha as alternativas independente da questão 
                     lista = ["Alternativa_A","Alternativa_B","Alternativa_C","Alternativa_D","Alternativa_E"]
                     
