@@ -87,8 +87,6 @@ def read_questao():
                     alternativa = st.radio("", options = opções, index=i)
                         
                     st.session_state["resposta"] = questao["Alternativa_A"]
-                
-                    butao = st.button("Submeter")
                             
                     # salva a sequencia de questoes
                     resul.update(st.session_state["save"])                                                
@@ -106,7 +104,7 @@ def read_questao():
                 
                     resposta = alternativa == questao["Alternativa_A"]
     
-        
+    butao = st.button("Submeter")    
     if butao and resposta:         
         st.toast(':green-background[Resposta Certa]', icon='🎉')
         lis = [ lin for lin in resul ]
