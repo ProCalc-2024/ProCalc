@@ -74,7 +74,7 @@ def read_questao():
                     Questão = st.session_state["ques"]
                 
                     #comando da questão  
-                    questao = lista_ques[Questão] 
+                    questao = lista_ques[Questão[i]] 
                     
                     st.write('')
                     st.write(questao["Enunciado"])
