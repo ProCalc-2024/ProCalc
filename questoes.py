@@ -33,7 +33,7 @@ def read_questao():
     for linha in dict.iloc: 
         if linha["Materia"] == materia:
                 lista_ques.append(linha)
-    st.write(lista_ques[])
+    
     with col3:    
         # Pergunta ao usuário quantas Questões deseja criar
         numero = st.number_input("Quantas Questões você gostaria fazer?", min_value=1, max_value=20, value=1)
@@ -75,7 +75,7 @@ def read_questao():
                 
                     #comando da questão  
                     questao = lista_ques[Questão] 
-                    st.write(lista_ques[])
+                    
                     st.write('')
                     st.write(questao["Enunciado"])
                         
