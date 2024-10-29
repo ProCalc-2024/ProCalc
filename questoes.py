@@ -81,9 +81,9 @@ def read_questao():
             Questão = b[i]
             questao = lista_ques[b[i]]
             
-            st.write('')
+            st.write(" ")
             st.write(questao["Enunciado"])
-            st.subheader('', divider='gray')
+            st.subheader(' ', divider='gray')
             
             # Exibe as alternativas embaralhadas
             opcoes = [questao[embaralho[j]] for j in range(5)]
