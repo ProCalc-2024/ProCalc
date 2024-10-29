@@ -48,6 +48,7 @@ def read_questao():
         st.title("Perguntas")
 
     for i in range(num_tabs):
+            
             with tabs[i]:
         
                     st.subheader('', divider = 'gray')
@@ -89,8 +90,7 @@ def read_questao():
                     embaralho = st.session_state["embaralho"]
                     
                     # escolha de questão aleatoria
-                    Questão = st.session_state["ques"]
-                    st.write(Questão[i])      
+                    Questão = st.session_state["ques"]    
                     #comando da questão  
                     questao = lista_ques[Questão] 
                     st.write('')
