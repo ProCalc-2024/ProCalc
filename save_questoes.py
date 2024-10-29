@@ -186,16 +186,17 @@ def editar_ques():
         st.success("Questão editada com sucesso!")
 
 def deletar_ques():
+    # Conexão com a planilha
     conn = st.connection("gsheets", type=GSheetsConnection)
     existing_data = conn.read(worksheet="Questões")
-    
+
     if existing_data.empty:
         st.warning("Nenhuma questão disponível para deletar.")
         return
 
     # Materias disponíveis
     materias_unicas = existing_data["Materia"].unique()
-    
+
     # Criação de colunas para Matéria e Questão
     col1, col2 = st.columns(2)
 
@@ -211,7 +212,7 @@ def deletar_ques():
             st.warning(f"Nenhuma questão disponível para a matéria '{materia}'.")
             return
 
-        # Atualiza a lista de questões para excluir as deletadas
+        # Lista de questões para excluir
         questoes_list = questoes_filtradas["Enunciado"].tolist()
         questao_selecionada = st.selectbox("Selecione a questão a deletar", options=questoes_list)
 
@@ -220,11 +221,14 @@ def deletar_ques():
         # Remove a linha correspondente à questão selecionada
         existing_data = existing_data[existing_data["Enunciado"] != questao_selecionada]
 
-        # Atualiza a planilha com as questões restantes
-        conn.update(worksheet="Questões", data=existing_data)
+        # Verifica se a questão foi deletada com sucesso
+        if questao_selecionada not in existing_data["Enunciado"].values:
+            # Atualiza a planilha com as questões restantes
+            conn.update(worksheet="Questões", data=existing_data)
 
-        # Mensagem de sucesso
-        st.success("Questão deletada com sucesso!")
+            # Mensagem de sucesso
+            st.success("Questão deletada com sucesso!")
 
         # Atualiza a interface após a deleção
         st.experimental_rerun()  # Isso recarrega a página atual para refletir as alterações
+
