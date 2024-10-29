@@ -91,7 +91,7 @@ def read_questao():
                               
                     #comando da questão  
                     questao = lista_ques[Questão] 
-                    st.write(lista_ques[Questão])
+                    st.write(lista_ques)
                     st.write('')
                     st.write(questao["Enunciado"])
                         
