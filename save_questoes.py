@@ -144,19 +144,24 @@ def editar_ques():
     
     # Materias disponíveis
     materias_unicas = existing_data["Materia"].unique()
-    materia = st.selectbox("Matéria", options=materias_unicas)
+    
+    # Criação de colunas para Materia e Questão
+    col1, col2 = st.columns(2)
 
-    # Filtra questões pela matéria selecionada
-    questoes_filtradas = existing_data[existing_data["Materia"] == materia]
+    with col1:
+        materia = st.selectbox("Matéria", options=materias_unicas)
 
-    # Verifica se há questões para a matéria selecionada
-    if questoes_filtradas.empty:
-        st.warning(f"Nenhuma questão disponível para a matéria '{materia}'.")
-        return
+    with col2:
+        # Filtra questões pela matéria selecionada
+        questoes_filtradas = existing_data[existing_data["Materia"] == materia]
+        
+        # Verifica se há questões para a matéria selecionada
+        if questoes_filtradas.empty:
+            st.warning(f"Nenhuma questão disponível para a matéria '{materia}'.")
+            return
 
-    # Lista de questões para edição
-    questoes_list = questoes_filtradas["Enunciado"].tolist()
-    questao_selecionada = st.selectbox("Selecione a questão a editar", options=questoes_list)
+        questoes_list = questoes_filtradas["Enunciado"].tolist()
+        questao_selecionada = st.selectbox("Selecione a questão a editar", options=questoes_list)
 
     # Obter dados da questão selecionada
     questao_atual = questoes_filtradas[questoes_filtradas["Enunciado"] == questao_selecionada].iloc[0]
@@ -179,3 +184,4 @@ def editar_ques():
         
         conn.update(worksheet="Questões", data=existing_data)
         st.success("Questão editada com sucesso!")
+
