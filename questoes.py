@@ -88,7 +88,7 @@ def read_questao():
                     st.write(evitar)
 
                     embaralho = st.session_state["embaralho"]
-                    
+                    st.write(st.session_state["ques"])
                     # escolha de questão aleatoria
                     Questão = st.session_state["ques"]    
                     #comando da questão  
