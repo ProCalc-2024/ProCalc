@@ -39,7 +39,7 @@ def read_questao():
     
     with col3:    
         # Pergunta ao usuário quantas questões deseja responder
-        numero = st.number_input("Quantas Questões você gostaria de fazer?", min_value=1, max_value=min(20, len(questoes_materia)), value=1)
+        numero = st.number_input("Quantas Questões você gostaria de fazer?", min_value=1, max_value=len(questoes_materia), value=1)
     
     # Cria as abas dinamicamente
     tab_names = [f"Q{i + 1}" for i in range(numero)]
@@ -53,6 +53,10 @@ def read_questao():
     for i in range(numero):
         with tabs[i]:
             questao = selecionar_questao(questoes_materia)
+            if not questao:
+                st.write("Você respondeu todas as perguntas dessa matéria!")
+                break
+            
             st.write('')
             st.write(questao["Enunciado"])
 
@@ -76,8 +80,9 @@ def selecionar_questao(questoes_materia):
         st.session_state["respondidas"].add(questoes_materia.index(questao_selecionada))
         return questao_selecionada
     else:
-        st.write("Você respondeu todas as perguntas dessa matéria!")
-        st.stop()
+        # Redefine as questões respondidas para permitir que o usuário recomece
+        st.session_state["respondidas"] = set()
+        return None
 
 def verificar_respostas(resultados):
     respostas_certas = 0
@@ -95,5 +100,6 @@ def verificar_respostas(resultados):
     st.write(f"Você acertou {respostas_certas} de {len(resultados)} questões!")
 
 local_css(r"styles_questao.css")
+
 
     
