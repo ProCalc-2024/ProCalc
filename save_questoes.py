@@ -184,9 +184,8 @@ def editar_ques():
         
         conn.update(worksheet="Questões", data=existing_data)
         st.success("Questão editada com sucesso!")
-import streamlit as st
-import pandas as pd
 
+# Função para carregar questões
 def carregar_questoes():
     conn = st.connection("gsheets", type=GSheetsConnection)
     existing_data = conn.read(worksheet="Questões")
@@ -233,8 +232,9 @@ def deletar_ques():
         # Tente atualizar a planilha e trate possíveis erros
         try:
             conn = st.connection("gsheets", type=GSheetsConnection)
+            # Atualiza a planilha com as questões restantes
             conn.update(worksheet="Questões", data=questoes_ativas.values.tolist())  # Convertendo para lista de listas
-
+            
             # Atualiza o session state com as questões restantes
             st.session_state.questoes = questoes_ativas
             
@@ -249,8 +249,13 @@ def deletar_ques():
 # Código principal onde você chama a função de deletar
 def main():
     st.title("Gerenciamento de Questões")
-    # Outras funções ou lógica que você tiver
+    
+    # Inicializa o session state para as questões se ainda não existir
+    if 'questoes' not in st.session_state:
+        st.session_state.questoes = pd.DataFrame()  # Cria um DataFrame vazio
+
     deletar_ques()  # Chama a função para deletar questões
 
 if __name__ == "__main__":
     main()
+
