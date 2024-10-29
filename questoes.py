@@ -81,7 +81,7 @@ def read_questao():
                     st.write("opcoes_validas")
                     st.write(opcoes_validas)
 
-                    evitar.append(st.session_state["ques"])
+                    evitar.append(Questão[i])
                     st.write("evitar")
                     st.write(evitar)
 
@@ -89,9 +89,9 @@ def read_questao():
                     
                     # escolha de questão aleatoria
                     Questão = st.session_state["ques"]
-                    st.write(i)      
+                    st.write(Questão[i])      
                     #comando da questão  
-                    questao = lista_ques[k] 
+                    questao = lista_ques[Questão[i]] 
                     st.write('')
                     st.write(questao["Enunciado"])
                         
