@@ -205,12 +205,13 @@ def deletar_ques():
     with col2:
         # Filtra questões pela matéria selecionada
         questoes_filtradas = existing_data[existing_data["Materia"] == materia]
-        
+
         # Verifica se há questões para a matéria selecionada
         if questoes_filtradas.empty:
             st.warning(f"Nenhuma questão disponível para a matéria '{materia}'.")
             return
 
+        # Atualiza a lista de questões para excluir as deletadas
         questoes_list = questoes_filtradas["Enunciado"].tolist()
         questao_selecionada = st.selectbox("Selecione a questão a deletar", options=questoes_list)
 
@@ -227,4 +228,3 @@ def deletar_ques():
 
         # Atualiza a interface após a deleção
         st.experimental_rerun()  # Isso recarrega a página atual para refletir as alterações
-
