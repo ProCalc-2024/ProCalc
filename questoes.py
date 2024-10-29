@@ -71,7 +71,7 @@ def read_questao():
                     if "ques" not in st.session_state:
                         st.session_state["save"] = {}
                         st.session_state["numero"] = 0
-                        st.session_state["ques"] = np.random.shuffle(b)
+                        st.session_state["ques"] = np.random.shuffle(np.array(b))
 
                     # Verifique se há opções válidas disponíveis
                     if opcoes_validas:
