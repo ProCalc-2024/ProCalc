@@ -73,7 +73,7 @@ def read_questao():
                         st.session_state["save"] = {}
                         st.session_state["numero"] = 0
                         random.shuffle(b)    
-                        st.session_state["ques"] = b[i]     
+                        st.session_state["ques"] = b     
 
                     # Verifique se há opções válidas disponíveis
                     if opcoes_validas:
