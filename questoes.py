@@ -72,7 +72,7 @@ def read_questao():
                         st.session_state["save"] = {}
                         st.session_state["numero"] = 0
                         random.shuffle(b)    
-                        st.session_state["ques"] = b     
+                        st.session_state["ques"] = b[i]     
 
                     # Verifique se há opções válidas disponíveis
                     if opcoes_validas:
@@ -91,7 +91,7 @@ def read_questao():
                     Questão = st.session_state["ques"]
                     st.write(Questão[i])      
                     #comando da questão  
-                    questao = lista_ques[Questão[i]] 
+                    questao = lista_ques[Questão] 
                     st.write('')
                     st.write(questao["Enunciado"])
                         
