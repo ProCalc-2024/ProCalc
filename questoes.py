@@ -20,7 +20,7 @@ def read_questao():
     col1, col2, col3 = st.columns([1, 1, 1])
 
     resul = {}
-
+    b = []
     # lista de questões
     lista = list(set(dict["Materia"]))
         
@@ -53,11 +53,10 @@ def read_questao():
                     
                     #numero de questoes
                     n=0
-                    b = []
                     for linha in lista_ques:
                         n = n+1
                         b.append(n)
-                    st.write(b)
+                   
                     # embaralha as alternativas independente da questão 
                     lista = ["Alternativa_A","Alternativa_B","Alternativa_C","Alternativa_D","Alternativa_E"]
                     
@@ -85,7 +84,7 @@ def read_questao():
                     
                     opções = [questao[embaralho[0]], questao[embaralho[1]], questao[embaralho[2]], questao[embaralho[3]], questao[embaralho[4]]]    
                     
-                    alternativa = st.radio("", options = opções, index=None)
+                    alternativa = st.radio("", options = opções, index=i)
                         
                     st.session_state["resposta"] = questao["Alternativa_A"]
                 
