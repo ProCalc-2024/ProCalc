@@ -216,8 +216,14 @@ def deletar_ques():
 
     # Confirmação de deleção
     if st.button("Deletar"):
+        # Remove a questão selecionada
         existing_data = existing_data[existing_data["Enunciado"] != questao_selecionada]
-        
+
         # Atualiza a planilha
         conn.update(worksheet="Questões", data=existing_data)
+        
+        # Após a deleção, atualiza a seleção de questões
         st.success("Questão deletada com sucesso!")
+        
+        # Redesenhar a interface para que as alterações sejam refletidas
+        st.experimental_rerun()  # Isso recarrega a página atual para refletir as alterações
