@@ -11,7 +11,7 @@ from yaml.loader import SafeLoader
 from streamlit_option_menu import option_menu
 from git import Repo
 import requests
-import testea
+
 
 def local_css(file_name):
         with open(file_name) as f:
@@ -36,7 +36,7 @@ authenticator.login()
 
 if st.session_state["authentication_status"]:
     
-    tab1, tab2, tab3, tab4 = st.tabs(["Home", "Edição", "Questionario", "Configurações"])
+    tab1, tab2, tab3, tab4, tab5 = st.tabs(["Home", "Edição", "Questionario", "Configurações", "Teste"])
 
     with col2:
         with tab1:
@@ -49,7 +49,7 @@ if st.session_state["authentication_status"]:
             co1, co2 = st.columns([1, 1])
 
             with co1:
-                    option = st.selectbox("",("Adicionar Questões", "Adicionar Materias"), index=None, placeholder="Editar Questões")
+                    option = st.selectbox("",("Adicionar Questões", "Adicionar Materias", "Deletar Questão"), index=None, placeholder="Editar Questões")
 
             match option:
                 case "Adicionar Questões":
@@ -57,12 +57,14 @@ if st.session_state["authentication_status"]:
                 case "Adicionar Materias":
                         with co1:
                                 save_questoes.inserir_assun()
-                     
+                case "Deletar Questão":
+                        save_questoes.editar_quest()
         with tab3:
             questoes.read_questao()
 
         with tab4:
             authenticator.logout()
+
 
 elif st.session_state["authentication_status"] is False:
     st.error('O nome de usuário/senha está incorreto')
