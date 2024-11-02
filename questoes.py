@@ -38,10 +38,10 @@ def read_questao():
     with col3:    
         # Pergunta ao usuário quantas questões deseja criar
         numero = st.number_input("Quantas questões você gostaria de fazer?", min_value=1, max_value=n, value=1)
-        num_tabs = numero
+        
     
     # Cria uma lista de nomes para as questões
-    tab_names = [f"Q{i + 1}" for i in range(num_tabs)]
+    tab_names = [f"Q{i + 1}" for i in range(numero)]
     # Cria as abas dinamicamente
     tabs = st.tabs(tab_names)
         
