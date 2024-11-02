@@ -46,7 +46,7 @@ def read_questao():
     # Cria as abas dinamicamente
     tabs = st.tabs(tab_names)
     
-    st.write(tab_names)
+    
     
     with col1:
         st.title("Perguntas")
