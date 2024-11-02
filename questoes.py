@@ -46,8 +46,6 @@ def read_questao():
     # Cria as abas dinamicamente
     tabs = st.tabs(tab_names)
     
-    
-    
     with col1:
         st.title("Perguntas")
 
@@ -92,7 +90,7 @@ def read_questao():
             
             # Exibe as alternativas embaralhadas
             opcoes = [questao[embaralho[j]] for j in range(5)]
-            alternativa = st.radio("", options=opcoes, index=None)
+            alternativa = st.radio("", options=opcoes, index=i)
             
             st.session_state["resposta"] = questao["Alternativa_A"]
             resul.update(st.session_state["save"])                                                
@@ -103,7 +101,10 @@ def read_questao():
             resposta = alternativa == questao["Alternativa_A"]
         
         with tabs[i+1]:
+            for i in range(numero):
+                
             st.write(tab_names)
+            
     # Botão de submissão
     butao = st.button("Submeter")
     if butao:
