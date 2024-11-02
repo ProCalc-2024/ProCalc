@@ -103,7 +103,7 @@ def read_questao():
             resposta = alternativa == questao["Alternativa_A"]
        
         with tabs[numero]:
-            index = opcoes.index(st.session_state.option1)
+            index = ["Alternativa_A", "Alternativa_B", "Alternativa_C", "Alternativa_D", "Alternativa_E"].index(st.session_state.option1)
             alternativa = st.radio("", options=opcoes, index=index, key="option2")
             st.write(alternativa)
             
