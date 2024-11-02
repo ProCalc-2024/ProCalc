@@ -105,7 +105,7 @@ def read_questao():
                 index = opcoes.index(st.session_state.i)
             else:
                 index = None
-            alternativa = st.radio("", options=opcoes, index=index, key="option2")
+            alternativa = st.radio("", options=opcoes, index=index, key= i)
             st.write(alternativa)
             
     # Botão de submissão
