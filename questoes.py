@@ -102,7 +102,7 @@ def read_questao():
         
         with tabs[i+1]:
             for i in range(numero):
-                st.radio("", options=opcoes, index=i)
+                alternativa
             st.write(tab_names)
             
     # Botão de submissão
