@@ -102,7 +102,7 @@ def read_questao():
             resposta = alternativa == questao["Alternativa_A"]
        
         with tabs[numero]:   
-            alternativa = st.radio("", key=1)
+            alternativa = st.radio(key=1)
             st.write(alternativa)
             
     # Botão de submissão
