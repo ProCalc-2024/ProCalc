@@ -103,8 +103,9 @@ def read_questao():
         with tabs[numero]:
             if alternativa != None:
                 index2 = opcoes.index(alternativa)
+            else:
+                index2 = None
 
-                
             st.radio("", options=opcoes, index=index2, key= f"cha{i}")
             st.write(alternativa)
             
