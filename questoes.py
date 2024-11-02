@@ -18,7 +18,7 @@ def read_questao():
     dict = pd.DataFrame(sheet)
 
     col1, col2, col3 = st.columns([1, 1, 1])
-    test = []
+    test = {}
     resul = {}
     b = []
     evitar = []
