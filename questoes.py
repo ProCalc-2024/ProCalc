@@ -91,7 +91,7 @@ def read_questao():
             
             # Exibe as alternativas embaralhadas
             opcoes = [questao[embaralho[j]] for j in range(5)]
-            alternativa = st.radio("", options=opcoes, index=None)
+            alternativa[i] = st.radio("", options=opcoes, index=None)
             
             st.session_state["resposta"] = questao["Alternativa_A"]
             resul.update(st.session_state["save"])                                                
@@ -99,11 +99,11 @@ def read_questao():
             sequencia = st.session_state["save"]
             resul.update(sequencia)
             st.session_state["save"] = resul
-            resposta = alternativa == questao["Alternativa_A"]
+            resposta = alternativa[i] == questao["Alternativa_A"]
        
         with tabs[numero]:   
             st.write(tabs[i])
-            st.write(alternativa)
+            st.write(alternativa[i])
             
     # Botão de submissão
     butao = st.button("Submeter")
