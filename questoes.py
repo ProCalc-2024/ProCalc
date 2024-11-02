@@ -99,10 +99,10 @@ def read_questao():
             resul.update(sequencia)
             st.session_state["save"] = resul
             resposta = alternativa == questao["Alternativa_A"]
-        
-        with tabs[i+1]:
-            for i in range(numero):
-                st.write(alternativa)
+    
+    for i in range(numero):    
+        with tabs[i+1]:   
+            st.write(alternativa)
             st.write(tab_names)
             
     # Botão de submissão
