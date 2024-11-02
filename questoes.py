@@ -50,6 +50,11 @@ def read_questao():
         st.title("Perguntas")
 
     for i in range(numero):
+
+        with tabs[i+1]:   
+            st.write(alternativa)
+            st.write(tab_names)
+        
         with tabs[i]:
             
             
@@ -99,11 +104,7 @@ def read_questao():
             resul.update(sequencia)
             st.session_state["save"] = resul
             resposta = alternativa == questao["Alternativa_A"]
-    
-    for i in range(numero):    
-        with tabs[i+1]:   
-            st.write(alternativa)
-            st.write(tab_names)
+       
             
     # Botão de submissão
     butao = st.button("Submeter")
