@@ -90,9 +90,7 @@ def read_questao():
             
             # Exibe as alternativas embaralhadas
             opcoes = [questao[embaralho[j]] for j in range(5)]
-            st.session_state.option1 = st.radio("", options=opcoes, index=None, key = "option1")
-            alternativa = st.session_state.option1
-
+            alternativa = st.radio("", options=opcoes, index=None, key = "option1")
             
             st.session_state["resposta"] = questao["Alternativa_A"]
             resul.update(st.session_state["save"])                                                
