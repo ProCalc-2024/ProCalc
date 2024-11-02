@@ -101,7 +101,7 @@ def read_questao():
             st.session_state["save"] = resul
             resposta = alternativa == questao["Alternativa_A"]
        
-        with tabs[i+1]:   
+        with tabs[numero]:   
             st.write(alternativa)
             
     # Botão de submissão
