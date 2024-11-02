@@ -91,7 +91,6 @@ def read_questao():
             # Exibe as alternativas embaralhadas
             opcoes = [questao[embaralho[j]] for j in range(5)]
             alternativa = st.radio("", options=opcoes, index=None)
-            test[i] = alternativa
             
             st.session_state["resposta"] = questao["Alternativa_A"]
             resul.update(st.session_state["save"])                                                
@@ -103,11 +102,11 @@ def read_questao():
        
         with tabs[numero]:
             if alternativa != None:
-                index = opcoes.index(test[i])
+                index2 = opcoes.index(alternativa)
             else:
-                index = None
+                index2 = None
                 
-            st.radio("", options=opcoes, index=index, key= f"cha{i}")
+            st.radio("", options=opcoes, index=index2, key= f"cha{i}")
             st.write(alternativa)
             
     # Botão de submissão
