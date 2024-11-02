@@ -102,7 +102,10 @@ def read_questao():
             resposta = alternativa == questao["Alternativa_A"]
        
         with tabs[numero]:
-            index = opcoes.index(alternativa)
+            if alternativa != None:
+                index = opcoes.index(alternativa)
+            else:
+                index = None
             alternativa = st.radio("", options=opcoes, index=index, key="option2")
             st.write(alternativa)
             
