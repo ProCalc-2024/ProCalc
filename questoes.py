@@ -18,7 +18,7 @@ def read_questao():
     dict = pd.DataFrame(sheet)
 
     col1, col2, col3 = st.columns([1, 1, 1])
-
+    test = []
     resul = {}
     b = []
     evitar = []
@@ -91,6 +91,7 @@ def read_questao():
             # Exibe as alternativas embaralhadas
             opcoes = [questao[embaralho[j]] for j in range(5)]
             alternativa = st.radio("", options=opcoes, index=None)
+            test[i] = alternativa
             
             st.session_state["resposta"] = questao["Alternativa_A"]
             resul.update(st.session_state["save"])                                                
@@ -102,7 +103,7 @@ def read_questao():
        
         with tabs[numero]:
             if alternativa != None:
-                index = opcoes.index(alternativa)
+                index = opcoes.index(test[i])
             else:
                 index = None
                 
