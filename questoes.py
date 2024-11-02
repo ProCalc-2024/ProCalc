@@ -46,7 +46,7 @@ def read_questao():
     # Cria as abas dinamicamente
     tabs = st.tabs(tab_names)
     
-    st.write(tab_names)
+    
     
     with col1:
         st.title("Perguntas")
@@ -101,7 +101,9 @@ def read_questao():
             resul.update(sequencia)
             st.session_state["save"] = resul
             resposta = alternativa == questao["Alternativa_A"]
-
+        
+        with tabs[i+1]
+            st.write(tab_names)
     # Botão de submissão
     butao = st.button("Submeter")
     if butao:
