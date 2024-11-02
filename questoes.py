@@ -22,7 +22,6 @@ def read_questao():
     resul = {}
     b = []
     evitar = []
-    alternativa 
     # lista de matérias
     lista = list(set(dict["Materia"]))
         
