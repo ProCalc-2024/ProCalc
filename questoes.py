@@ -22,7 +22,7 @@ def read_questao():
     resul = {}
     b = []
     evitar = []
-    
+    alternativa 
     # lista de matérias
     lista = list(set(dict["Materia"]))
         
@@ -91,7 +91,8 @@ def read_questao():
             
             # Exibe as alternativas embaralhadas
             opcoes = [questao[embaralho[j]] for j in range(5)]
-            alternativa[i] = st.radio("", options=opcoes, index=None)
+            alternativa = st.radio("", options=opcoes, index=None)
+
             
             st.session_state["resposta"] = questao["Alternativa_A"]
             resul.update(st.session_state["save"])                                                
@@ -99,11 +100,11 @@ def read_questao():
             sequencia = st.session_state["save"]
             resul.update(sequencia)
             st.session_state["save"] = resul
-            resposta = alternativa[i] == questao["Alternativa_A"]
+            resposta = alternativa == questao["Alternativa_A"]
        
         with tabs[numero]:   
             st.write(tabs[i])
-            st.write(alternativa[i])
+            st.write(alternativa)
             
     # Botão de submissão
     butao = st.button("Submeter")
