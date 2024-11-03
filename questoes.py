@@ -101,7 +101,7 @@ def read_questao():
             resposta = alternativa == questao["Alternativa_A"]
        
         with tabs[numero]:
-            
+            st.write(tab_names[i])
             if alternativa != None:
                 index2 = opcoes.index(alternativa)
                 st.write(alternativa)
