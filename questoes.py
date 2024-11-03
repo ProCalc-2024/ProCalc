@@ -103,17 +103,13 @@ def read_questao():
         col_list = [1] * numero
         coluna = st.columns(col_list)
       
-        with tabs[i]:
-                colunas = st.columns(numero)  # Cria colunas lado a lado
-                for j, coluna in enumerate(colunas):
-                    with coluna:
-                        if alternativa is not None:
-                            st.write(f"Coluna: {j+1}")
-                            if alternativa in opcoes:
-                                index2 = opcoes.index(alternativa)
-                            else:
-                                index2 = 0  # Valor padrão caso alternativa não esteja em opcoes
-                            st.radio("", options=opcoes, index=index2, key=f"cha{i}_{j}")     
+        with tabs[numero]: 
+            
+            with coluna[i]:
+                if alternativa != None:
+                    st.write(tab_names[i])
+                    index2 = opcoes.index(alternativa)
+                    st.radio("", options=opcoes, index=index2, key= f"cha{i}")        
             
     # Botão de submissão
     butao = st.button("Submeter")
