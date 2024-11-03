@@ -106,9 +106,9 @@ def read_questao():
             for j in range(numero):
                 with coluna[j]:
                     if alternativa != None:
-                        st.write(tab_names[i])
+                        st.write(tab_names[j])
                         index2 = opcoes.index(alternativa)
-                        st.radio("", options=opcoes, index=index2, key= f"cha{i}")         
+                        st.radio("", options=opcoes, index=index2, key= f"cha{j}")         
             
     # Botão de submissão
     butao = st.button("Submeter")
