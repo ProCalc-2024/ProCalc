@@ -102,13 +102,9 @@ def read_questao():
        
         with tabs[numero]:
             col_list = [1] * numero
-            coluna = st.columns(col_list)
-
-                        
+            coluna = st.columns(col_list)            
             with coluna[i]:
-               
                 st.write(tab_names[i])
-            
                 if alternativa != None:
                     
                     index2 = opcoes.index(alternativa)
