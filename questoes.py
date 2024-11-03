@@ -103,7 +103,7 @@ def read_questao():
             if alternativa != None:
                 index2 = opcoes.index(alternativa)
             else:
-                index2 = 0
+                index2 = None
        
         with tabs[numero]:
 
