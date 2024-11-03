@@ -103,12 +103,12 @@ def read_questao():
             resposta = alternativa == questao["Alternativa_A"]
        
         with tabs[numero]:
-            with coluna[i]:
-                st.write(tab_names[i])
             
                 if alternativa != None:
-                    index2 = opcoes.index(alternativa)
-                    st.radio("", options=opcoes, index=index2, key= f"cha{i}")         
+                    with coluna[i]:
+                        st.write(tab_names[i])
+                        index2 = opcoes.index(alternativa)
+                        st.radio("", options=opcoes, index=index2, key= f"cha{i}")         
             
     # Botão de submissão
     butao = st.button("Submeter")
