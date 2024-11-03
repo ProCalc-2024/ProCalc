@@ -44,7 +44,8 @@ def read_questao():
     tab_names.append("Resposta")
     # Cria as abas dinamicamente
     tabs = st.tabs(tab_names)
-    
+    col_list = list(range(numero))
+    st.write(col_list)
     coluna = st.columns([1, 1, 1])
     
     with col1:
