@@ -44,8 +44,6 @@ def read_questao():
     tab_names.append("Resposta")
     # Cria as abas dinamicamente
     tabs = st.tabs(tab_names)
-    col_list = [1] * numero
-    coluna = st.columns(col_list)
     
     with col1:
         st.title("Perguntas")
@@ -103,12 +101,18 @@ def read_questao():
             resposta = alternativa == questao["Alternativa_A"]
        
         with tabs[numero]:
+            col_list = [1] * numero
+            coluna = st.columns(col_list)
+
+                        
+            with coluna[i]:
+               
+                st.write(tab_names[i])
             
                 if alternativa != None:
-                    with coluna[i]:
-                        st.write(tab_names[i])
-                        index2 = opcoes.index(alternativa)
-                        st.radio("", options=opcoes, index=index2, key= f"cha{i}")         
+                    
+                    index2 = opcoes.index(alternativa)
+                    st.radio("", options=opcoes, index=index2, key= f"cha{i}")         
             
     # Botão de submissão
     butao = st.button("Submeter")
