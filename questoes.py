@@ -99,10 +99,11 @@ def read_questao():
             resul.update(sequencia)
             st.session_state["save"] = resul
             resposta = alternativa == questao["Alternativa_A"]
-       
+
+        col_list = [1] * numero
+        coluna = st.columns(col_list)
+        
         with tabs[numero]: 
-            col_list = [1] * numero
-            coluna = st.columns(col_list)
             
             with coluna[i]:
                 if alternativa != None:
