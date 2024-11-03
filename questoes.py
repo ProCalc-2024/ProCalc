@@ -102,13 +102,15 @@ def read_questao():
        
         with tabs[numero]:
             st.write(tab_names[i])
+            
             if alternativa != None:
                 index2 = opcoes.index(alternativa)
                 st.write(alternativa)
+                st.radio("", options=opcoes, index=index2, key= f"cha{i}")
             else:
                 index2 = None
 
-            st.radio("", options=opcoes, index=index2, key= f"cha{i}")
+            
             
             
     # Botão de submissão
