@@ -49,8 +49,7 @@ def read_questao():
         st.title("Perguntas")
 
     for i in range(numero):
-        col_list = [1] * numero
-        coluna = st.columns(col_list)
+
         with tabs[i]:
             
             
@@ -101,8 +100,11 @@ def read_questao():
             st.session_state["save"] = resul
             resposta = alternativa == questao["Alternativa_A"]
        
-        with tabs[numero]:            
-            with coluna[i]:
+        with tabs[numero]: 
+            col_list = [1] * numero
+            coluna = st.columns(col_list)
+            
+            for coluna[i]:
                 if alternativa != None:
                     st.write(tab_names[i])
                     index2 = opcoes.index(alternativa)
