@@ -99,12 +99,14 @@ def read_questao():
             resul.update(sequencia)
             st.session_state["save"] = resul
             resposta = alternativa == questao["Alternativa_A"]
-       
-        with tabs[numero]:
+
             if alternativa != None:
                 index2 = opcoes.index(alternativa)
             else:
                 index2 = 0
+       
+        with tabs[numero]:
+
 
             st.radio("", options=opcoes, index=index2, key= f"cha{i}")
             st.write(alternativa)
