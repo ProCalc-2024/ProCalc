@@ -104,9 +104,7 @@ def read_questao():
             col_list = [1] * numero
             coluna = st.columns(col_list)            
             
-            
             with coluna[i]:
-                st.write(tab_names[i])
                 if alternativa != None:
                     index2 = opcoes.index(alternativa)
                     st.radio("", options=opcoes, index=index2, key= f"cha{i}")         
