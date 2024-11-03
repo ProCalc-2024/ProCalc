@@ -45,7 +45,6 @@ def read_questao():
     # Cria as abas dinamicamente
     tabs = st.tabs(tab_names)
     col_list = [1] * numero
-    st.write(col_list)
     coluna = st.columns(col_list)
     
     with col1:
