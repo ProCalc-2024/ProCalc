@@ -104,11 +104,12 @@ def read_questao():
             
             if alternativa != None:
                 index2 = opcoes.index(alternativa)
+                st.write(alternativa)
             else:
                 index2 = None
 
             st.radio("", options=opcoes, index=index2, key= f"cha{i}")
-            st.write(alternativa)
+            
             
     # Botão de submissão
     butao = st.button("Submeter")
