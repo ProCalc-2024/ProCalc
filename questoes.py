@@ -104,8 +104,8 @@ def read_questao():
             
             if alternativa != None:
                 index2 = opcoes.index(alternativa)
-            elif alternativa == None:
-                index2 = 6
+            else alternativa == None:
+                index2 = None
 
             st.radio("", options=opcoes, index=index2, key= f"cha{i}")
             st.write(alternativa)
