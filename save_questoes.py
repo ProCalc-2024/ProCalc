@@ -187,36 +187,30 @@ def editar_ques():
 
 
 def deletar_ques():
+    # Conexão com o Google Sheets
     conn = st.connection("gsheets", type=GSheetsConnection)
     sheet = conn.read(worksheet="Questões")
-    dict_questoes = pd.DataFrame(sheet)
+    dict = pd.DataFrame(sheet)
 
-    if dict_questoes.empty:
-        st.warning("Nenhuma questão disponível para deletar.")
-        return
+    st.title("Deletar Questão")
     
-    # Exibir questões para seleção
-    st.subheader("Selecione uma questão para deletar")
-    questao_idx = st.selectbox("Escolha a questão pelo índice", options=dict_questoes.index)
-    
-    if questao_idx is not None:
-        st.write("Questão Selecionada:")
-        st.write(dict_questoes.loc[questao_idx, ['Materia', 'Descrição', 'Enunciado', 'Alternativa_A', 'Alternativa_B', 'Alternativa_C', 'Alternativa_D', 'Alternativa_E']])
+    # Seleção de questão a ser deletada
+    st.write("Selecione a questão que deseja deletar:")
+    questoes_dict = {f"{i + 1}. {row['Materia']} - {row['Enunciado'][:50]}": index for i, (index, row) in enumerate(dict.iterrows())}
+    questao_selecionada = st.selectbox("Questões:", options=list(questoes_dict.keys()))
 
-        if st.button("Deletar Questão"):
-            # Remover a questão selecionada do DataFrame
-            dict_questoes = dict_questoes.drop(questao_idx).reset_index(drop=True)
-            
-            # Atualizar a planilha com o DataFrame modificado
-            conn.update(worksheet="Questões", data=dict_questoes)
-
-            # Exibir confirmação e atualizar cache
-            st.toast(':red-background[Questão deletada com sucesso]', icon='🗑️')
-            time.sleep(2)
-            st.experimental_rerun()
-
-          
-            st.success("Questão deletada com sucesso!")
-
+    # Botão para confirmar exclusão
+    if st.button("Deletar Questão"):
+        index_questao = questoes_dict[questao_selecionada]
+        dict = dict.drop(index_questao).reset_index(drop=True)
         
-        st.experimental_rerun()  # Isso recarrega a página atual para refletir as alterações
+        # Atualiza a planilha com o dataframe sem a questão excluída
+        conn.update(worksheet="Questões", data=dict)
+        
+        # Atualiza cache para refletir a exclusão
+        conn.read(worksheet="Questões", ttl="10m")
+        
+        st.toast(':green-background[Questão deletada com sucesso]', icon='✔️')
+        time.sleep(2)
+        st.experimental_rerun()
+
