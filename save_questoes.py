@@ -194,10 +194,22 @@ def deletar_ques():
 
     st.title("Deletar Questão")
     
+    # Colunas para seleção de matéria e questão
+    col1, col2 = st.columns([1, 2])
+
+    # Seleção de matéria
+    with col1:
+        materias_unicas = dict["Materia"].unique()
+        materia_selecionada = st.selectbox("Selecione a Matéria:", options=materias_unicas)
+
+    # Filtra as questões pela matéria selecionada
+    questoes_filtradas = dict[dict["Materia"] == materia_selecionada]
+
     # Seleção de questão a ser deletada
-    st.write("Selecione a questão que deseja deletar:")
-    questoes_dict = {f"{i + 1}. {row['Materia']} - {row['Enunciado'][:50]}": index for i, (index, row) in enumerate(dict.iterrows())}
-    questao_selecionada = st.selectbox("Questões:", options=list(questoes_dict.keys()))
+    with col2:
+        st.write("Selecione a questão que deseja deletar:")
+        questoes_dict = {f"{i + 1}. {row['Materia']} - {row['Enunciado'][:50]}": index for i, (index, row) in enumerate(questoes_filtradas.iterrows())}
+        questao_selecionada = st.selectbox("Questões:", options=list(questoes_dict.keys()))
 
     # Botão para confirmar exclusão
     if st.button("Deletar Questão"):
