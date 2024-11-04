@@ -187,45 +187,33 @@ def editar_ques():
 
 
 def deletar_ques():
-    
     conn = st.connection("gsheets", type=GSheetsConnection)
-    existing_data = conn.read(worksheet="Questões")
+    sheet = conn.read(worksheet="Questões")
+    dict_questoes = pd.DataFrame(sheet)
 
-    if existing_data.empty:
+    if dict_questoes.empty:
         st.warning("Nenhuma questão disponível para deletar.")
         return
-
     
-    materias_unicas = existing_data["Materia"].unique()
-
+    # Exibir questões para seleção
+    st.subheader("Selecione uma questão para deletar")
+    questao_idx = st.selectbox("Escolha a questão pelo índice", options=dict_questoes.index)
     
-    col1, col2 = st.columns(2)
+    if questao_idx is not None:
+        st.write("Questão Selecionada:")
+        st.write(dict_questoes.loc[questao_idx, ['Materia', 'Descrição', 'Enunciado', 'Alternativa_A', 'Alternativa_B', 'Alternativa_C', 'Alternativa_D', 'Alternativa_E']])
 
-    with col1:
-        materia = st.selectbox("Matéria", options=materias_unicas)
-
-    with col2:
-        
-        questoes_filtradas = existing_data[existing_data["Materia"] == materia]
-
-       
-        if questoes_filtradas.empty:
-            st.warning(f"Nenhuma questão disponível para a matéria '{materia}'.")
-            return
-
-       
-        questoes_list = questoes_filtradas["Enunciado"].tolist()
-        questao_selecionada = st.selectbox("Selecione a questão a deletar", options=questoes_list)
-
- 
-    if st.button("Deletar"):
-      
-        existing_data = existing_data[existing_data["Enunciado"] != questao_selecionada]
-
-      
-        if questao_selecionada not in existing_data["Enunciado"].values:
+        if st.button("Deletar Questão"):
+            # Remover a questão selecionada do DataFrame
+            dict_questoes = dict_questoes.drop(questao_idx).reset_index(drop=True)
             
-            conn.update(worksheet="Questões", data=existing_data)
+            # Atualizar a planilha com o DataFrame modificado
+            conn.update(worksheet="Questões", data=dict_questoes)
+
+            # Exibir confirmação e atualizar cache
+            st.toast(':red-background[Questão deletada com sucesso]', icon='🗑️')
+            time.sleep(2)
+            st.experimental_rerun()
 
           
             st.success("Questão deletada com sucesso!")
