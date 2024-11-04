@@ -103,7 +103,7 @@ def inserir_ques():
         )
         st.toast(':green-background[Questão salva]', icon='✔️')
         
-        time.sleep(5)
+        time.sleep(1)
         
         st.rerun()
         
