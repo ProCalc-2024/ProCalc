@@ -208,7 +208,7 @@ def deletar_ques():
         conn.update(worksheet="Questões", data=dict)
         
         # Atualiza cache para refletir a exclusão
-        conn.read(worksheet="Questões", ttl="10m")
+        conn.read(worksheet="Questões", ttl="1s")
         
         st.toast(':green-background[Questão deletada com sucesso]', icon='✔️')
         time.sleep(2)
