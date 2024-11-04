@@ -207,7 +207,6 @@ def deletar_ques():
 
     # Seleção de questão a ser deletada
     with col2:
-        st.write("Selecione a questão que deseja deletar:")
         questoes_dict = {f"{i + 1}. {row['Materia']} - {row['Enunciado'][:50]}": index for i, (index, row) in enumerate(questoes_filtradas.iterrows())}
         questao_selecionada = st.selectbox("Questões:", options=list(questoes_dict.keys()))
 
