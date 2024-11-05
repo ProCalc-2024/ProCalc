@@ -113,17 +113,17 @@ def read_questao():
                     st.write(tab_names[i])
                     index2 = opcoes.index(alternativa)
                     st.radio("", options=opcoes, index=index2, key= f"cha{i}")        
-            
             # Botão de submissão
             butao = st.button("Submeter",key = 123)
-    if butao:
-        if resposta:
-            st.toast(':green-background[Resposta Certa]', icon='🎉')
-            new_ques(lista, n)
-            time.sleep(5)
-            st.rerun()
-        else:
-            st.toast(':red-background[Resposta Errada]', icon="⚠️")
+            
+            if butao:
+                if resposta:
+                    st.toast(':green-background[Resposta Certa]', icon='🎉')
+                    new_ques(lista, n)
+                    time.sleep(5)
+                    st.rerun()
+                else:
+                    st.toast(':red-background[Resposta Errada]', icon="⚠️")
 
 def new_ques(lista, n):
     # Salva as questões que foram feitas pelo usuário
