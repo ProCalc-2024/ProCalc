@@ -116,7 +116,7 @@ def read_questao():
                     st.markdown(
                         f"""
                         <style>
-                        [data-testid="radio-cha{i}"] label p {{
+                        [data-testid="radio-f{cha{i}}"] label p {{
                             font-size: 0;  /* Oculta o texto */
                         }}
                         </style>
