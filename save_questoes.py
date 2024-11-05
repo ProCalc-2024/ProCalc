@@ -204,9 +204,6 @@ def deletar_ques():
     # Filtra as questões pela matéria selecionada
     questoes_filtradas = dict[dict["Materia"] == materia_selecionada]
 
-    # Exibe as primeiras linhas de questoes_filtradas para depuração
-    st.write("Conteúdo de questoes_filtradas:", questoes_filtradas.head())
-
     # Seleção de questão a ser deletada, tratando possíveis NaNs em 'Enunciado'
     with col2:
         questoes_dict = {
@@ -215,9 +212,14 @@ def deletar_ques():
         }
         questao_selecionada = st.selectbox("Questões:", options=list(questoes_dict.keys()))
 
+    # Exibe as informações da questão selecionada
+    index_questao = questoes_dict[questao_selecionada]
+    questao_info = dict.loc[index_questao]
+    st.write("Informações da questão selecionada para exclusão:")
+    st.write(questao_info)
+
     # Botão para confirmar exclusão
     if st.button("Deletar Questão"):
-        index_questao = questoes_dict[questao_selecionada]
         dict = dict.drop(index_questao).reset_index(drop=True)
 
         # Atualiza a planilha com o dataframe sem a questão excluída
