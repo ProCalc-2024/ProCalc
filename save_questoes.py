@@ -193,9 +193,6 @@ def deletar_ques():
 
     st.title("Deletar Questão")
     
-    # Verifica as colunas do DataFrame
-    st.write("Colunas disponíveis no DataFrame:", dict.columns.tolist())
-
     # Colunas para seleção de matéria e questão
     col1, col2 = st.columns([1, 2])
 
@@ -209,7 +206,7 @@ def deletar_ques():
 
     # Seleção de questão a ser deletada
     with col2:
-        questoes_dict = {f"{i + 1}. {row['Materia']} - {row['Descrição'][:50]}": index for i, (index, row) in enumerate(questoes_filtradas.iterrows())}
+        questoes_dict = {f"{i + 1}. {row['Materia']} - {row['Enunciado'][:50]}": index for i, (index, row) in enumerate(questoes_filtradas.iterrows())}
         questao_selecionada = st.selectbox("Questões:", options=list(questoes_dict.keys()))
 
     # Botão para confirmar exclusão
@@ -224,6 +221,6 @@ def deletar_ques():
         conn.read(worksheet="Questões", ttl="1s")
         
         st.toast(':green-background[Questão deletada com sucesso]', icon='✔️')
-        time.sleep(2)
         st.experimental_rerun()
+
 
