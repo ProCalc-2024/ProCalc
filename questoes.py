@@ -102,16 +102,16 @@ def read_questao():
         
             col_list = [1] * numero
             coluna = st.columns(col_list)
-            
-            with coluna[i]:
-                if alternativa != None:
-                
-                    index2 = opcoes.index(alternativa)
-                else:   
-                    index2 = 0
+            for i in range(numero):
+                with coluna[i]:
+                    if alternativa != None:
                     
-                st.write(tab_names[i])
-                st.radio("", options=opcoes, index=index2, key=f"cha{i}", label_visibility= "collapsed")     
+                        index2 = opcoes.index(alternativa)
+                    else:   
+                        index2 = 0
+                        
+                    st.write(tab_names[i])
+                    st.radio("", options=opcoes, index=index2, key=f"cha{i}", label_visibility= "collapsed")     
 
             
     
