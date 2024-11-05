@@ -101,13 +101,14 @@ def read_questao():
             st.session_state["save"] = resul
             resposta = alternativa == questao["Alternativa_A"]
 
-        with tabs[i]:  # Corrigido para acessar a aba correta
+        with tabs[numero]:  # Corrigido para acessar a aba correta
             col_list = [1] * numero
             coluna = st.columns(col_list)
             
             with coluna[i]:
                 if alternativa != None:
                     index2 = opcoes.index(alternativa)
+                    
                     st.write(tab_names[i])
                     st.radio("", options=opcoes, index=index2, key=f"cha{i}", label_visibility= "collapsed")        
 
