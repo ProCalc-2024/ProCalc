@@ -102,7 +102,7 @@ def read_questao():
             resposta = alternativa == questao["Alternativa_A"]
 
 
-      
+    for i in range(numero):  
         with tabs[numero]: 
             
             col_list = [1] * numero
@@ -116,7 +116,7 @@ def read_questao():
                 st.write(tab_names[i])
                 st.radio("", options=opcoes, index=index2, key= f"cha{i}")        
             # Botão de submissão
-        butao = st.button("Submeter",key = f"sub{i} ")
+            butao = st.button("Submeter",key = f"sub{i} ")
             
         if butao:
             if resposta:
