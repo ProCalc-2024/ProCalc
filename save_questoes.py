@@ -185,48 +185,5 @@ def editar_ques():
         st.success("Questão editada com sucesso!")
 
 
-def deletar_ques():
-    # Conexão com o Google Sheets
-    conn = st.connection("gsheets", type=GSheetsConnection)
-    sheet = conn.read(worksheet="Questões")
-    dict = pd.DataFrame(sheet)
-
-    st.title("Deletar Questão")
-
-    # Colunas para seleção de matéria e questão
-    col1, col2 = st.columns([1, 2])
-
-    # Seleção de matéria
-    with col1:
-        materias_unicas = dict["Materia"].unique()
-        materia_selecionada = st.selectbox("Selecione a Matéria:", options=materias_unicas)
-
-    # Filtra as questões pela matéria selecionada
-    questoes_filtradas = dict[dict["Materia"] == materia_selecionada]
-
-    # Exibe as primeiras linhas de questoes_filtradas para depuração
-    st.write("Questão a ser deletada:", questoes_filtradas.head())
-
-    # Seleção de questão a ser deletada, tratando possíveis NaNs em 'Enunciado'
-    with col2:
-        questoes_dict = {
-            f"{i + 1}. {row['Materia']} - {str(row['Enunciado'])[:50]}" if pd.notnull(row['Enunciado']) else f"{i + 1}. {row['Materia']} - [Sem enunciado]": index
-            for i, (index, row) in enumerate(questoes_filtradas.iterrows())
-        }
-        questao_selecionada = st.selectbox("Questões:", options=list(questoes_dict.keys()))
-
-    # Botão para confirmar exclusão
-    if st.button("Deletar Questão"):
-        index_questao = questoes_dict[questao_selecionada]
-        dict = dict.drop(index_questao).reset_index(drop=True)
-
-        # Atualiza a planilha com o dataframe sem a questão excluída
-        conn.update(worksheet="Questões", data=dict)
-
-        # Atualiza cache para refletir a exclusão
-        conn.read(worksheet="Questões", ttl="1s")
-
-        st.toast(':green-background[Questão deletada com sucesso]', icon='✔️')
-        st.experimental_rerun()
 
 
