@@ -117,10 +117,10 @@ def read_questao():
                 st.radio("", options=opcoes, index=index2, key=f"cha{i}")        
 
             # Botão de submissão
-            st.button("Submeter", key=f"sub{i}")  # Corrigido o espaço extra na chave
+            botao =st.button("Submeter", key=f"sub{i}")  # Corrigido o espaço extra na chave
 
             
-        if butao:
+        if botao:
             if resposta:
                 st.toast(':green-background[Resposta Certa]', icon='🎉')
                 new_ques(lista, n)
