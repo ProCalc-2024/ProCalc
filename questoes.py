@@ -107,18 +107,19 @@ def read_questao():
             
         with tabs[numero]:    
             
-            st.write(tab_names[i])
+        
             x=0
             if alternativa is not None:
                     
                 index2 = opcoes.index(alternativa)
-                st.radio("", options=opcoes, index=index2, key=f"cha1{i}", horizontal=True, label_visibility= "collapsed") 
+                st.radio(tab_names[i], options=opcoes, index=index2, key=f"cha1{i}", horizontal=True, label_visibility= "collapsed") 
                 x = 1
             if x == 0:  
-                st.radio("", options=opcoes, index=None, key=f"cha2{i}", horizontal=True, label_visibility= "collapsed")       
-    
+                st.radio(tab_names[i], options=opcoes, index=None, key=f"cha2{i}", horizontal=True, label_visibility= "collapsed")       
+     
+    with tabs[numero]:
             # Botão de submissão
-            botao =st.button("Submeter", key=f"sub{i}")  # Corrigido o espaço extra na chave
+        botao =st.button("Submeter", key=f"sub{i}")  # Corrigido o espaço extra na chave
 
             
         if botao:
