@@ -99,7 +99,7 @@ def read_questao():
             st.session_state["save"] = resul
             resposta = alternativa == questao["Alternativa_A"]
 
-        with tabs[numero]:  # Corrigido para acessar a aba correta
+        with tabs[i]:  # Corrigido para acessar a aba correta
             col_list = [1] * numero
             coluna = st.columns(col_list)
             
