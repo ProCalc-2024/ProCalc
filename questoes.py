@@ -110,7 +110,7 @@ def read_questao():
                             if alternativa in opcoes:
                                 index2 = opcoes.index(alternativa)
                             else:
-                                index2 = 0  # Valor padrão caso alternativa não esteja em opcoes
+                                index2 = None  # Valor padrão caso alternativa não esteja em opcoes
                             st.radio("", options=opcoes, index=index2, key=f"cha{i}_{j}")       
 
             
