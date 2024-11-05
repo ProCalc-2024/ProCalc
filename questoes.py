@@ -48,7 +48,7 @@ def read_questao():
     with col1:
         st.title("Perguntas")
 
-    for i in range(numero):
+    for i in range(numero-1):
 
         with tabs[i]:
             
