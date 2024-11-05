@@ -105,7 +105,7 @@ def read_questao():
             col_list = [1] * numero
             coluna = st.columns(col_list)
         
-            if alternativa is not None:
+            if alternativa != None:
                 index2 = opcoes.index(alternativa)
             else:
                 index2 = 0  # Defina um índice padrão seguro, como 0
