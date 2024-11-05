@@ -128,16 +128,7 @@ def read_questao():
                             """,
                             unsafe_allow_html=True
                         )
-                    st.markdown(
-                        """
-                        <style>
-                        .custom-radio label p {
-                            font-size: 0;  /* Oculta o texto */
-                        }
-                        </style>
-                        """,
-                        unsafe_allow_html=True
-                    )
+
 
             
     
