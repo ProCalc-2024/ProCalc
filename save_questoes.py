@@ -102,7 +102,7 @@ def inserir_ques():
         ttl="10m"                  # Cache de 10 minutos
         )
         
-        st.toast(':green-background[Questão salva]', icon='✔️')
+        st.success(':green-background[Questão salva]', icon='✔️')
         
         st.rerun()
 
