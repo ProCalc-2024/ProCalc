@@ -192,7 +192,7 @@ def deletar_ques():
     dict = pd.DataFrame(sheet)
 
     st.title("Deletar Questão")
-    
+
     # Colunas para seleção de matéria e questão
     col1, col2 = st.columns([1, 2])
 
@@ -204,6 +204,11 @@ def deletar_ques():
     # Filtra as questões pela matéria selecionada
     questoes_filtradas = dict[dict["Materia"] == materia_selecionada]
 
+    # Verificação se a coluna 'Enunciado' existe
+    if 'Enunciado' not in questoes_filtradas.columns:
+        st.error("A coluna 'Enunciado' não foi encontrada.")
+        return
+
     # Seleção de questão a ser deletada
     with col2:
         questoes_dict = {f"{i + 1}. {row['Materia']} - {row['Enunciado'][:50]}": index for i, (index, row) in enumerate(questoes_filtradas.iterrows())}
@@ -213,14 +218,13 @@ def deletar_ques():
     if st.button("Deletar Questão"):
         index_questao = questoes_dict[questao_selecionada]
         dict = dict.drop(index_questao).reset_index(drop=True)
-        
+
         # Atualiza a planilha com o dataframe sem a questão excluída
         conn.update(worksheet="Questões", data=dict)
-        
+
         # Atualiza cache para refletir a exclusão
         conn.read(worksheet="Questões", ttl="1s")
-        
+
         st.toast(':green-background[Questão deletada com sucesso]', icon='✔️')
         st.experimental_rerun()
-
 
