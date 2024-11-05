@@ -112,8 +112,11 @@ def read_questao():
                 st.write(tab_names[i])
                 st.radio("", options=opcoes, index=index2, key=f"cha{i}", label_visibility= "collapsed")        
 
-            # Botão de submissão
-            botao =st.button("Submeter", key=f"sub{i}")  # Corrigido o espaço extra na chave
+            
+    
+    with tabs[numero]:
+        # Botão de submissão
+        botao =st.button("Submeter", key=f"sub{i}")  # Corrigido o espaço extra na chave
 
             
         if botao:
