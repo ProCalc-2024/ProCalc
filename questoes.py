@@ -112,7 +112,16 @@ def read_questao():
                     st.write(tab_names[i])
                     st.radio("", options=opcoes, index=index2, key=f"cha{i}", label_visibility= "collapsed") 
                      
-
+                    st.markdown(
+                        """
+                        <style>
+                        .stRadio label p {
+                            font-size: 0;  /* Oculta o texto */
+                        }
+                        </style>
+                        """,
+                        unsafe_allow_html=True
+                    )
             
     
     with tabs[numero]:
