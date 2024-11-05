@@ -118,14 +118,14 @@ def read_questao():
             # Botão de submissão
         butao = st.button("Submeter",key = f"sub{i} ")
             
-            if butao:
-                if resposta:
-                    st.toast(':green-background[Resposta Certa]', icon='🎉')
-                    new_ques(lista, n)
-                    time.sleep(5)
-                    st.rerun()
-                else:
-                    st.toast(':red-background[Resposta Errada]', icon="⚠️")
+        if butao:
+            if resposta:
+                st.toast(':green-background[Resposta Certa]', icon='🎉')
+                new_ques(lista, n)
+                time.sleep(5)
+                st.rerun()
+            else:
+                st.toast(':red-background[Resposta Errada]', icon="⚠️")
 
 def new_ques(lista, n):
     # Salva as questões que foram feitas pelo usuário
