@@ -118,7 +118,7 @@ def read_questao():
                 """,
                 unsafe_allow_html=True
             )
-            st.markdown('<div class="centered-radio">', unsafe_allow_html=True))
+            st.markdown('<div class="centered-radio">', unsafe_allow_html=True)
             x=0
             if alternativa is not None:
                         
