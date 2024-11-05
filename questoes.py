@@ -117,7 +117,7 @@ def read_questao():
                 if x == 0:  
                     st.radio("", options=opcoes, index=None, key=f"cha2{i}", label_visibility= "collapsed")       
 
-
+    st.write(alternativa)
             
     
     with tabs[numero]:
