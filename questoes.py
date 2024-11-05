@@ -48,14 +48,12 @@ def read_questao():
     with col1:
         st.title("Perguntas")
 
-    for i in range(numero-1):
+    for i in range(numero):
 
         with tabs[i]:
             
-            
             # Número de questões
             b = list(range(n))
-            
             
             # Embaralha as alternativas
             lista = ["Alternativa_A", "Alternativa_B", "Alternativa_C", "Alternativa_D", "Alternativa_E"]
@@ -105,8 +103,10 @@ def read_questao():
             col_list = [1] * numero
             coluna = st.columns(col_list)
             
-            with coluna[i]:
-                if alternativa != None:
+            
+            if alternativa != None:
+                with coluna[i]:
+                
                     index2 = opcoes.index(alternativa)
                     st.write(tab_names[i])
                     st.radio("", options=opcoes, index=index2, key=f"cha{i}", label_visibility= "collapsed")     
