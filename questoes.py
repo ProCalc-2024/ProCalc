@@ -103,20 +103,22 @@ def read_questao():
 
 
     for i in range(numero):  
-        with tabs[numero]: 
-            
+        with tabs[i]:  # Corrigido para acessar a aba correta
             col_list = [1] * numero
             coluna = st.columns(col_list)
-            
-            if alternativa != None:
+        
+            if alternativa is not None:
                 index2 = opcoes.index(alternativa)
             else:
-                index2 = None
+                index2 = 0  # Defina um índice padrão seguro, como 0
+            
             with coluna[i]:
                 st.write(tab_names[i])
-                st.radio("", options=opcoes, index=index2, key= f"cha{i}")        
+                st.radio("", options=opcoes, index=index2, key=f"cha{i}")        
+
             # Botão de submissão
-            butao = st.button("Submeter",key = 123)
+            st.button("Submeter", key=f"sub{i}")  # Corrigido o espaço extra na chave
+
             
         if butao:
             if resposta:
