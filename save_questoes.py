@@ -205,7 +205,7 @@ def deletar_ques():
     questoes_filtradas = dict[dict["Materia"] == materia_selecionada]
 
     # Exibe as primeiras linhas de questoes_filtradas para depuração
-    st.write("Conteúdo de questoes_filtradas:", questoes_filtradas.head())
+    st.write("Questão a ser deletada:", questoes_filtradas.head())
 
     # Seleção de questão a ser deletada, tratando possíveis NaNs em 'Enunciado'
     with col2:
