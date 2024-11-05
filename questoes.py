@@ -22,7 +22,7 @@ def read_questao():
     resul = {}
     b = []
     evitar = []
-    alternativa = {}
+    resposta = {}
     # lista de matérias
     lista = list(set(dict["Materia"]))
         
@@ -93,7 +93,7 @@ def read_questao():
             # Exibe as alternativas embaralhadas
             opcoes = [questao[embaralho[j]] for j in range(5)]
             
-            alternativa[i] = st.radio("", options=opcoes, index=None, key = f"key{i}")
+            alternativa = st.radio("", options=opcoes, index=None, key = f"key{i}")
             
             st.session_state["resposta"] = questao["Alternativa_A"]
             resul.update(st.session_state["save"])                                                
@@ -101,7 +101,7 @@ def read_questao():
             sequencia = st.session_state["save"]
             resul.update(sequencia)
             st.session_state["save"] = resul
-            resposta = alternativa[i] == questao["Alternativa_A"]
+            resposta[i] = alternativa == questao["Alternativa_A"]
 
         
             
@@ -109,15 +109,15 @@ def read_questao():
             with coluna[i]:
                 st.write(tab_names[i])
                 x=0
-                if alternativa[i] is not None:
+                if alternativa is not None:
                     
-                    index2 = opcoes.index(alternativa[i])
+                    index2 = opcoes.index(alternativa)
                     st.radio("", options=opcoes, index=index2, key=f"cha1{i}", label_visibility= "collapsed") 
                     x = 1
                 if x == 0:  
                     st.radio("", options=opcoes, index=None, key=f"cha2{i}", label_visibility= "collapsed")       
 
-    st.write(alternativa)
+    
             
     
     with tabs[numero]:
