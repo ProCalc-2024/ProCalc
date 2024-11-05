@@ -110,7 +110,7 @@ def read_questao():
                     
                     index2 = opcoes.index(alternativa)
                     st.write(tab_names[i])
-                    st.radio("", options=opcoes, index=index2, key1=f"cha{i}", label_visibility= "collapsed") 
+                    st.radio("", options=opcoes, index=index2, key=f"cha{i}", label_visibility= "collapsed") 
                      
                     st.markdown(
                         f"""
