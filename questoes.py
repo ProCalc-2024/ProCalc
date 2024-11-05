@@ -106,28 +106,12 @@ def read_questao():
             
             
             with coluna[i]:
+                st.write(tab_names[i])
                 if alternativa != None:
                     
                     index2 = opcoes.index(alternativa)
-                    st.write(tab_names[i])
-                    
-                    key = f"cha{i}"
-
-                    with st.container():
-                        # Criamos um contêiner para identificar o `st.radio` específico
-                        st.markdown(
-                            f"""
-                            <div class="custom-radio">
-                            """,
-                            unsafe_allow_html=True
-                        )
-                        st.radio("", options=opcoes, index=index2, key=key, label_visibility= "collapsed") 
-                        st.markdown(
-                            """
-                            </div>
-                            """,
-                            unsafe_allow_html=True
-                        )
+                    st.radio("", options=opcoes, index=index2, key=f"cha{i}", label_visibility= "collapsed") 
+                st.radio("", options=opcoes, index=None, key=f"cha{i}", label_visibility= "collapsed")       
 
 
             
