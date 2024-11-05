@@ -114,11 +114,11 @@ def read_questao():
                     st.radio("", options=opcoes, index=index2, key=key2, label_visibility= "collapsed") 
                      
                     st.markdown(
-                        """
+                        f"""
                         <style>
-                        [data-testid="radio-{key2}"] label p {
+                        [data-testid="radio-{key2}"] label p {{
                             font-size: 0;  /* Oculta o texto */
-                        }
+                        }}
                         </style>
                         """,
                         unsafe_allow_html=True
