@@ -114,7 +114,7 @@ def read_questao():
                     index2 = opcoes.index(alternativa)
                     st.radio("", options=opcoes, index=index2, key= f"cha{i}")        
             # Botão de submissão
-            butao = st.button("Submeter",key = 123)
+            butao = st.button("Submeter",key = f"sub{i} ")
             
             if butao:
                 if resposta:
