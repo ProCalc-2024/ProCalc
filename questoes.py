@@ -44,7 +44,10 @@ def read_questao():
     tab_names.append("Resposta")
     # Cria as abas dinamicamente
     tabs = st.tabs(tab_names)
-    
+     
+    with tabs[numero]:
+        col_list = [1] * numero
+        coluna = st.columns(col_list)
     with col1:
         st.title("Perguntas")
 
@@ -100,18 +103,17 @@ def read_questao():
             resposta = alternativa == questao["Alternativa_A"]
 
         
-            col_list = [1] * numero
-            coluna = st.columns(col_list)
-            for i in range(numero):
-                with coluna[i]:
-                    if alternativa != None:
+            
+            
+            with coluna[i]:
+                if alternativa != None:
                     
-                        index2 = opcoes.index(alternativa)
-                    else:   
-                        index2 = 0
+                    index2 = opcoes.index(alternativa)
+                else:   
+                    index2 = 0
                         
-                    st.write(tab_names[i])
-                    st.radio("", options=opcoes, index=index2, key=f"cha{i}", label_visibility= "collapsed")     
+                st.write(tab_names[i])
+                st.radio("", options=opcoes, index=index2, key=f"cha{i}", label_visibility= "collapsed")     
 
             
     
