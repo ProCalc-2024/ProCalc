@@ -116,7 +116,7 @@ def read_questao():
                     st.markdown(
                         f"""
                         <style>
-                        [data-testid="stRadio"] div:nth-child({i + 1}) label p {{
+                        [data-testid="stRadio"] div:nth-child({i}) label p {{
                             font-size: 0;  /* Oculta o texto */
                         }}
                         </style>
