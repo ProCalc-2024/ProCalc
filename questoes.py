@@ -106,16 +106,16 @@ def read_questao():
         
             
             
-            with coluna[i]:
-                st.write(tab_names[i])
-                x=0
-                if alternativa is not None:
+            
+            st.write(tab_names[i])
+            x=0
+            if alternativa is not None:
                     
-                    index2 = opcoes.index(alternativa)
-                    st.radio("", options=opcoes, index=index2, key=f"cha1{i}", label_visibility= "collapsed") 
-                    x = 1
-                if x == 0:  
-                    st.radio("", options=opcoes, index=None, key=f"cha2{i}", label_visibility= "collapsed")       
+                index2 = opcoes.index(alternativa)
+                st.radio("", options=opcoes, index=index2, key=f"cha1{i}", horizontal=True, label_visibility= "collapsed") 
+                x = 1
+            if x == 0:  
+                st.radio("", options=opcoes, index=None, key=f"cha2{i}", horizontal=True, label_visibility= "collapsed")       
 
     
             
