@@ -227,5 +227,6 @@ def deletar_ques():
         conn.read(worksheet="Questões", ttl="1s")
 
         st.toast(':green-background[Questão deletada com sucesso]', icon='✔️')
-        st.experimental_rerun()
+         st.rerun()
+
 
