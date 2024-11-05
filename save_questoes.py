@@ -204,14 +204,15 @@ def deletar_ques():
     # Filtra as questões pela matéria selecionada
     questoes_filtradas = dict[dict["Materia"] == materia_selecionada]
 
-    # Verificação se a coluna 'Enunciado' existe
-    if 'Enunciado' not in questoes_filtradas.columns:
-        st.error("A coluna 'Enunciado' não foi encontrada.")
-        return
+    # Exibe as primeiras linhas de questoes_filtradas para depuração
+    st.write("Conteúdo de questoes_filtradas:", questoes_filtradas.head())
 
-    # Seleção de questão a ser deletada
+    # Seleção de questão a ser deletada, tratando possíveis NaNs em 'Enunciado'
     with col2:
-        questoes_dict = {f"{i + 1}. {row['Materia']} - {row['Enunciado'][:50]}": index for i, (index, row) in enumerate(questoes_filtradas.iterrows())}
+        questoes_dict = {
+            f"{i + 1}. {row['Materia']} - {str(row['Enunciado'])[:50]}" if pd.notnull(row['Enunciado']) else f"{i + 1}. {row['Materia']} - [Sem enunciado]": index
+            for i, (index, row) in enumerate(questoes_filtradas.iterrows())
+        }
         questao_selecionada = st.selectbox("Questões:", options=list(questoes_dict.keys()))
 
     # Botão para confirmar exclusão
