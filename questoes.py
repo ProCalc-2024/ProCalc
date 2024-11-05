@@ -110,19 +110,35 @@ def read_questao():
                     
                     index2 = opcoes.index(alternativa)
                     st.write(tab_names[i])
+                    
                     key = f"cha{i}"
-                    st.radio("", options=opcoes, index=index2, key=key, label_visibility= "collapsed") 
-                     
+
+                    with st.container():
+                        # Criamos um contêiner para identificar o `st.radio` específico
+                        st.markdown(
+                            f"""
+                            <div class="custom-radio">
+                            """,
+                            unsafe_allow_html=True
+                        )
+                        st.radio("", options=opcoes, index=index2, key=key, label_visibility= "collapsed") 
+                        st.markdown(
+                            """
+                            </div>
+                            """,
+                            unsafe_allow_html=True
+                        )
                     st.markdown(
-                        f"""
+                        """
                         <style>
-                        [data-testid="stRadio"] div:nth-child({i}) label p {{
+                        .custom-radio label p {
                             font-size: 0;  /* Oculta o texto */
-                        }}
+                        }
                         </style>
                         """,
                         unsafe_allow_html=True
                     )
+
             
     
     with tabs[numero]:
