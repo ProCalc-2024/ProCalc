@@ -192,7 +192,7 @@ def deletar_ques():
     dict = pd.DataFrame(sheet)
 
     st.title("Deletar Questão")
-    
+
     # Colunas para seleção de matéria e questão
     col1, col2 = st.columns([1, 2])
 
@@ -204,32 +204,29 @@ def deletar_ques():
     # Filtra as questões pela matéria selecionada
     questoes_filtradas = dict[dict["Materia"] == materia_selecionada]
 
-    # Seleção de questão a ser deletada
+    # Seleção de questão a ser deletada, tratando possíveis NaNs em 'Enunciado'
     with col2:
-        questoes_dict = {f"{i + 1}. {row['Materia']} - {row['Enunciado'][:50]}": index for i, (index, row) in enumerate(questoes_filtradas.iterrows())}
+        questoes_dict = {
+            f"{i + 1}. {row['Materia']} - {str(row['Enunciado'])[:50]}" if pd.notnull(row['Enunciado']) else f"{i + 1}. {row['Materia']} - [Sem enunciado]": index
+            for i, (index, row) in enumerate(questoes_filtradas.iterrows())
+        }
         questao_selecionada = st.selectbox("Questões:", options=list(questoes_dict.keys()))
 
-    # Visualização da questão selecionada antes de deletar
+    # Exibe as informações da questão selecionada
     index_questao = questoes_dict[questao_selecionada]
-    questao = questoes_filtradas.loc[index_questao]
-
-    # Exibe detalhes da questão no mesmo layout que as outras questões
-    with st.expander("Visualizar Questão Selecionada para Exclusão"):
-        st.write(f"**Enunciado:** {questao['Enunciado']}")
-
-        # Embaralha as alternativas para visualização
-        alternativas = ["Alternativa_A", "Alternativa_B", "Alternativa_C", "Alternativa_D", "Alternativa_E"]
-        embaralhado = np.random.choice(alternativas, len(alternativas), replace=False)
-
-        opcoes = [questao[alt] for alt in embaralhado]
-        st.radio("Alternativas:", options=opcoes, index=0)
+    questao_info = dict.loc[index_questao]
+    st.write("Informações da questão selecionada para exclusão:")
+    st.write(questao_info)
 
     # Botão para confirmar exclusão
     if st.button("Deletar Questão"):
-        # Remove a questão do DataFrame e atualiza o Google Sheets
         dict = dict.drop(index_questao).reset_index(drop=True)
+
+        # Atualiza a planilha com o dataframe sem a questão excluída
         conn.update(worksheet="Questões", data=dict)
+
+        # Atualiza cache para refletir a exclusão
         conn.read(worksheet="Questões", ttl="1s")
-        
+
         st.toast(':green-background[Questão deletada com sucesso]', icon='✔️')
         st.experimental_rerun()
