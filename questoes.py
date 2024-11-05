@@ -103,19 +103,19 @@ def read_questao():
 
 
       
-            with tabs[numero]: 
+        with tabs[numero]: 
             
-                col_list = [1] * numero
-                coluna = st.columns(col_list)
+            col_list = [1] * numero
+            coluna = st.columns(col_list)
             
-                with coluna[i]:
-                    if alternativa != None:
-                        st.write(tab_names[i])
-                        index2 = opcoes.index(alternativa)
-                        st.radio("", options=opcoes, index=index2, key= f"cha{i}")        
+            with coluna[i]:
+                if alternativa != None:
+                    st.write(tab_names[i])
+                    index2 = opcoes.index(alternativa)
+                    st.radio("", options=opcoes, index=index2, key= f"cha{i}")        
             
-    # Botão de submissão
-    butao = st.button("Submeter",key = 123)
+            # Botão de submissão
+            butao = st.button("Submeter",key = 123)
     if butao:
         if resposta:
             st.toast(':green-background[Resposta Certa]', icon='🎉')
