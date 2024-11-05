@@ -104,7 +104,7 @@ def read_questao():
         with tabs[numero]:
                 colunas = st.columns(numero)  # Cria colunas lado a lado
                 for j, coluna in enumerate(colunas):
-                    with coluna[j]:
+                    with coluna:
                         if alternativa is not None:
                             st.write(f"Coluna: {j+1}")
                             if alternativa in opcoes:
