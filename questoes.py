@@ -111,7 +111,10 @@ def read_questao():
                     
                     index2 = opcoes.index(alternativa)
                     st.radio("", options=opcoes, index=index2, key=f"cha{i}", label_visibility= "collapsed") 
-                st.radio("", options=opcoes, index=None, key=f"cha{i}", label_visibility= "collapsed")       
+                    
+                else:  
+                    
+                    st.radio("", options=opcoes, index=None, key=f"cha{i}", label_visibility= "collapsed")       
 
 
             
