@@ -193,6 +193,9 @@ def deletar_ques():
 
     st.title("Deletar Questão")
     
+    # Verifica as colunas do DataFrame
+    st.write("Colunas disponíveis no DataFrame:", dict.columns.tolist())
+
     # Colunas para seleção de matéria e questão
     col1, col2 = st.columns([1, 2])
 
@@ -203,6 +206,11 @@ def deletar_ques():
 
     # Filtra as questões pela matéria selecionada
     questoes_filtradas = dict[dict["Materia"] == materia_selecionada]
+
+    # Verifica se a coluna 'Enunciado' existe no DataFrame filtrado
+    if "Enunciado" not in questoes_filtradas.columns:
+        st.error("A coluna 'Enunciado' não foi encontrada. Verifique o nome da coluna no Google Sheets.")
+        return
 
     # Seleção de questão a ser deletada
     with col2:
