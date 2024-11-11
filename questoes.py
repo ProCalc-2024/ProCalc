@@ -103,19 +103,17 @@ def read_questao():
             resul.update(sequencia)
             st.session_state["save"] = resul
             resposta[i] = alternativa == questao["Alternativa_A"]
-
-        
             
         with tabs[numero]:    
-            
-            x=0
-            if alternativa is not None:
-                        
-                index2 = opcoes.index(alternativa)
-                st.radio(tab_names[i], options=opcoes, index=index2, key=f"cha1{i}", disabled=True, horizontal=True) 
-                x = 1
-            if x == 0:  
-                st.radio(tab_names[i], options=opcoes, index=None, key=f"cha2{i}", disabled=True, horizontal=True)
+            if botao == False:
+                x=0
+                if alternativa is not None:
+                            
+                    index2 = opcoes.index(alternativa)
+                    st.radio(tab_names[i], options=opcoes, index=index2, key=f"cha1{i}", disabled=True, horizontal=True) 
+                    x = 1
+                if x == 0:  
+                    st.radio(tab_names[i], options=opcoes, index=None, key=f"cha2{i}", disabled=True, horizontal=True)
      
     with tabs[numero]:
             # Botão de submissão
