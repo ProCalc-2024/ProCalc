@@ -77,7 +77,7 @@ def read_questao():
             # Verifique se há opções válidas disponíveis
             if opcoes_validas:
                 numero_aleatorio = np.random.choice(opcoes_validas)
-            
+            st.write(opcoes_validas)
             evitar.append(b[i])
 
             embaralho = st.session_state["embaralho"]
