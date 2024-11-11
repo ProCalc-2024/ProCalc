@@ -61,8 +61,8 @@ def read_questao():
             
             # Embaralha as alternativas
             lista = ["Alternativa_A", "Alternativa_B", "Alternativa_C", "Alternativa_D", "Alternativa_E"]
-            if "embaralho" not in st.session_state:
-                st.session_state["embaralho"] = np.random.choice(lista, 5, replace=False)
+            if f"embaralho{i}" not in st.session_state:
+                st.session_state[f"embaralho{i}"] = np.random.choice(lista, 5, replace=False)
 
             # Filtra os números que não estão na lista de exclusão
             opcoes_validas = [num for num in b if num not in evitar]
@@ -73,15 +73,18 @@ def read_questao():
                 st.session_state["numero"] = 0
                 random.shuffle(b)
                 st.session_state["ques"] = b
+            
+            # se ja existir algo no sesion state 
             b = st.session_state["ques"]
+            
             # Verifique se há opções válidas disponíveis
             if opcoes_validas:
                 numero_aleatorio = np.random.choice(opcoes_validas)
-            st.write(b)
+           
             evitar.append(b[i])
-            st.write(b)
-            embaralho = st.session_state["embaralho"]
-
+            
+            embaralho = st.session_state[f"embaralho{i}"]
+            st.write(embaralho)
             # Escolha de questão aleatória
             questao = lista_ques[b[i]]
             
@@ -123,7 +126,7 @@ def read_questao():
         if botao:
             if resposta:
                 st.toast(':green-background[Resposta Certa]', icon='🎉')
-                new_ques(lista, n)
+                # new_ques(lista, n)
                 time.sleep(5)
                 st.rerun()
             else:
