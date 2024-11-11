@@ -84,7 +84,6 @@ def read_questao():
             evitar.append(b[i])
             
             embaralho = st.session_state[f"embaralho{i}"]
-            st.write(embaralho)
             # Escolha de questão aleatória
             questao = lista_ques[b[i]]
             
