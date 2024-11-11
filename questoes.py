@@ -108,7 +108,8 @@ def read_questao():
             if "botao" not in st.session_state:
                st.session_state["botao"] = False
             botão = st.session_state["botao"]
-            if botao == False:
+           
+            if botao is not True:
                 x=0
                 if alternativa is not None:
                             
