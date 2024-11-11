@@ -104,7 +104,10 @@ def read_questao():
             st.session_state["save"] = resul
             resposta[i] = alternativa == questao["Alternativa_A"]
             
-        with tabs[numero]:    
+        with tabs[numero]:
+            if "botao" not in st.session_state:
+               st.session_state["botao"] = False
+            botão = st.session_state["botao"]
             if botao == False:
                 x=0
                 if alternativa is not None:
@@ -117,7 +120,7 @@ def read_questao():
      
     with tabs[numero]:
             # Botão de submissão
-        botao =st.button("Submeter", key=f"sub{i}")  # Corrigido o espaço extra na chave
+        st.session_state["botao"] = st.button("Submeter", key=f"sub{i}")  # Corrigido o espaço extra na chave
 
             
         if botao:
