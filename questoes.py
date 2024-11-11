@@ -73,15 +73,17 @@ def read_questao():
                 st.session_state["numero"] = 0
                 random.shuffle(b)
                 st.session_state["ques"] = b
-
+            b = st.session_state["ques"]
             # Verifique se há opções válidas disponíveis
             if opcoes_validas:
                 numero_aleatorio = np.random.choice(opcoes_validas)
+            
             st.write(opcoes_validas)
+            
             evitar.append(b[i])
 
             embaralho = st.session_state["embaralho"]
-            
+            random.shuffle()
             # Escolha de questão aleatória
             questao = lista_ques[b[i]]
             
