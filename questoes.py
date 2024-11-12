@@ -118,16 +118,13 @@ def read_questao():
         with tabs[numero]:
             
             botao = st.session_state["botao"]
-            if alternativa is not None:
-                st.session_state["lup"] = False
-            lup = st.session_state["lup"] 
             
             if botao and alternativa is None:
                 st.radio(tab_names[i], options=opcoes, index=None, key=f"cha4{i}", disabled=True, horizontal=True)
                 st.warning('Nenhuma das alternativas foi selecionada.', icon="⚠️")
                 res[i] = False
             else:
-                if botao is not True:
+                if botao is True:
                     x=0
                     if alternativa is not None:
                                 
@@ -164,8 +161,7 @@ def read_questao():
             
         # Mostra o botão somente se ele ainda não foi clicado
         if not st.session_state["botao"]:
-            if st.button("Submeter") and lup == False:
-                clicar_botao
+            if st.button("Submeter",on_click=clicar_botao):
                 pass  # O estado muda ao clicar, e o botão desaparece na próxima renderização
 
         if st.session_state["botao"]:       
