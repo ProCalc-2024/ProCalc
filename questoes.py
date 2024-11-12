@@ -158,7 +158,7 @@ def read_questao():
     
     with tabs[numero]:   
         def click1():
-            st.session_state["botao"] = True
+            st.session_state["botao"] = False
         
         def clicar_botao():
             st.session_state["botao"] = True
@@ -170,7 +170,7 @@ def read_questao():
             st.session_state["disabled"] = False
             
         # Mostra o botão somente se ele ainda não foi clicado
-        if not st.session_state["botao"]:
+        if not st.session_state["botao"] and resultado2:
             if st.button("Submeter", on_click = click1):
                 clicar_botao
                   # O estado muda ao clicar, e o botão desaparece na próxima renderização
