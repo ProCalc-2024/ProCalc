@@ -124,7 +124,7 @@ def read_questao():
                 st.warning('Nenhuma das alternativas foi selecionada.', icon="⚠️")
                 res[i] = False
             else:
-                if botao is True:
+                if botao is not True:
                     x=0
                     if alternativa is not None:
                                 
