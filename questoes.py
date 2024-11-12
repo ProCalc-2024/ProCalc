@@ -26,7 +26,9 @@ def read_questao():
 
     if "botao" not in st.session_state:
         st.session_state["botao"] = False
-        st.session_state["disabled"] = False 
+        st.session_state["disabled"] = False
+        st.session_state["rebot"] = 1
+            
     
     # lista de matérias
     lista = list(set(dict["Materia"]))
@@ -40,7 +42,8 @@ def read_questao():
     # Número de questões
     n = len(lista_ques)
     
-    with col3:    
+    with col3:
+        rebot = st.session_state["rebot"]  
         # Pergunta ao usuário quantas questões deseja criar
         numero = st.number_input("Quantas questões você gostaria de fazer?", min_value=1, max_value=n, value=rebot)
         
