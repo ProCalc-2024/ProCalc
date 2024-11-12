@@ -135,18 +135,15 @@ def read_questao():
      
     with tabs[numero]:
         
-        # Inicializa o estado do botão se ainda não estiver definido
-        if "botao_clicado" not in st.session_state:
-            st.session_state["botao_clicado"] = False
         def clicar_botao():
-            st.session_state["botao_clicado"] = True
+            st.session_state["botao"] = True
         # Mostra o botão somente se ele ainda não foi clicado
-        if not st.session_state["botao_clicado"]:
-            if st.button("Clique aqui", on_click=clicar_botao):
+        if not st.session_state["botao"]:
+            if st.button("Submeter", on_click=clicar_botao):
                 pass  # O estado muda ao clicar, e o botão desaparece na próxima renderização
         
         # Define a variável com base no estado do botão
-        variavel = st.session_state["botao_clicado"]
+        botao = st.session_state["botao"]
 
 # Função que será chamada ao clicar no botão
 
