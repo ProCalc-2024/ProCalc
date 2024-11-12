@@ -23,6 +23,13 @@ def read_questao():
     b = []
     evitar = []
     resposta = {}
+
+    if "botao" not in st.session_state:
+        st.session_state["botao"] = False
+        st.session_state["disabled"] = False
+        st.session_state["rebot"] = 1
+    rebot = st.session_state["rebot"]  
+    
     # lista de matérias
     lista = list(set(dict["Materia"]))
         
@@ -37,7 +44,7 @@ def read_questao():
     
     with col3:    
         # Pergunta ao usuário quantas questões deseja criar
-        numero = st.number_input("Quantas questões você gostaria de fazer?", min_value=1, max_value=n, value=1)
+        numero = st.number_input("Quantas questões você gostaria de fazer?", min_value=1, max_value=n, value=rebot)
         
     
     # Cria uma lista de nomes para as questões
@@ -56,10 +63,7 @@ def read_questao():
 
         with tabs[i]:
             
-            if "botao" not in st.session_state:
-               st.session_state["botao"] = False
-               st.session_state["disabled"] = False  
-                
+             
             # Número de questões
             b = list(range(n))
             
@@ -143,10 +147,12 @@ def read_questao():
         def clicar_botao():
             st.session_state["botao"] = True
             st.session_state["disabled"] = True
+
         def new_questionario():
             st.session_state["botao"] = None
             st.session_state["disabled"] = False
-            st.rerun(scope = "app")
+            st.session_state["rebot"] = 1
+            
         # Mostra o botão somente se ele ainda não foi clicado
         if not st.session_state["botao"]:
             if st.button("Submeter", on_click=clicar_botao):
