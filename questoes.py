@@ -138,7 +138,8 @@ def read_questao():
         # Inicializa o estado do botão se ainda não estiver definido
         if "botao_clicado" not in st.session_state:
             st.session_state["botao_clicado"] = False
-        
+        def clicar_botao():
+            st.session_state["botao_clicado"] = True
         # Mostra o botão somente se ele ainda não foi clicado
         if not st.session_state["botao_clicado"]:
             if st.button("Clique aqui", on_click=clicar_botao):
@@ -148,8 +149,7 @@ def read_questao():
         variavel = st.session_state["botao_clicado"]
 
 # Função que será chamada ao clicar no botão
-def clicar_botao():
-    st.session_state["botao_clicado"] = True
+
 
 def new_ques(lista, n):
     # Salva as questões que foram feitas pelo usuário
