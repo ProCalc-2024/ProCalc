@@ -43,9 +43,9 @@ def read_questao():
     n = len(lista_ques)
     
     with col3:
-        rebot = st.session_state["rebot"]  
+        
         # Pergunta ao usuário quantas questões deseja criar
-        numero = st.number_input("Quantas questões você gostaria de fazer?", min_value=1, max_value=n, value=rebot)
+        numero = st.number_input("Quantas questões você gostaria de fazer?", min_value=1, max_value=n, value=1)
         
     
     # Cria uma lista de nomes para as questões
