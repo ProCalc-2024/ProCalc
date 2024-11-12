@@ -24,8 +24,6 @@ def read_questao():
     evitar = []
     resposta = {}
     res = {}
-    resultado = []
-    resultado2 = []
     if "botao" not in st.session_state:
         st.session_state["botao"] = False
         st.session_state["disabled"] = False
@@ -124,7 +122,7 @@ def read_questao():
                 st.session_state["lup"] = False
             lup = st.session_state["lup"] 
             
-            if lup or (botao and alternativa is None):
+            if botao and alternativa is None:
                 st.radio(tab_names[i], options=opcoes, index=None, key=f"cha4{i}", disabled=True, horizontal=True)
                 st.warning('Nenhuma das alternativas foi selecionada.', icon="⚠️")
                 res[i] = False
