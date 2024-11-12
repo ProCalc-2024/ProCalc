@@ -94,7 +94,7 @@ def read_questao():
             # Exibe as alternativas embaralhadas
             opcoes = [questao[embaralho[j]] for j in range(5)]
             
-            alternativa = st.radio("", options=opcoes, index=None, key = f"key{i}")
+            alternativa = st.radio("", options=opcoes, index=None, key = f"key{i}", disabled=st.session_state["disabled"])
             
             st.session_state["resposta"] = questao["Alternativa_A"]
             resul.update(st.session_state["save"])                                                
@@ -137,8 +137,10 @@ def read_questao():
         
         def clicar_botao():
             st.session_state["botao"] = True
+            st.session_state["disabled"] = True
         def new_questionario():
             st.session_state["botao"] = None
+            st.session_state["disabled"] = False
         # Mostra o botão somente se ele ainda não foi clicado
         if not st.session_state["botao"]:
             if st.button("Submeter", on_click=clicar_botao):
