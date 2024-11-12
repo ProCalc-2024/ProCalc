@@ -119,36 +119,35 @@ def read_questao():
         with tabs[numero]:
 
             botao = st.session_state["botao"]
-            
-            if botao is not True:
-                x=0
-                if alternativa is not None:
-                            
-                    index2 = opcoes.index(alternativa)
-                    st.radio(tab_names[i], options=opcoes, index=index2, key=f"cha1{i}", disabled=True, horizontal=True) 
-                    x = 1
-                if x == 0:  
-                    st.radio(tab_names[i], options=opcoes, index=None, key=f"cha2{i}", disabled=True, horizontal=True)
-            if botao and alternativa is not None:
-                
-                index2 = opcoes.index(alternativa)
-                st.radio(tab_names[i], options=opcoes, index=index2, key=f"cha3{i}", disabled=True, horizontal=True) 
-                
-                if resposta[i] == True:
-                            
-                    st.success(f'A resposta correta e {questao["Alternativa_A"]}', icon="✅")
-             
-                if resposta[i] == False:  
-            
-                    st.error(f'A resposta correta e {questao["Alternativa_A"]}', icon="🚨")
-                res[i] = True
-                
             if botao and alternativa is None:
                 st.radio(tab_names[i], options=opcoes, index=None, key=f"cha4{i}", disabled=True, horizontal=True)
                 st.warning('Nenhuma das alternativas foi selecionada.', icon="⚠️")
                 res[i] = False
+            else:
+                if botao is not True:
+                    x=0
+                    if alternativa is not None:
+                                
+                        index2 = opcoes.index(alternativa)
+                        st.radio(tab_names[i], options=opcoes, index=index2, key=f"cha1{i}", disabled=True, horizontal=True) 
+                        x = 1
+                    if x == 0:  
+                        st.radio(tab_names[i], options=opcoes, index=None, key=f"cha2{i}", disabled=True, horizontal=True)
+                if botao and alternativa is not None:
+                    
+                    index2 = opcoes.index(alternativa)
+                    st.radio(tab_names[i], options=opcoes, index=index2, key=f"cha3{i}", disabled=True, horizontal=True) 
+                    
+                    if resposta[i] == True:
+                                
+                        st.success(f'A resposta correta e {questao["Alternativa_A"]}', icon="✅")
+                 
+                    if resposta[i] == False:  
                 
-                st.write(res[i])
+                        st.error(f'A resposta correta e {questao["Alternativa_A"]}', icon="🚨")
+                    res[i] = True
+                
+
 
     res2 = list(set(res))
     st.write(res2)
@@ -163,8 +162,8 @@ def read_questao():
             st.session_state["disabled"] = False
             
         # Mostra o botão somente se ele ainda não foi clicado
-        if not st.session_state["botao"] :
-            if st.button("Submeter", on_click=clicar_botao):
+        if not st.session_state["botao"]:
+            if st.button("Submeter", on_click=clicar_botao) and res2:
                 pass  # O estado muda ao clicar, e o botão desaparece na próxima renderização
 
         if st.session_state["botao"] :       
