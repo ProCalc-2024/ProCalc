@@ -70,8 +70,8 @@ def read_questao():
             
             # Embaralha as alternativas
             lista = ["Alternativa_A", "Alternativa_B", "Alternativa_C", "Alternativa_D", "Alternativa_E"]
-            if f"embaralho{i} {materia}" not in st.session_state:
-                st.session_state[f"embaralho{i}  {materia}"] = np.random.choice(lista, 5, replace=False)
+            if f"embaralho{i}{materia}" not in st.session_state:
+                st.session_state[f"embaralho{i}{materia}"] = np.random.choice(lista, 5, replace=False)
 
             # Filtra os números que não estão na lista de exclusão
             opcoes_validas = [num for num in b if num not in evitar]
@@ -92,7 +92,7 @@ def read_questao():
            
             evitar.append(b[i])
             
-            embaralho = st.session_state[f"embaralho{i} {materia}"]
+            embaralho = st.session_state[f"embaralho{i}{materia}"]
             # Escolha de questão aleatória
             questao = lista_ques[b[i]]
             
