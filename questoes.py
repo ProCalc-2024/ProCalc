@@ -122,21 +122,24 @@ def read_questao():
             botao = st.session_state["botao"]
             if alternativa is not None:
                 st.session_state["lup"] = False
-            lup = st.session_state["lup"]    
+            lup = st.session_state["lup"] 
+            
             if lup or (botao and alternativa is None):
                 st.radio(tab_names[i], options=opcoes, index=None, key=f"cha4{i}", disabled=True, horizontal=True)
                 st.warning('Nenhuma das alternativas foi selecionada.', icon="⚠️")
                 res[i] = False
             else:
-                if not lup is not True:
+                if botao is not True:
                     x=0
                     if alternativa is not None:
                                 
                         index2 = opcoes.index(alternativa)
                         st.radio(tab_names[i], options=opcoes, index=index2, key=f"cha1{i}", disabled=True, horizontal=True) 
                         x = 1
+                        
                     if x == 0:  
                         st.radio(tab_names[i], options=opcoes, index=None, key=f"cha2{i}", disabled=True, horizontal=True)
+                        
                 if botao and alternativa is not None:
                     
                     index2 = opcoes.index(alternativa)
