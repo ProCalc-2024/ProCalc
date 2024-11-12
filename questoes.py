@@ -25,6 +25,7 @@ def read_questao():
     resposta = {}
     res = {}
     resultado = []
+    resultado2 = []
     if "botao" not in st.session_state:
         st.session_state["botao"] = False
         st.session_state["disabled"] = False
@@ -150,7 +151,10 @@ def read_questao():
     for valor in res:
         if res[valor] not in resultado:
             resultado.append(res[valor])
-    st.write(resultado)
+    for valor in resultado:
+        if res[valor] == False :
+            resultado2 = False
+    st.write(f"res{resultado2}")
     
     with tabs[numero]:   
         def click1():
