@@ -149,7 +149,7 @@ def read_questao():
                 
 
 
-    res2 = list(set(res))
+    res2 = et(res)
     st.write(res2)
     with tabs[numero]:   
         def click1():
