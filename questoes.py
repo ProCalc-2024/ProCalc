@@ -138,7 +138,7 @@ def read_questao():
         def clicar_botao():
             st.session_state["botao"] = True
         def new_questionario():
-            st.session_state["botao"] = False
+            st.session_state["botao"] = None
         # Mostra o botão somente se ele ainda não foi clicado
         if not st.session_state["botao"]:
             if st.button("Submeter", on_click=clicar_botao):
