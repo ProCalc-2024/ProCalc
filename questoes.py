@@ -29,7 +29,7 @@ def read_questao():
     if "botao" not in st.session_state:
         st.session_state["botao"] = False
         st.session_state["disabled"] = False
-            
+        st.session_state["lup"] = False   
     # lista de matérias
     lista = list(set(dict["Materia"]))
         
