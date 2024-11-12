@@ -148,9 +148,8 @@ def read_questao():
                     res[i] = True
 
     for valor in res:
-        if valor not in resultado:
+        if res[valor] not in resultado:
             resultado.append(res[valor])
-            st.write(valor)
     st.write(resultado)
     
     with tabs[numero]:   
