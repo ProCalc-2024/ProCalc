@@ -27,7 +27,7 @@ def read_questao():
     if "botao" not in st.session_state:
         st.session_state["botao"] = False
         st.session_state["disabled"] = False
-        st.session_state["rebot"] = 1
+        st.session_state["reb"] = 1
             
     
     # lista de matérias
@@ -43,9 +43,9 @@ def read_questao():
     n = len(lista_ques)
     
     with col3:
-        
+        reb=st.session_state["reb"]
         # Pergunta ao usuário quantas questões deseja criar
-        numero = st.number_input("Quantas questões você gostaria de fazer?", min_value=1, max_value=n, value=1)
+        numero = st.number_input("Quantas questões você gostaria de fazer?", min_value=1, max_value=n, value=reb)
         
     
     # Cria uma lista de nomes para as questões
@@ -152,7 +152,7 @@ def read_questao():
         def new_questionario():
             st.session_state["botao"] = None
             st.session_state["disabled"] = False
-            st.session_state["rebot"] = 1
+            st.session_state["reb"] = 1
             
         # Mostra o botão somente se ele ainda não foi clicado
         if not st.session_state["botao"]:
