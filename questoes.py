@@ -28,6 +28,7 @@ def read_questao():
         st.session_state["botao"] = False
         st.session_state["disabled"] = False
         st.session_state["reb"] = 1
+        reb = st.session_state["reb"]
             
     
     # lista de matérias
@@ -43,7 +44,7 @@ def read_questao():
     n = len(lista_ques)
     
     with col3:
-        reb=st.session_state["reb"]
+        
         # Pergunta ao usuário quantas questões deseja criar
         numero = st.number_input("Quantas questões você gostaria de fazer?", min_value=1, max_value=n, value=reb)
         
