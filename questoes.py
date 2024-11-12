@@ -149,7 +149,7 @@ def read_questao():
 
     for valor in res:
         if valor not in resultado:
-            resultado.append(valor)
+            resultado.append(resultado[valor])
             st.write(valor)
     st.write(resultado)
     
