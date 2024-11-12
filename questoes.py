@@ -118,8 +118,11 @@ def read_questao():
 
                 
         with tabs[numero]:
-            lup = st.session_state["lup"]
+            
             botao = st.session_state["botao"]
+            if alternativa is not None:
+                st.session_state["lup"] = False
+            lup = st.session_state["lup"]    
             if lup or (botao and alternativa is None):
                 st.radio(tab_names[i], options=opcoes, index=None, key=f"cha4{i}", disabled=True, horizontal=True)
                 st.warning('Nenhuma das alternativas foi selecionada.', icon="⚠️")
