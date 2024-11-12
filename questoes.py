@@ -174,7 +174,7 @@ def read_questao():
                 clicar_botao
                 pass  # O estado muda ao clicar, e o botão desaparece na próxima renderização
 
-        if st.session_state["botao"] and resultado:       
+        if st.session_state["botao"] and resultado2:       
             if st.button("Novas Perguntas", on_click=new_questionario):
                 pass  # O estado muda ao clicar, e o botão desaparece na próxima renderização
         
