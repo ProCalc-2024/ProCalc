@@ -150,7 +150,7 @@ def read_questao():
         def new_questionario():
             st.session_state["botao"] = None
             st.session_state["disabled"] = False
-            st.rerun()
+            st.experimental_set_query_params(rerun=True)
             
         # Mostra o botão somente se ele ainda não foi clicado
         if not st.session_state["botao"]:
