@@ -141,15 +141,14 @@ def read_questao():
                 if resposta[i] == False:  
             
                     st.error(f'A resposta correta e {questao["Alternativa_A"]}', icon="🚨")
-                st.session_state["res"] = True
-                res[i] = st.session_state["res"]
+                res[i] = True
                 
             if botao and alternativa is None:
                 st.radio(tab_names[i], options=opcoes, index=None, key=f"cha4{i}", disabled=True, horizontal=True)
                 st.warning('Nenhuma das alternativas foi selecionada.', icon="⚠️")
-                st.session_state["res"] = False
-                res[i] = st.session_state["res"]
-                st.write = res[i]
+                res[i] = False
+                
+                st.write(res[i])
 
     res2 = list(set(res))
     st.write(res2)
