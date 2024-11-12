@@ -147,7 +147,9 @@ def read_questao():
                         st.error(f'A resposta correta e {questao["Alternativa_A"]}', icon="🚨")
                     res[i] = True
 
-    res2 = list(dict.fromkeys(res)
+    for valor in res:
+        if valor not in resultado:
+            resultado.append(valor)
     st.write(res2)
     
     with tabs[numero]:   
