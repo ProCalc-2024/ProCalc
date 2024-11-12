@@ -27,10 +27,7 @@ def read_questao():
     if "botao" not in st.session_state:
         st.session_state["botao"] = False
         st.session_state["disabled"] = False
-        st.session_state["reb"] = 1
-    reb = st.session_state["reb"]
             
-    
     # lista de matérias
     lista = list(set(dict["Materia"]))
         
@@ -46,7 +43,7 @@ def read_questao():
     with col3:
         
         # Pergunta ao usuário quantas questões deseja criar
-        numero = st.number_input("Quantas questões você gostaria de fazer?", min_value=1, max_value=n, value=reb)
+        numero = st.number_input("Quantas questões você gostaria de fazer?", min_value=1, max_value=n, value=1)
         
     
     # Cria uma lista de nomes para as questões
@@ -73,8 +70,8 @@ def read_questao():
             
             # Embaralha as alternativas
             lista = ["Alternativa_A", "Alternativa_B", "Alternativa_C", "Alternativa_D", "Alternativa_E"]
-            if f"embaralho{i}" not in st.session_state:
-                st.session_state[f"embaralho{i}"] = np.random.choice(lista, 5, replace=False)
+            if f"embaralho{i} {materia}" not in st.session_state:
+                st.session_state[f"embaralho{i}  {materia}"] = np.random.choice(lista, 5, replace=False)
 
             # Filtra os números que não estão na lista de exclusão
             opcoes_validas = [num for num in b if num not in evitar]
@@ -95,7 +92,7 @@ def read_questao():
            
             evitar.append(b[i])
             
-            embaralho = st.session_state[f"embaralho{i}"]
+            embaralho = st.session_state[f"embaralho{i} {materia}"]
             # Escolha de questão aleatória
             questao = lista_ques[b[i]]
             
@@ -153,7 +150,6 @@ def read_questao():
         def new_questionario():
             st.session_state["botao"] = None
             st.session_state["disabled"] = False
-            st.session_state["reb"] = 1
             
         # Mostra o botão somente se ele ainda não foi clicado
         if not st.session_state["botao"]:
