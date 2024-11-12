@@ -128,7 +128,7 @@ def read_questao():
                     x = 1
                 if x == 0:  
                     st.radio(tab_names[i], options=opcoes, index=None, key=f"cha2{i}", disabled=True, horizontal=True)
-            if botao:
+            if botao and alternativa is not None:
                 
                 index2 = opcoes.index(alternativa)
                 st.radio(tab_names[i], options=opcoes, index=index2, key=f"cha1{i}", disabled=True, horizontal=True) 
@@ -150,7 +150,6 @@ def read_questao():
         def new_questionario():
             st.session_state["botao"] = None
             st.session_state["disabled"] = False
-            st.experimental_set_query_params(rerun=True)
             
         # Mostra o botão somente se ele ainda não foi clicado
         if not st.session_state["botao"]:
