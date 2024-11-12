@@ -163,6 +163,7 @@ def read_questao():
         def clicar_botao():
             st.session_state["botao"] = True
             st.session_state["disabled"] = True
+            pass
 
         def new_questionario():
             st.session_state["botao"] = None
@@ -172,7 +173,7 @@ def read_questao():
         if not st.session_state["botao"]:
             if st.button("Submeter", on_click = click1) and resultado2 :
                 clicar_botao
-                pass  # O estado muda ao clicar, e o botão desaparece na próxima renderização
+                  # O estado muda ao clicar, e o botão desaparece na próxima renderização
 
         if st.session_state["botao"] and resultado2:       
             if st.button("Novas Perguntas", on_click=new_questionario):
