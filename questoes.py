@@ -141,8 +141,7 @@ def read_questao():
             
                     st.error(f'A resposta correta e {questao["Alternativa_A"]}', icon="🚨")
             if botao and alternativa is None:
-                index2 = opcoes.index(alternativa)
-                st.radio(tab_names[i], options=opcoes, index=index2, key=f"cha4{i}", disabled=True, horizontal=True)
+                st.radio(tab_names[i], options=opcoes, index=None, key=f"cha4{i}", disabled=True, horizontal=True)
                 
     with tabs[numero]:
         
