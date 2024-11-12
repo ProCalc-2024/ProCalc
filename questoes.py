@@ -23,6 +23,7 @@ def read_questao():
     b = []
     evitar = []
     resposta = {}
+    res = {}
 
     if "botao" not in st.session_state:
         st.session_state["botao"] = False
@@ -140,11 +141,18 @@ def read_questao():
                 if resposta[i] == False:  
             
                     st.error(f'A resposta correta e {questao["Alternativa_A"]}', icon="🚨")
+                st.session_state["res"] = True
+                res[i] = st.session_state["res"]
+                
             if botao and alternativa is None:
                 st.radio(tab_names[i], options=opcoes, index=None, key=f"cha4{i}", disabled=True, horizontal=True)
-                
+                st.warning('Nenhuma das alternativas foi selecionada.', icon="⚠️")
+                st.session_state["res"] = False
+                res[i] = st.session_state["res"]
+
+    res2 = list(set(res))
     with tabs[numero]:
-        
+         
         def clicar_botao():
             st.session_state["botao"] = True
             st.session_state["disabled"] = True
@@ -154,7 +162,7 @@ def read_questao():
             st.session_state["disabled"] = False
             
         # Mostra o botão somente se ele ainda não foi clicado
-        if not st.session_state["botao"]:
+        if not st.session_state["botao"] and res:
             if st.button("Submeter", on_click=clicar_botao):
                 pass  # O estado muda ao clicar, e o botão desaparece na próxima renderização
         else:        
