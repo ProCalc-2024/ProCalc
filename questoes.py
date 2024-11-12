@@ -103,8 +103,10 @@ def read_questao():
             resul.update(sequencia)
             st.session_state["save"] = resul
             resposta[i] = alternativa == questao["Alternativa_A"]
+            
             if "botao" not in st.session_state:
                st.session_state["botao"] = False
+                
         with tabs[numero]:
 
             botao = st.session_state["botao"]
@@ -132,9 +134,22 @@ def read_questao():
                     st.error(f'A resposta correta e {questao["Alternativa_A"]}', icon="🚨")
      
     with tabs[numero]:
-            # Botão de submissão
-        st.session_state["botao"] = st.button("Submeter", key=f"sub{i}")  # Corrigido o espaço extra na chave
+        
+        # Inicializa o estado do botão se ainda não estiver definido
+        if "botao_clicado" not in st.session_state:
+            st.session_state["botao_clicado"] = False
+        
+        # Mostra o botão somente se ele ainda não foi clicado
+        if not st.session_state["botao_clicado"]:
+            if st.button("Clique aqui", on_click=clicar_botao):
+                pass  # O estado muda ao clicar, e o botão desaparece na próxima renderização
+        
+        # Define a variável com base no estado do botão
+        variavel = st.session_state["botao_clicado"]
 
+# Função que será chamada ao clicar no botão
+def clicar_botao():
+    st.session_state["botao_clicado"] = True
 
 def new_ques(lista, n):
     # Salva as questões que foram feitas pelo usuário
