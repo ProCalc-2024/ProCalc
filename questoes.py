@@ -56,8 +56,14 @@ def read_questao():
 
         with tabs[i]:
             
+            if "botao" not in st.session_state:
+               st.session_state["botao"] = False
+               st.session_state["disabled"] = False  
+                
             # Número de questões
             b = list(range(n))
+            
+            disabled2 = st.session_state["disabled"]
             
             # Embaralha as alternativas
             lista = ["Alternativa_A", "Alternativa_B", "Alternativa_C", "Alternativa_D", "Alternativa_E"]
@@ -94,7 +100,7 @@ def read_questao():
             # Exibe as alternativas embaralhadas
             opcoes = [questao[embaralho[j]] for j in range(5)]
             
-            alternativa = st.radio("", options=opcoes, index=None, key = f"key{i}", disabled=st.session_state["disabled"])
+            alternativa = st.radio("", options=opcoes, index=None, key = f"key{i}", disabled=disabled2)
             
             st.session_state["resposta"] = questao["Alternativa_A"]
             resul.update(st.session_state["save"])                                                
@@ -104,14 +110,12 @@ def read_questao():
             st.session_state["save"] = resul
             resposta[i] = alternativa == questao["Alternativa_A"]
             
-            if "botao" not in st.session_state:
-               st.session_state["botao"] = False
-               st.session_state["disabled"] = False
+
                 
         with tabs[numero]:
 
             botao = st.session_state["botao"]
-           
+            
             if botao is not True:
                 x=0
                 if alternativa is not None:
