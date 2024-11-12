@@ -147,7 +147,7 @@ def read_questao():
                         st.error(f'A resposta correta e {questao["Alternativa_A"]}', icon="🚨")
                     res[i] = True
 
-    res2 = set(res)
+    res2 = list(dict.fromkeys(res)
     st.write(res2)
     
     with tabs[numero]:   
@@ -164,7 +164,7 @@ def read_questao():
             
         # Mostra o botão somente se ele ainda não foi clicado
         if not st.session_state["botao"]:
-            if st.button("Submeter", on_click = click1) and res2:
+            if st.button("Submeter", on_click = click1) and res2 == True:
                 clicar_botao
                 pass  # O estado muda ao clicar, e o botão desaparece na próxima renderização
 
