@@ -119,17 +119,17 @@ def read_questao():
                 if x == 0:  
                     st.radio(tab_names[i], options=opcoes, index=None, key=f"cha2{i}", disabled=True, horizontal=True)
             if botao:
-                x=0
+                
+                index2 = opcoes.index(alternativa)
+                st.radio(tab_names[i], options=opcoes, index=index2, key=f"cha1{i}", disabled=True, horizontal=True) 
+                
                 if resposta[i] == True:
                             
-                    index2 = opcoes.index(alternativa)
-                    st.radio(tab_names[i], options=opcoes, index=index2, key=f"cha1{i}", disabled=True, horizontal=True) 
-                    st.success(f'A resposta correta e{questao["Alternativa_A"]}', icon="✅")
-                    x = 1
-                    
+                    st.success(f'A resposta correta e {questao["Alternativa_A"]}', icon="✅")
+             
                 if resposta[i] == False:  
-                    st.radio(tab_names[i], options=opcoes, index=None, key=f"cha2{i}", disabled=True, horizontal=True)
-                    st.error(f'A resposta correta e{questao["Alternativa_A"]}', icon="🚨")
+            
+                    st.error(f'A resposta correta e {questao["Alternativa_A"]}', icon="🚨")
      
     with tabs[numero]:
             # Botão de submissão
