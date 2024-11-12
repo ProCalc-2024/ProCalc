@@ -146,11 +146,10 @@ def read_questao():
                 
                         st.error(f'A resposta correta e {questao["Alternativa_A"]}', icon="🚨")
                     res[i] = True
-                
 
-
-    res2 = et(res)
+    res2 = set(res)
     st.write(res2)
+    
     with tabs[numero]:   
         def click1():
             st.session_state["botao"] = True
