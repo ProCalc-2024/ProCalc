@@ -28,7 +28,7 @@ def read_questao():
         st.session_state["botao"] = False
         st.session_state["disabled"] = False
         st.session_state["reb"] = 1
-        reb = st.session_state["reb"]
+    reb = st.session_state["reb"]
             
     
     # lista de matérias
