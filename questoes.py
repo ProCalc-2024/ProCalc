@@ -150,7 +150,7 @@ def read_questao():
     for valor in res:
         if valor not in resultado:
             resultado.append(valor)
-    st.write(res2)
+    st.write(resultado)
     
     with tabs[numero]:   
         def click1():
@@ -166,11 +166,11 @@ def read_questao():
             
         # Mostra o botão somente se ele ainda não foi clicado
         if not st.session_state["botao"]:
-            if st.button("Submeter", on_click = click1) and res2 == True:
+            if st.button("Submeter", on_click = click1) and resultado == True:
                 clicar_botao
                 pass  # O estado muda ao clicar, e o botão desaparece na próxima renderização
 
-        if st.session_state["botao"] and res2:       
+        if st.session_state["botao"] and resultado:       
             if st.button("Novas Perguntas", on_click=new_questionario):
                 pass  # O estado muda ao clicar, e o botão desaparece na próxima renderização
         
