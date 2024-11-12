@@ -137,12 +137,15 @@ def read_questao():
         
         def clicar_botao():
             st.session_state["botao"] = True
+        def new_questionario():
+            st.session_state["botao"] = False
         # Mostra o botão somente se ele ainda não foi clicado
         if not st.session_state["botao"]:
             if st.button("Submeter", on_click=clicar_botao):
                 pass  # O estado muda ao clicar, e o botão desaparece na próxima renderização
         else:        
-                st.button("Novas Perguntas")
+            if st.button("Novas Perguntas", on_click=new_questionario):
+                pass  # O estado muda ao clicar, e o botão desaparece na próxima renderização
         
         # Define a variável com base no estado do botão
         botao = st.session_state["botao"]
