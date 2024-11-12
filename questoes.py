@@ -24,7 +24,7 @@ def read_questao():
     evitar = []
     resposta = {}
     res = {}
-    resultado = {}
+    resultado = []
     if "botao" not in st.session_state:
         st.session_state["botao"] = False
         st.session_state["disabled"] = False
@@ -149,7 +149,7 @@ def read_questao():
 
     for valor in res:
         if valor not in resultado:
-            resultado.append(resultado[valor])
+            resultado.append(res[valor])
             st.write(valor)
     st.write(resultado)
     
