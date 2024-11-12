@@ -153,23 +153,12 @@ def read_questao():
                 
                         st.error(f'A resposta correta e {questao["Alternativa_A"]}', icon="🚨")
                     res[i] = True
-
-    for valor in res:
-        if res[valor] not in resultado:
-            resultado.append(res[valor])
-    for valor in resultado:
-        if res[valor] == False :
-            resultado2 = False
-    st.write(f"res{resultado2}")
     
     with tabs[numero]:   
-        def click1():
-            st.session_state["lup"] = True
-        
         def clicar_botao():
             st.session_state["botao"] = True
             st.session_state["disabled"] = True
-            pass
+            
 
         def new_questionario():
             st.session_state["botao"] = None
@@ -177,11 +166,11 @@ def read_questao():
             
         # Mostra o botão somente se ele ainda não foi clicado
         if not st.session_state["botao"]:
-            if st.button("Submeter", on_click = click1) and lup == False:
+            if st.button("Submeter") and lup == False:
                 clicar_botao
-                  # O estado muda ao clicar, e o botão desaparece na próxima renderização
+                pass  # O estado muda ao clicar, e o botão desaparece na próxima renderização
 
-        if st.session_state["botao"] and resultado2:       
+        if st.session_state["botao"]:       
             if st.button("Novas Perguntas", on_click=new_questionario):
                 pass  # O estado muda ao clicar, e o botão desaparece na próxima renderização
         
