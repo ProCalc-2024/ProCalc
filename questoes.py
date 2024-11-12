@@ -149,6 +149,7 @@ def read_questao():
                 st.warning('Nenhuma das alternativas foi selecionada.', icon="⚠️")
                 st.session_state["res"] = False
                 res[i] = st.session_state["res"]
+                st.write = res[i]
 
     res2 = list(set(res))
     st.write(res2)
