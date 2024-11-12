@@ -103,10 +103,10 @@ def read_questao():
             resul.update(sequencia)
             st.session_state["save"] = resul
             resposta[i] = alternativa == questao["Alternativa_A"]
-            
-        with tabs[numero]:
             if "botao" not in st.session_state:
                st.session_state["botao"] = False
+        with tabs[numero]:
+
             botao = st.session_state["botao"]
            
             if botao is not True:
@@ -135,15 +135,6 @@ def read_questao():
             # Botão de submissão
         st.session_state["botao"] = st.button("Submeter", key=f"sub{i}")  # Corrigido o espaço extra na chave
 
-            
-        if botao:
-            if resposta:
-                st.toast(':green-background[Resposta Certa]', icon='🎉')
-                # new_ques(lista, n)
-                time.sleep(5)
-                st.rerun()
-            else:
-                st.toast(':red-background[Resposta Errada]', icon="⚠️")
 
 def new_ques(lista, n):
     # Salva as questões que foram feitas pelo usuário
