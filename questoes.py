@@ -61,8 +61,10 @@ def read_questao():
         st.title("Perguntas")
 
     for i in range(numero):
-
         with tabs[i]:
+            st.info('This is a purely informational message', icon="ℹ️")
+            
+        with tabs[i+1]:
             
              
             # Número de questões
@@ -117,7 +119,7 @@ def read_questao():
             
 
                 
-        with tabs[numero]:
+        with tabs[numero+1]:
             
             botao = st.session_state["botao"]
             
