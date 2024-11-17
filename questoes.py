@@ -159,9 +159,9 @@ def read_questao():
         def new_questionario():
             st.session_state["botao"] = None
             st.session_state["disabled"] = False
-            st.Write(b)
+            st.write(b)
             random.shuffle(b)
-            st.Write(b)
+            st.write(b)
             st.session_state["ques"] = b
             
         # Mostra o botão somente se ele ainda não foi clicado
