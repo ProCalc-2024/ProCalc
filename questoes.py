@@ -47,9 +47,8 @@ def read_questao():
         
     tab_names = []
     # Cria uma lista de nomes para as questões
-    tab_names = ["Informações"]
-    tab_names1 = f"Q{i + 1}" for i in range(numero)
-    tab_names.append(tab_names1)
+    tab_names = "Informações"
+    tab_names = [f"Q{i + 1}" for i in range(numero)]
     tab_names.append("Resposta")
     
     # Cria as abas dinamicamente
