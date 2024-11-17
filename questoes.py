@@ -161,6 +161,9 @@ def read_questao():
             st.session_state["disabled"] = False
             random.shuffle(b)
             st.session_state["ques"] = b
+            for i in range(n):
+                st.session_state[f"embaralho{i}{materia}"] = np.random.choice(lista, 5, replace=False)
+            
             
         # Mostra o botão somente se ele ainda não foi clicado
         if not st.session_state["botao"]:
