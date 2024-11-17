@@ -50,7 +50,6 @@ def read_questao():
     tab_names = [f"Q{i}" for i in range(numero + 1)]
     tab_names[0] = "Informações"
     tab_names.append("Resposta")
-    st.write(tab_names)
     # Cria as abas dinamicamente
     tabs = st.tabs(tab_names)
     
