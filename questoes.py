@@ -84,19 +84,18 @@ def read_questao():
                 st.session_state["numero"] = 0
                 random.shuffle(b)
                 st.session_state["ques"] = b
-            
             # se ja existir algo no sesion state 
-            b = st.session_state["ques"]
+            b1 = st.session_state["ques"]
             
             # Verifique se há opções válidas disponíveis
             if opcoes_validas:
                 numero_aleatorio = np.random.choice(opcoes_validas)
            
-            evitar.append(b[i])
+            evitar.append(b1[i])
             
             embaralho = st.session_state[f"embaralho{i}{materia}"]
             # Escolha de questão aleatória
-            questao = lista_ques[b[i]]
+            questao = lista_ques[b1[i]]
             
             st.write(" ")
             st.write(questao["Enunciado"])
@@ -160,6 +159,9 @@ def read_questao():
         def new_questionario():
             st.session_state["botao"] = None
             st.session_state["disabled"] = False
+            random.shuffle(b)
+            st.session_state["ques"] = b
+            st.rerun()
             
         # Mostra o botão somente se ele ainda não foi clicado
         if not st.session_state["botao"]:
@@ -178,7 +180,7 @@ def read_questao():
 
 def new_ques(lista, n):
     # Salva as questões que foram feitas pelo usuário
-    st.session_state["numero"] += 1
+    
     st.session_state["embaralho"] = np.random.choice(lista, 5, replace=False)
     st.session_state["ques"] = np.random.randint(0, n)
 
