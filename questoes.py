@@ -45,7 +45,7 @@ def read_questao():
         # Pergunta ao usuário quantas questões deseja criar
         numero = st.number_input("Quantas questões você gostaria de fazer?", min_value=1, max_value=n, value=1)
         
-    
+    tab_names = []
     # Cria uma lista de nomes para as questões
     tab_names.append("Informações")
     tab_names = [f"Q{i + 1}" for i in range(numero)]
