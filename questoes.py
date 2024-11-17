@@ -159,9 +159,10 @@ def read_questao():
         def new_questionario():
             st.session_state["botao"] = None
             st.session_state["disabled"] = False
+            st.Write(b)
             random.shuffle(b)
+            st.Write(b)
             st.session_state["ques"] = b
-            st.rerun()
             
         # Mostra o botão somente se ele ainda não foi clicado
         if not st.session_state["botao"]:
@@ -174,13 +175,3 @@ def read_questao():
         
         # Define a variável com base no estado do botão
         botao = st.session_state["botao"]
-
-# Função que será chamada ao clicar no botão
-
-
-def new_ques(lista, n):
-    # Salva as questões que foram feitas pelo usuário
-    
-    st.session_state["embaralho"] = np.random.choice(lista, 5, replace=False)
-    st.session_state["ques"] = np.random.randint(0, n)
-
