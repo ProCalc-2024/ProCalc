@@ -52,7 +52,7 @@ def read_questao():
     tab_names.append("Resposta")
     # Cria as abas dinamicamente
     tabs = st.tabs(tab_names)
-     
+    st.write(tab_names) 
     with tabs[numero]:
         col_list = [1] * numero
         coluna = st.columns(col_list)
