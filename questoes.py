@@ -62,9 +62,9 @@ def read_questao():
         st.info('This is a purely informational message', icon="ℹ️")
         
     for i in range(numero):
-            
+        j=i+1    
         with tabs[i+1]:
-            j=i+1 
+            
             # Número de questões
             b = list(range(n))
             
@@ -122,7 +122,7 @@ def read_questao():
             botao = st.session_state["botao"]
             
             if botao and alternativa is None:
-                st.radio(tab_names[i+1], options=opcoes, index=None, key=f"cha4{i}", disabled=True, horizontal=True)
+                st.radio(tab_names[j], options=opcoes, index=None, key=f"cha4{j}", disabled=True, horizontal=True)
                 st.warning('Nenhuma das alternativas foi selecionada.', icon="⚠️")
                 res[i] = False
             else:
@@ -131,16 +131,16 @@ def read_questao():
                     if alternativa is not None:
                                 
                         index2 = opcoes.index(alternativa)
-                        st.radio(tab_names[i], options=opcoes, index=index2, key=f"cha1{i}", disabled=True, horizontal=True) 
+                        st.radio(tab_names[j], options=opcoes, index=index2, key=f"cha1{j}", disabled=True, horizontal=True) 
                         x = 1
                         
                     if x == 0:  
-                        st.radio(tab_names[i], options=opcoes, index=None, key=f"cha2{i}", disabled=True, horizontal=True)
+                        st.radio(tab_names[j], options=opcoes, index=None, key=f"cha2{j}", disabled=True, horizontal=True)
                         
                 if botao and alternativa is not None:
                     
                     index2 = opcoes.index(alternativa)
-                    st.radio(tab_names[i], options=opcoes, index=index2, key=f"cha3{i}", disabled=True, horizontal=True) 
+                    st.radio(tab_names[j], options=opcoes, index=index2, key=f"cha3{j}", disabled=True, horizontal=True) 
                     
                     if resposta[i] == True:
                                 
