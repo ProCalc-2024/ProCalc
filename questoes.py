@@ -58,14 +58,13 @@ def read_questao():
         coluna = st.columns(col_list)
     with col1:
         st.title("Perguntas")
-
+    with tabs[0]:
+        st.info('This is a purely informational message', icon="ℹ️")
+        
     for i in range(numero):
-        with tabs[0]:
-            st.info('This is a purely informational message', icon="ℹ️")
             
         with tabs[i+1]:
-            
-             
+            j=i+1 
             # Número de questões
             b = list(range(n))
             
