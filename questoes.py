@@ -17,7 +17,7 @@ def read_questao():
     sheet = conn.read(worksheet="Questões")
     dict = pd.DataFrame(sheet)
 
-    col1, col2 = st.columns([1, 1, 1])
+    col1, col2 = st.columns([1, 1])
     test = {}
     resul = {}
     b = []
