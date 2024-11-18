@@ -32,7 +32,8 @@ def read_questao():
     lista = list(set(dict["Materia"]))
         
     with col2:    
-        materia = st.selectbox("Selecione um assunto", lista)    
+        st.write("Selecione um assunto")
+        materia = st.selectbox("", lista)    
 
     # lista de questões de acordo com a matéria escolhida
     lista_ques = [linha for linha in dict.iloc if linha["Materia"] == materia]
