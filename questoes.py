@@ -17,7 +17,7 @@ def read_questao():
     sheet = conn.read(worksheet="Questões")
     dict = pd.DataFrame(sheet)
 
-    col1, col2, col3 = st.columns([1, 1, 1])
+    col1, col2 = st.columns([1, 1, 1])
     test = {}
     resul = {}
     b = []
@@ -30,16 +30,17 @@ def read_questao():
           
     # lista de matérias
     lista = list(set(dict["Materia"]))
-           
-    materia = st.selectbox("Selecione um assunto", lista)    
+    with col2:       
+        materia = st.selectbox("Selecione um assunto", lista)    
 
     # lista de questões de acordo com a matéria escolhida
     lista_ques = [linha for linha in dict.iloc if linha["Materia"] == materia]
 
     # Número de questões
     n = len(lista_ques)
-    # Pergunta ao usuário quantas questões deseja criar
-    numero = st.number_input("Quantas questões você gostaria de fazer?", min_value=1, max_value=n, value=1)
+    with col2: 
+        # Pergunta ao usuário quantas questões deseja criar
+        numero = st.number_input("Quantas questões você gostaria de fazer?", min_value=1, max_value=n, value=1)
         
     tab_names = []
     # Cria uma lista de nomes para as questões
