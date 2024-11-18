@@ -31,9 +31,7 @@ def read_questao():
     # lista de matérias
     lista = list(set(dict["Materia"]))
         
-    with col2:    
-        st.write("Selecione um assunto")
-        materia = st.selectbox("", lista)    
+    materia = st.selectbox("", lista)    
 
     # lista de questões de acordo com a matéria escolhida
     lista_ques = [linha for linha in dict.iloc if linha["Materia"] == materia]
@@ -41,10 +39,9 @@ def read_questao():
     # Número de questões
     n = len(lista_ques)
     
-    with col3:
-        st.write("Quantas questões você gostaria de fazer?")
-        # Pergunta ao usuário quantas questões deseja criar
-        numero = st.number_input("", min_value=1, max_value=n, value=1)
+    st.write("Quantas questões você gostaria de fazer?")
+    # Pergunta ao usuário quantas questões deseja criar
+    numero = st.number_input("", min_value=1, max_value=n, value=1)
         
     tab_names = []
     # Cria uma lista de nomes para as questões
