@@ -50,9 +50,9 @@ def read_questao():
     # Cria as abas dinamicamente
     tabs = st.tabs(tab_names)
     
-    with tabs[numero]:
-        col_list = [1] * numero
-        coluna = st.columns(col_list)
+    #with tabs[numero]:
+    col_list = [1] * numero
+    coluna = st.columns(col_list)
     with col1:
         st.title("Perguntas")
     with tabs[0]:
@@ -94,9 +94,8 @@ def read_questao():
             # Escolha de questão aleatória
             questao = lista_ques[b1[i]]
             
-            st.write(" ")
             st.write(questao["Enunciado"])
-            st.subheader(' ', divider='gray')
+            st.subheader('', divider='gray')
             
             # Exibe as alternativas embaralhadas
             opcoes = [questao[embaralho[j]] for j in range(5)]
@@ -111,7 +110,6 @@ def read_questao():
             st.session_state["save"] = resul
             resposta[i] = alternativa == questao["Alternativa_A"]
             
-
                 
         with tabs[numero+1]:
             
