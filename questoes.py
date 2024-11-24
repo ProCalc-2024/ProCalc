@@ -59,7 +59,8 @@ def read_questao():
         st.info('This is a purely informational message', icon="ℹ️")
         
     for i in range(numero):
-        j=i+1    
+        j=i+1
+        botao = st.session_state["botao"]
         with tabs[i+1]:
             
             # Número de questões
@@ -113,14 +114,9 @@ def read_questao():
                 
         with tabs[numero+1]:
             
-            botao = st.session_state["botao"]
-            
             if botao and alternativa is None:
                 st.radio(tab_names[j], options=opcoes, index=None, key=f"cha4{j}", disabled=True, horizontal=True)
                 st.warning('Nenhuma das alternativas foi selecionada.', icon="⚠️")
-                with tabs[i+1]:
-                    st.radio(tab_names[j], options=opcoes, index=None, key=f"cha4{j}", disabled=True, horizontal=True)
-                    st.warning('Nenhuma das alternativas foi selecionada.', icon="⚠️")
                 res[i] = False
             else:
                 if botao is not True:
