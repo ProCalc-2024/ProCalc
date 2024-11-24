@@ -151,9 +151,9 @@ def read_questao():
                     if x == 0:  
                         st.radio(tab_names[y], options=opcoes, index=None, key=f"cha2{y}", disabled=True, horizontal=True)
                         
-                if botao and alternativa is not None:
+                if botao and alternativa[i] is not None:
                     
-                    index2 = opcoes.index(alternativa)
+                    index2 = opcoes.index(alternativa[i])
                     st.radio(tab_names[y], options=opcoes, index=index2, key=f"cha3{y}", disabled=True, horizontal=True) 
                     
                     if resposta[i] == True:
