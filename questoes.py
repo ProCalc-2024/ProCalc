@@ -22,7 +22,7 @@ def read_questao():
     resul = {}
     b = []
     evitar = []
-    resposta = {}
+    resposta = []
     res = {}
     if "botao" not in st.session_state:
         st.session_state["botao"] = False
