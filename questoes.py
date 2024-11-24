@@ -110,7 +110,20 @@ def read_questao():
             resul.update(sequencia)
             st.session_state["save"] = resul
             resposta[i] = alternativa == questao["Alternativa_A"]
-            
+
+            if botao and alternativa is None:
+                st.warning('Nenhuma das alternativas foi selecionada.', icon="⚠️")
+            else:
+                
+                if botao and alternativa is not None:
+                    
+                    if resposta[i] == True:
+                                
+                        st.success(f'A resposta correta e {questao["Alternativa_A"]}', icon="✅")
+                 
+                    if resposta[i] == False:  
+                
+                        st.error(f'A resposta correta e {questao["Alternativa_A"]}', icon="🚨")
                 
         with tabs[numero+1]:
             
