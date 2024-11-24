@@ -110,13 +110,13 @@ def read_questao():
             sequencia = st.session_state["save"]
             resul.update(sequencia)
             st.session_state["save"] = resul
-            resposta[i] = alternativa == questao["Alternativa_A"]
+            resposta[i] = alternativa[i] == questao["Alternativa_A"]
 
-            if botao and alternativa is None:
+            if botao and alternativa[i] is None:
                 st.warning('Nenhuma das alternativas foi selecionada.', icon="⚠️")
             else:
                 
-                if botao and alternativa is not None:
+                if botao and alternativa[i] is not None:
                     
                     if resposta[i] == True:
                                 
@@ -135,7 +135,7 @@ def read_questao():
         y=i+1
         with tabs[numero+1]:
              
-            if botao and alternativa is None:
+            if botao and alternativa[i] is None:
                 st.radio(tab_names[y], options=opcoes, index=None, key=f"cha4{y}", disabled=True, horizontal=True)
                 st.warning('Nenhuma das alternativas foi selecionada.', icon="⚠️")
                 res[i] = False
