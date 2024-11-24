@@ -124,14 +124,17 @@ def read_questao():
                     if resposta[i] == False:  
                 
                         st.error(f'A resposta correta e {questao["Alternativa_A"]}', icon="🚨")
-                
+    with tabs[numero+1]:
+        acertos = sum(1 for valor in resposta.values() if valor)
+        porcen = (acertos/numero)*100
+        progress_text = f"Operation in progress. Please wait."
+        my_bar = st.progress(porcen, text=progress_text)
+        
+    for i in range(numero):    
+        
         with tabs[numero+1]:
-            acertos = sum(1 for valor in resposta.values() if valor)
-            porcen = (acertos/numero)*100
-            progress_text = f"Operation in progress. Please wait."
-                
+             
             if botao and alternativa is None:
-                my_bar = st.progress(porcen, text=progress_text)
                 
                 st.radio(tab_names[j], options=opcoes, index=None, key=f"cha4{j}", disabled=True, horizontal=True)
                 st.warning('Nenhuma das alternativas foi selecionada.', icon="⚠️")
