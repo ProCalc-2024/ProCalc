@@ -135,7 +135,6 @@ def read_questao():
         with tabs[numero+1]:
              
             if botao and alternativa is None:
-                
                 st.radio(tab_names[j], options=opcoes, index=None, key=f"cha4{j}", disabled=True, horizontal=True)
                 st.warning('Nenhuma das alternativas foi selecionada.', icon="⚠️")
                 res[i] = False
@@ -149,7 +148,7 @@ def read_questao():
                         x = 1
                         
                     if x == 0:  
-                        st.radio(tab_names[j], options=opcoes, index=None, key=f"cha2{j}", disabled=True, horizontal=True)
+                        st.radio(tab_names[j], options=opcoes, index=None, key=f"cha2{j+50}", disabled=True, horizontal=True)
                         
                 if botao and alternativa is not None:
                     
