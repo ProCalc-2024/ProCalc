@@ -131,11 +131,11 @@ def read_questao():
         my_bar = st.progress(porcen, text=progress_text)
         
     for i in range(numero):    
-        
+        y=i+1
         with tabs[numero+1]:
              
             if botao and alternativa is None:
-                st.radio(tab_names[j], options=opcoes, index=None, key=f"cha4{j}", disabled=True, horizontal=True)
+                st.radio(tab_names[y], options=opcoes, index=None, key=f"cha4{y}", disabled=True, horizontal=True)
                 st.warning('Nenhuma das alternativas foi selecionada.', icon="⚠️")
                 res[i] = False
             else:
@@ -144,16 +144,16 @@ def read_questao():
                     if alternativa is not None:
                                 
                         index2 = opcoes.index(alternativa)
-                        st.radio(tab_names[j], options=opcoes, index=index2, key=f"cha1{j}", disabled=True, horizontal=True) 
+                        st.radio(tab_names[y], options=opcoes, index=index2, key=f"cha1{y}", disabled=True, horizontal=True) 
                         x = 1
                         
                     if x == 0:  
-                        st.radio(tab_names[j], options=opcoes, index=None, key=f"cha2{j+50}", disabled=True, horizontal=True)
+                        st.radio(tab_names[y], options=opcoes, index=None, key=f"cha2{y}", disabled=True, horizontal=True)
                         
                 if botao and alternativa is not None:
                     
                     index2 = opcoes.index(alternativa)
-                    st.radio(tab_names[j], options=opcoes, index=index2, key=f"cha3{j}", disabled=True, horizontal=True) 
+                    st.radio(tab_names[y], options=opcoes, index=index2, key=f"cha3{y}", disabled=True, horizontal=True) 
                     
                     if resposta[i] == True:
                                 
