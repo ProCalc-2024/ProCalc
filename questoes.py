@@ -129,7 +129,7 @@ def read_questao():
     with tabs[numero+1]:
         acertos = sum(1 for valor in resposta.values() if valor)
         porcen = (acertos/numero)*100
-        st.wrrite(porcen)
+        st.write(porcen)
         progress_text = f"Operation in progress. Please wait."
         my_bar = st.progress(porcen, text=progress_text)
         
