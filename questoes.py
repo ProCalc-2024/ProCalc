@@ -129,9 +129,10 @@ def read_questao():
     with tabs[numero+1]:
         acertos = 0
         for i in resposta:
-            st.write(resposta[i])
+            
             if resposta[i] is True:
                 acertos = acertos + 1
+                st.write(acertos)
         porcen = (acertos/numero)*100
         st.write(porcen)
         progress_text = f"Operation in progress. Please wait."
