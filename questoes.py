@@ -50,49 +50,7 @@ def read_questao():
     tab_names[0] = "Informações"
     tab_names.append("Resposta")
     # Cria as abas dinamicamente
-    tabs = st.tabs(tab_names)
-    
-    time_per_question = 60
-    # Inicializar variáveis de sessão
-    if "current_question" not in st.session_state:
-        st.session_state.current_question = 1
-    if "time_left" not in st.session_state:
-        st.session_state.time_left = time_per_question
-    if "start_time" not in st.session_state:
-        st.session_state.start_time = None
-    if "running" not in st.session_state:
-        st.session_state.running = False
-    
-    # Função para iniciar o temporizador
-    def start_timer():
-        st.session_state.running = True
-        st.session_state.start_time = time.time()
-    
-    # Função para atualizar o temporizador
-    def update_timer():
-        if st.session_state.running:
-            elapsed_time = int(time.time() - st.session_state.start_time)
-            st.session_state.time_left = max(0, time_per_question - elapsed_time)
-    
-            # Verificar se o tempo da questão acabou
-            if st.session_state.time_left == 0:
-                if st.session_state.current_question < numero:
-                    st.session_state.current_question += 1
-                    st.session_state.time_left = time_per_question
-                    st.session_state.start_time = time.time()  # Reiniciar o tempo
-                else:
-                    st.session_state.running = False  # Parar o temporizador
-    
-    # Interface do Temporizador
-    if st.session_state.running:
-        update_timer()
-        st.write(f"**Question {st.session_state.current_question}**")
-        st.write(f"Time left: {st.session_state.time_left} seconds")
-        time.sleep(1)  # Atualizar a cada 1 segundo
-        st.rerun()
-    elif st.session_state.current_question > numero:
-        st.write("🎉 All questions completed!")
-    start_timer()    
+    tabs = st.tabs(tab_names)   
     
     #with tabs[numero]:
     col_list = [1] * numero
@@ -220,6 +178,48 @@ def read_questao():
                 
                         st.error(f'A resposta correta e {questao["Alternativa_A"]}', icon="🚨")
                     res[i] = True
+    with col1:
+        time_per_question = 60
+        # Inicializar variáveis de sessão
+        if "current_question" not in st.session_state:
+            st.session_state.current_question = 1
+        if "time_left" not in st.session_state:
+            st.session_state.time_left = time_per_question
+        if "start_time" not in st.session_state:
+            st.session_state.start_time = None
+        if "running" not in st.session_state:
+            st.session_state.running = False
+        
+        # Função para iniciar o temporizador
+        def start_timer():
+            st.session_state.running = True
+            st.session_state.start_time = time.time()
+        
+        # Função para atualizar o temporizador
+        def update_timer():
+            if st.session_state.running:
+                elapsed_time = int(time.time() - st.session_state.start_time)
+                st.session_state.time_left = max(0, time_per_question - elapsed_time)
+        
+                # Verificar se o tempo da questão acabou
+                if st.session_state.time_left == 0:
+                    if st.session_state.current_question < numero:
+                        st.session_state.current_question += 1
+                        st.session_state.time_left = time_per_question
+                        st.session_state.start_time = time.time()  # Reiniciar o tempo
+                    else:
+                        st.session_state.running = False  # Parar o temporizador
+        
+        # Interface do Temporizador
+        if st.session_state.running:
+            update_timer()
+            st.write(f"**Question {st.session_state.current_question}**")
+            st.write(f"Time left: {st.session_state.time_left} seconds")
+            time.sleep(1)  # Atualizar a cada 1 segundo
+            st.rerun()
+        elif st.session_state.current_question > numero:
+            st.write("🎉 All questions completed!")
+        start_timer() 
     
     with tabs[numero+1]:   
         def clicar_botao():
