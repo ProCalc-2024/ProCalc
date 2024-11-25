@@ -42,7 +42,7 @@ def read_questao():
     n = len(lista_ques)
     with col2: 
         # Pergunta ao usuário quantas questões deseja criar
-        numero = st.number_input("Quantas questões você gostaria de fazer?", min_value=1, max_value=n, value=1)
+        numero = st.number_input("Quantas questões você gostaria de fazer?", min_value=1, max_value=n, value=1, on_change= start_timer())
         
     tab_names = []
     # Cria uma lista de nomes para as questões
@@ -52,7 +52,7 @@ def read_questao():
     # Cria as abas dinamicamente
     tabs = st.tabs(tab_names)
     
-    time_per_question = st.slider("Time per Question (seconds)", 10, 300, 60)
+    time_per_question = 60
     # Inicializar variáveis de sessão
     if "current_question" not in st.session_state:
         st.session_state.current_question = 1
@@ -94,10 +94,6 @@ def read_questao():
         st.write("🎉 All questions completed!")
     else:
         st.write("Click 'Start Timer' to begin.")
-    
-    # Botão para iniciar o temporizador
-    if st.button("Start Timer"):
-        start_timer()
     
     #with tabs[numero]:
     col_list = [1] * numero
