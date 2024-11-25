@@ -127,7 +127,10 @@ def read_questao():
                 
                         st.error(f'A resposta correta e {questao["Alternativa_A"]}', icon="🚨")
     with tabs[numero+1]:
-        acertos = sum(1 for valor in resposta.values() if valor)
+        acertos = 0
+        for i in resposta:
+            if i is True:
+                acertos = acertos + 1
         porcen = (acertos/numero)*100
         st.write(porcen)
         progress_text = f"Operation in progress. Please wait."
