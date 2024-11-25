@@ -134,7 +134,7 @@ def read_questao():
                 st.write(acertos)
                 
         porcen = (acertos/numero)*100
-        st.write(round(porcen, 0))
+        porcen = round(porcen, 0)
         progress_text = f"Operation in progress. Please wait."
         my_bar = st.progress(porcen, text=progress_text)
         
