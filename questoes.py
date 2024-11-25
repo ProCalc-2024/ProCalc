@@ -25,6 +25,7 @@ def read_questao():
     resposta = {}
     alternativa = {}
     res = {}
+    opcoes = {}
     if "botao" not in st.session_state:
         st.session_state["botao"] = False
         st.session_state["disabled"] = False
@@ -100,9 +101,9 @@ def read_questao():
             st.subheader('', divider='gray')
             
             # Exibe as alternativas embaralhadas
-            opcoes = [questao[embaralho[j]] for j in range(5)]
+            opcoes[i] = [questao[embaralho[j]] for j in range(5)]
             
-            alternativa[i] = st.radio("", options=opcoes, index=None, key = f"key{i}", disabled=disabled2)
+            alternativa[i] = st.radio("", options=opcoes[i], index=None, key = f"key{i}", disabled=disabled2)
             
             st.session_state["resposta"] = questao["Alternativa_A"]
             resul.update(st.session_state["save"])                                                
@@ -136,24 +137,24 @@ def read_questao():
         with tabs[numero+1]:
              
             if botao and alternativa[i] is None:
-                st.radio(tab_names[y], options=opcoes, index=None, key=f"cha4{y}", disabled=True, horizontal=True)
+                st.radio(tab_names[y], options=opcoes[i], index=None, key=f"cha4{y}", disabled=True, horizontal=True)
                 st.warning('Nenhuma das alternativas foi selecionada.', icon="⚠️")
                 res[i] = False
             else:
                 if botao is not True:
                     x=0
                     if alternativa[i] is not None:
-                        index2 = opcoes.index(alternativa[i])
-                        st.radio(tab_names[y], options=opcoes, index=index2, key=f"cha1{y}", disabled=True, horizontal=True) 
+                        index2 = opcoes[i].index(alternativa[i])
+                        st.radio(tab_names[y], options=opcoes[i], index=index2, key=f"cha1{y}", disabled=True, horizontal=True) 
                         x = 1
                         
                     if x == 0:  
-                        st.radio(tab_names[y], options=opcoes, index=None, key=f"cha2{y}", disabled=True, horizontal=True)
+                        st.radio(tab_names[y], options=opcoes[i], index=None, key=f"cha2{y}", disabled=True, horizontal=True)
                         
                 if botao and alternativa[i] is not None:
                     
-                    index2 = opcoes.index(alternativa[i])
-                    st.radio(tab_names[y], options=opcoes, index=index2, key=f"cha3{y}", disabled=True, horizontal=True) 
+                    index2 = opcoes[i].index(alternativa[i])
+                    st.radio(tab_names[y], options=opcoes[i], index=index2, key=f"cha3{y}", disabled=True, horizontal=True) 
                     
                     if resposta[i] == True:
                                 
