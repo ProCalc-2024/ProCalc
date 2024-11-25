@@ -134,7 +134,7 @@ def read_questao():
                 acertos = acertos + 1
                 
         porcen = (acertos/numero)
-        progress_text = f"{porcen*100} de acertos"
+        progress_text = f"{round(porcen*100, 0)}% de acertos"
         st.progress(porcen, text=progress_text)
         
         
