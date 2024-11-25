@@ -60,9 +60,10 @@ def read_questao():
     with tabs[0]:
         st.info('This is a purely informational message', icon="ℹ️")
         
+    botao = st.session_state["botao"]
     for i in range(numero):
         j=i+1
-        botao = st.session_state["botao"]
+        
         with tabs[i+1]:
             
             # Número de questões
@@ -128,13 +129,14 @@ def read_questao():
                         st.error(f'A resposta correta e {questao["Alternativa_A"]}', icon="🚨")
     
     with tabs[numero+1]:
+        if botao:
         acertos = 0
         for i in resposta:  
             if resposta[i] == True:
                 acertos = acertos + 1
                 
         porcen = (acertos/numero)
-        progress_text = f"{round(porcen*100, 0)}% de acertos"
+        progress_text = f"{round(porcen*100, 1)}% de acertos"
         st.progress(porcen, text=progress_text)
         
         
