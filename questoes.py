@@ -129,6 +129,7 @@ def read_questao():
     with tabs[numero+1]:
         acertos = 0
         for i in resposta:
+            st.write(i)
             if i is True:
                 acertos = acertos + 1
         porcen = (acertos/numero)*100
