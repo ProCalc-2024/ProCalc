@@ -138,7 +138,7 @@ def read_questao():
             porcen = (acertos/numero)
             progress_text = f"{round(porcen*100, 1)}% de acertos"
             st.progress(porcen, text=progress_text)
-            if porcen < 0.7:
+            if porcen < 0.6:
                 st.toast(f':red-background[Você Acertou {round(porcen*100, 1)}%]', icon="⚠️")
             else:
                 st.toast(f':green-background[Você Acertou {round(porcen*100, 1)}%]', icon='🎉')
