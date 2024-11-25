@@ -85,7 +85,6 @@ def inserir_ques():
         
         if butao and resposta:         
             st.toast(':green-background[Resposta Certa]', icon='🎉')
-            st.rerun()
     
         elif butao and (resposta is False):
             st.toast(':red-background[Resposta Errada]', icon="⚠️")
