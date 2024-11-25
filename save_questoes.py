@@ -77,7 +77,7 @@ def inserir_ques():
             
         st.session_state["resposta"] = questao["Alternativa_A"]
     
-        butao = st.button("Submeter") 
+        butao = st.button("Submeter", key = "button_save_questoes") 
                 
         # salva a sequencia de questoes
 
