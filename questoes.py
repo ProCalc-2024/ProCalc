@@ -130,7 +130,7 @@ def read_questao():
         acertos = 0
         for i in resposta:
             st.write(i)
-            if i is True:
+            if resposta[i] is True:
                 acertos = acertos + 1
         porcen = (acertos/numero)*100
         st.write(porcen)
