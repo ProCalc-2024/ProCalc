@@ -108,10 +108,6 @@ def read_questao():
         st.info('This is a purely informational message', icon="ℹ️")
         
     botao = st.session_state["botao"]
-    
-    for i in range(work_seconds):
-        time.sleep(1)
-        work_placeholder.write(f"{work_seconds - i - 1} seconds left")
         
     for i in range(numero):
         j=i+1
