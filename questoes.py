@@ -92,8 +92,7 @@ def read_questao():
         st.experimental_rerun()
     elif st.session_state.current_question > numero:
         st.write("🎉 All questions completed!")
-    else:
-        st.write("Click 'Start Timer' to begin.")
+    start_timer()    
     
     #with tabs[numero]:
     col_list = [1] * numero
