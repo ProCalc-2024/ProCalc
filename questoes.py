@@ -52,6 +52,53 @@ def read_questao():
     # Cria as abas dinamicamente
     tabs = st.tabs(tab_names)
     
+    time_per_question = st.slider("Time per Question (seconds)", 10, 300, 60)
+    # Inicializar variáveis de sessão
+    if "current_question" not in st.session_state:
+        st.session_state.current_question = 1
+    if "time_left" not in st.session_state:
+        st.session_state.time_left = time_per_question
+    if "start_time" not in st.session_state:
+        st.session_state.start_time = None
+    if "running" not in st.session_state:
+        st.session_state.running = False
+    
+    # Função para iniciar o temporizador
+    def start_timer():
+        st.session_state.running = True
+        st.session_state.start_time = time.time()
+    
+    # Função para atualizar o temporizador
+    def update_timer():
+        if st.session_state.running:
+            elapsed_time = int(time.time() - st.session_state.start_time)
+            st.session_state.time_left = max(0, time_per_question - elapsed_time)
+    
+            # Verificar se o tempo da questão acabou
+            if st.session_state.time_left == 0:
+                if st.session_state.current_question < numero:
+                    st.session_state.current_question += 1
+                    st.session_state.time_left = time_per_question
+                    st.session_state.start_time = time.time()  # Reiniciar o tempo
+                else:
+                    st.session_state.running = False  # Parar o temporizador
+    
+    # Interface do Temporizador
+    if st.session_state.running:
+        update_timer()
+        st.write(f"**Question {st.session_state.current_question}**")
+        st.write(f"Time left: {st.session_state.time_left} seconds")
+        time.sleep(1)  # Atualizar a cada 1 segundo
+        st.experimental_rerun()
+    elif st.session_state.current_question > numero:
+        st.write("🎉 All questions completed!")
+    else:
+        st.write("Click 'Start Timer' to begin.")
+    
+    # Botão para iniciar o temporizador
+    if st.button("Start Timer"):
+        start_timer()
+    
     #with tabs[numero]:
     col_list = [1] * numero
     coluna = st.columns(col_list)
@@ -61,6 +108,11 @@ def read_questao():
         st.info('This is a purely informational message', icon="ℹ️")
         
     botao = st.session_state["botao"]
+    
+    for i in range(work_seconds):
+        time.sleep(1)
+        work_placeholder.write(f"{work_seconds - i - 1} seconds left")
+        
     for i in range(numero):
         j=i+1
         
