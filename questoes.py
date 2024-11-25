@@ -130,14 +130,14 @@ def read_questao():
     
     with tabs[numero+1]:
         if botao:
-        acertos = 0
-        for i in resposta:  
-            if resposta[i] == True:
-                acertos = acertos + 1
-                
-        porcen = (acertos/numero)
-        progress_text = f"{round(porcen*100, 1)}% de acertos"
-        st.progress(porcen, text=progress_text)
+            acertos = 0
+            for i in resposta:  
+                if resposta[i] == True:
+                    acertos = acertos + 1
+                    
+            porcen = (acertos/numero)
+            progress_text = f"{round(porcen*100, 1)}% de acertos"
+            st.progress(porcen, text=progress_text)
         
         
     for i in range(numero):    
