@@ -131,9 +131,9 @@ def read_questao():
         for i in resposta:  
             if resposta[i] == True:
                 acertos = acertos + 1
-                st.write(acertos)
                 
         porcen = (acertos/numero)
+        st.write(porcen)
         progress_text = "Operation in progress. Please wait."
         st.progress(porcen, text=progress_text)
         
