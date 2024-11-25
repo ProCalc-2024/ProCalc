@@ -89,7 +89,7 @@ def read_questao():
         st.write(f"**Question {st.session_state.current_question}**")
         st.write(f"Time left: {st.session_state.time_left} seconds")
         time.sleep(1)  # Atualizar a cada 1 segundo
-        st.experimental_rerun()
+        st.rerun()
     elif st.session_state.current_question > numero:
         st.write("🎉 All questions completed!")
     start_timer()    
