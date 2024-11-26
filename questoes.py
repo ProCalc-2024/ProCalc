@@ -178,6 +178,34 @@ def read_questao():
                 
                         st.error(f'A resposta correta e {questao["Alternativa_A"]}', icon="🚨")
                     res[i] = True
+
+    with tabs[numero+1]:   
+        def clicar_botao():
+            st.session_state["botao"] = True
+            st.session_state["disabled"] = True
+            
+
+        def new_questionario():
+            st.session_state["botao"] = None
+            st.session_state["disabled"] = False
+            random.shuffle(b)
+            st.session_state["ques"] = b
+            for i in range(n):
+                st.session_state[f"embaralho{i}{materia}"] = np.random.choice(lista, 5, replace=False)
+            
+            
+        # Mostra o botão somente se ele ainda não foi clicado
+        if not st.session_state["botao"]:
+            if st.button("Submeter",on_click=clicar_botao):
+                pass  # O estado muda ao clicar, e o botão desaparece na próxima renderização
+
+        if st.session_state["botao"]:       
+            if st.button("Novas Perguntas", on_click=new_questionario):
+                pass  # O estado muda ao clicar, e o botão desaparece na próxima renderização
+        
+        # Define a variável com base no estado do botão
+        botao = st.session_state["botao"]
+    
     with col1:
         time_per_question = 60
         # Calcular o tempo total
@@ -217,33 +245,6 @@ def read_questao():
         else:
             st.write("Click 'Start Timer' to begin.")
         
-        # Botão para iniciar o temporizador
-        
+        #iniciar o temporizador
         start_timer()
-    
-    with tabs[numero+1]:   
-        def clicar_botao():
-            st.session_state["botao"] = True
-            st.session_state["disabled"] = True
-            
-
-        def new_questionario():
-            st.session_state["botao"] = None
-            st.session_state["disabled"] = False
-            random.shuffle(b)
-            st.session_state["ques"] = b
-            for i in range(n):
-                st.session_state[f"embaralho{i}{materia}"] = np.random.choice(lista, 5, replace=False)
-            
-            
-        # Mostra o botão somente se ele ainda não foi clicado
-        if not st.session_state["botao"]:
-            if st.button("Submeter",on_click=clicar_botao):
-                pass  # O estado muda ao clicar, e o botão desaparece na próxima renderização
-
-        if st.session_state["botao"]:       
-            if st.button("Novas Perguntas", on_click=new_questionario):
-                pass  # O estado muda ao clicar, e o botão desaparece na próxima renderização
         
-        # Define a variável com base no estado do botão
-        botao = st.session_state["botao"]
