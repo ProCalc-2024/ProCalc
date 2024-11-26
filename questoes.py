@@ -180,11 +180,12 @@ def read_questao():
                     res[i] = True
     with col1:
         time_per_question = 60
+        # Calcular o tempo total
+        total_time = numero * time_per_question
+        
         # Inicializar variáveis de sessão
-        if "current_question" not in st.session_state:
-            st.session_state.current_question = 1
         if "time_left" not in st.session_state:
-            st.session_state.time_left = time_per_question
+            st.session_state.time_left = total_time
         if "start_time" not in st.session_state:
             st.session_state.start_time = None
         if "running" not in st.session_state:
@@ -199,27 +200,26 @@ def read_questao():
         def update_timer():
             if st.session_state.running:
                 elapsed_time = int(time.time() - st.session_state.start_time)
-                st.session_state.time_left = max(0, time_per_question - elapsed_time)
+                st.session_state.time_left = max(0, total_time - elapsed_time)
         
-                # Verificar se o tempo da questão acabou
+                # Verificar se o tempo total acabou
                 if st.session_state.time_left == 0:
-                    if st.session_state.current_question < numero:
-                        st.session_state.current_question += 1
-                        st.session_state.time_left = time_per_question
-                        st.session_state.start_time = time.time()  # Reiniciar o tempo
-                    else:
-                        st.session_state.running = False  # Parar o temporizador
+                    st.session_state.running = False
         
         # Interface do Temporizador
         if st.session_state.running:
             update_timer()
-            st.write(f"**Question {st.session_state.current_question}**")
-            st.write(f"Time left: {st.session_state.time_left} seconds")
+            st.write(f"⏳ **Time left: {st.session_state.time_left} seconds**")
             time.sleep(1)  # Atualizar a cada 1 segundo
-            st.rerun()
-        elif st.session_state.current_question > numero:
-            st.write("🎉 All questions completed!")
-        start_timer() 
+            st.experimental_rerun()
+        elif st.session_state.time_left == 0:
+            st.write("🎉 Time is up!")
+        else:
+            st.write("Click 'Start Timer' to begin.")
+        
+        # Botão para iniciar o temporizador
+        
+        start_timer()
     
     with tabs[numero+1]:   
         def clicar_botao():
