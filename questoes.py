@@ -237,13 +237,11 @@ def read_questao():
         # Interface do Temporizador
         if st.session_state.running:
             update_timer()
-            st.write(f"⏳ **Time left: {st.session_state.time_left} seconds**")
+            st.write(f"⏳ {st.session_state.time_left}")
             time.sleep(1)  # Atualizar a cada 1 segundo
             st.rerun()
         elif st.session_state.time_left == 0:
-            st.write("🎉 Time is up!")
-        else:
-            st.write("Click 'Start Timer' to begin.")
+            st.write("⏳ Tempo finalizado")
         
         #iniciar o temporizador
         start_timer()
