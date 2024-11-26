@@ -211,7 +211,7 @@ def read_questao():
             update_timer()
             st.write(f"⏳ **Time left: {st.session_state.time_left} seconds**")
             time.sleep(1)  # Atualizar a cada 1 segundo
-            st.experimental_rerun()
+            st.rerun()
         elif st.session_state.time_left == 0:
             st.write("🎉 Time is up!")
         else:
