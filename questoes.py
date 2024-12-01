@@ -12,9 +12,6 @@ def local_css(file_name):
 
 local_css(r"styles_questao.css")
 
-def Click1():
-    st.session_state["beginning"] = True
-
 def read_questao():
     conn = st.connection("gsheets", type=GSheetsConnection)
     sheet = conn.read(worksheet="Questões")
@@ -213,11 +210,8 @@ def read_questao():
         time_per_question = 60
         # Calcular o tempo total
         total_time = numero * time_per_question
-
-        if "beginning" not in st.session_state:
-            st.session_state["beginning"] = False
-        timer = st.session_state["beginning"]    
-        if timer:
+        
+        if numero != 1:
             # Inicializar variáveis de sessão
             if "time_left" not in st.session_state:
                 st.session_state.time_left = total_time
