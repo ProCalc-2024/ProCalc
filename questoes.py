@@ -12,6 +12,9 @@ def local_css(file_name):
 
 local_css(r"styles_questao.css")
 
+def Click1():
+    st.session_state["beginning"] = True
+
 def read_questao():
     conn = st.connection("gsheets", type=GSheetsConnection)
     sheet = conn.read(worksheet="Questões")
@@ -42,7 +45,7 @@ def read_questao():
     n = len(lista_ques)
     with col2: 
         # Pergunta ao usuário quantas questões deseja criar
-        numero = st.number_input("Quantas questões você gostaria de fazer?", min_value=1, max_value=n, value=1)
+        numero = st.number_input("Quantas questões você gostaria de fazer?", min_value=1, max_value=n, value=1, on_change = Click1())
         
     tab_names = []
     # Cria uma lista de nomes para as questões
@@ -210,39 +213,43 @@ def read_questao():
         time_per_question = 60
         # Calcular o tempo total
         total_time = numero * time_per_question
-        
-        # Inicializar variáveis de sessão
-        if "time_left" not in st.session_state:
-            st.session_state.time_left = total_time
-        if "start_time" not in st.session_state:
-            st.session_state.start_time = None
-        if "running" not in st.session_state:
-            st.session_state.running = False
-        
-        # Função para iniciar o temporizador
-        def start_timer():
-            st.session_state.running = True
-            st.session_state.start_time = time.time()
-        
-        # Função para atualizar o temporizador
-        def update_timer():
+
+        if "beginning" not in st.session_state:
+            st.session_state["beginning"] = False
+        timer = st.session_state["beginning"]    
+        if timer:
+            # Inicializar variáveis de sessão
+            if "time_left" not in st.session_state:
+                st.session_state.time_left = total_time
+            if "start_time" not in st.session_state:
+                st.session_state.start_time = None
+            if "running" not in st.session_state:
+                st.session_state.running = False
+            
+            # Função para iniciar o temporizador
+            def start_timer():
+                st.session_state.running = True
+                st.session_state.start_time = time.time()
+            
+            # Função para atualizar o temporizador
+            def update_timer():
+                if st.session_state.running:
+                    elapsed_time = int(time.time() - st.session_state.start_time)
+                    st.session_state.time_left = max(0, total_time - elapsed_time)
+            
+                    # Verificar se o tempo total acabou
+                    if st.session_state.time_left == 0:
+                        st.session_state.running = False
+            
+            # Interface do Temporizador
             if st.session_state.running:
-                elapsed_time = int(time.time() - st.session_state.start_time)
-                st.session_state.time_left = max(0, total_time - elapsed_time)
-        
-                # Verificar se o tempo total acabou
-                if st.session_state.time_left == 0:
-                    st.session_state.running = False
-        
-        # Interface do Temporizador
-        if st.session_state.running:
-            update_timer()
-            st.write(f"⏳ {st.session_state.time_left}")
-            time.sleep(1)  # Atualizar a cada 1 segundo
-            st.rerun()
-        elif st.session_state.time_left == 0:
-            st.write("⏳ Tempo finalizado")
-        
-        #iniciar o temporizador
-        start_timer()
+                update_timer()
+                st.write(f"⏳ {st.session_state.time_left}")
+                time.sleep(1)  # Atualizar a cada 1 segundo
+                st.rerun()
+            elif st.session_state.time_left == 0:
+                st.write("⏳ Tempo finalizado")
+            
+            #iniciar o temporizador
+            start_timer()
         
