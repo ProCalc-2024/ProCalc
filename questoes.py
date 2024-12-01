@@ -218,7 +218,7 @@ def read_questao():
             if "start_time" not in st.session_state:
                 st.session_state.start_time = None
             if "running" not in st.session_state:
-                st.session_state.running = False
+                st.session_state.running = True
             
             # Função para iniciar o temporizador
             def start_timer():
