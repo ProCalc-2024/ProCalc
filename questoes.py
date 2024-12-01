@@ -225,7 +225,8 @@ def read_questao():
             if numero != 1:    
                 st.session_state.running = True
                 st.session_state.start_time = time.time()
-                
+                leu = st.session_state.start_time
+                st.write(leu)
             
         # Função para atualizar o temporizador
         def update_timer():
