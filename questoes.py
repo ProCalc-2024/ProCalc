@@ -211,39 +211,40 @@ def read_questao():
         # Calcular o tempo total
         total_time = numero * time_per_question
         
-        if numero != 1:
-            # Inicializar variáveis de sessão
-            if "time_left" not in st.session_state:
-                st.session_state.time_left = total_time
-            if "start_time" not in st.session_state:
-                st.session_state.start_time = None
-            if "running" not in st.session_state:
-                st.session_state.running = False
+        
+        # Inicializar variáveis de sessão
+        if "time_left" not in st.session_state:
+            st.session_state.time_left = total_time
+        if "start_time" not in st.session_state:
+            st.session_state.start_time = None
+        if "running" not in st.session_state:
+            st.session_state.running = False
             
-            # Função para iniciar o temporizador
-            def start_timer():
+        # Função para iniciar o temporizador
+        def start_timer():
+            if numero != 1:    
                 st.session_state.running = True
                 st.session_state.start_time = time.time()
             
-            # Função para atualizar o temporizador
-            def update_timer():
-                if st.session_state.running:
-                    elapsed_time = int(time.time() - st.session_state.start_time)
-                    st.session_state.time_left = max(0, total_time - elapsed_time)
-            
-                    # Verificar se o tempo total acabou
-                    if st.session_state.time_left == 0:
-                        st.session_state.running = False
-            
-            # Interface do Temporizador
+        # Função para atualizar o temporizador
+        def update_timer():
             if st.session_state.running:
-                update_timer()
-                st.write(f"⏳ {st.session_state.time_left}")
-                time.sleep(1)  # Atualizar a cada 1 segundo
-                st.rerun()
-            elif st.session_state.time_left == 0:
-                st.write("⏳ Tempo finalizado")
+                elapsed_time = int(time.time() - st.session_state.start_time)
+                st.session_state.time_left = max(0, total_time - elapsed_time)
             
-            #iniciar o temporizador
-            start_timer()
+                # Verificar se o tempo total acabou
+                if st.session_state.time_left == 0:
+                    st.session_state.running = False
+            
+        # Interface do Temporizador
+        if st.session_state.running:
+            update_timer()
+            st.write(f"⏳ {st.session_state.time_left}")
+            time.sleep(1)  # Atualizar a cada 1 segundo
+            st.rerun()
+        elif st.session_state.time_left == 0:
+            st.write("⏳ Tempo finalizado")
+            
+        #iniciar o temporizador
+        start_timer()
         
