@@ -64,9 +64,8 @@ if st.session_state["authentication_status"]:
                     pass
 
         with tab3:
-            if "rerun" not in st.session_state:
-                st.session_state["rerun"] = True   
-                questoes.read_questao()
+             
+            questoes.read_questao()
 
         with tab4:
             authenticator.logout()
