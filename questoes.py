@@ -197,7 +197,7 @@ def read_questao():
         # Mostra o botão somente se ele ainda não foi clicado
         if not st.session_state["botao"]:
             
-            if but1 = st.button("Submeter",on_click=clicar_botao):
+            if st.button("Submeter",on_click=clicar_botao):
                 pass  # O estado muda ao clicar, e o botão desaparece na próxima renderização
         
         if st.session_state["botao"]:       
