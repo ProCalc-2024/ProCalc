@@ -196,13 +196,13 @@ def read_questao():
             
         # Mostra o botão somente se ele ainda não foi clicado
         if not st.session_state["botao"]:
-            but1 = st.button("Submeter",on_click=clicar_botao)
-            if but1:
+            
+            if but1 = st.button("Submeter",on_click=clicar_botao):
                 pass  # O estado muda ao clicar, e o botão desaparece na próxima renderização
         
         if st.session_state["botao"]:       
-            but2 = st.button("Novas Perguntas", on_click=new_questionario)
-            if but2:
+            
+            if st.button("Novas Perguntas", on_click=new_questionario):
                 pass  # O estado muda ao clicar, e o botão desaparece na próxima renderização
         
         # Define a variável com base no estado do botão
@@ -249,7 +249,7 @@ def read_questao():
             st.rerun()
         elif st.session_state.time_left == 0:
             st.write("⏳ Tempo finalizado")
-            if but2:
+            if st.session_state["botao"] == None:
                 st.session_state.time_left = total_time    
             
         #iniciar o temporizador
