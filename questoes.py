@@ -245,16 +245,17 @@ def read_questao():
                 
         # Interface do Temporizador
         if st.session_state.running:
+            
             update_timer()
             st.write(f"⏳ {st.session_state.time_left}")
             time.sleep(1)  # Atualizar a cada 1 segundo
             st.rerun()
+        
         elif st.session_state.time_left == 0:
-            
+            st.session_state["botao"] = True
+            st.session_state["disabled"] = True
             st.write("⏳ Tempo finalizado")
-            
-            
-            
+                
         #iniciar o temporizador
         if "tim" not in st.session_state: 
             start_timer()
