@@ -255,7 +255,9 @@ def read_questao():
             clicar_botao()
             st.write("⏳ Tempo finalizado")
             if "rer" not in st.session_state:
-                st.rerun()    
+                
+                st.rerun() 
+                st.session_state["rer"] = True
         #iniciar o temporizador
         if "tim" not in st.session_state: 
             start_timer()
