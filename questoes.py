@@ -247,7 +247,14 @@ def read_questao():
         if st.session_state.running:
             
             update_timer()
-            st.write(f"⏳ {st.session_state.time_left}")
+            # Converter segundos para horas, minutos e segundos
+            hours, remainder = divmod(st.session_state.time_left, 3600)
+            minutes, seconds = divmod(remainder, 60)
+            # Formatar no estilo "hh:mm:ss"
+            formatted_time = f"{int(hours):02}:{int(minutes):02}:{int(seconds):02}"
+            # Exibir o tempo restante
+            st.write(f"⏳ {formatted_time}")
+
             time.sleep(1)  # Atualizar a cada 1 segundo
             st.rerun()
         
