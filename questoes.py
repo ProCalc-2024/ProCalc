@@ -251,8 +251,9 @@ def read_questao():
             time.sleep(1)  # Atualizar a cada 1 segundo
             st.rerun()
         elif st.session_state.time_left == 0:
-            st.write("⏳ Tempo finalizado")
             clicar_botao()
+            st.write("⏳ Tempo finalizado")
+            
             
             
         #iniciar o temporizador
