@@ -242,6 +242,7 @@ def read_questao():
                 # Verificar se o tempo total acabou
                 if st.session_state.time_left == 0:
                     st.session_state.running = False
+                    clicar_botao()
                 
         # Interface do Temporizador
         if st.session_state.running:
@@ -250,7 +251,6 @@ def read_questao():
             # Converter segundos para horas, minutos e segundos
             hours, remainder = divmod(st.session_state.time_left, 3600)
             minutes, seconds = divmod(remainder, 60)
-            # Formatar no estilo "hh:mm:ss"
             formatted_time = f"{int(hours):02}:{int(minutes):02}:{int(seconds):02}"
             # Exibir o tempo restante
             st.write(f"⏳ {formatted_time}")
@@ -259,7 +259,6 @@ def read_questao():
             st.rerun()
         
         elif st.session_state.time_left == 0:
-            clicar_botao()
             st.write("⏳ Tempo finalizado")
     
         #iniciar o temporizador
