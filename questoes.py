@@ -11,7 +11,8 @@ def local_css(file_name):
         st.markdown(f"<style>{f.read()}</style>", unsafe_allow_html=True)
 
 local_css(r"styles_questao.css")
-
+def click1():
+    st.session_state["inicio"] = True
 def read_questao():
     conn = st.connection("gsheets", type=GSheetsConnection)
     sheet = conn.read(worksheet="Questões")
@@ -27,6 +28,7 @@ def read_questao():
     res = {}
     opcoes = {}
     if "botao" not in st.session_state:
+        st.session_state["inicio"] = False
         st.session_state["botao"] = False
         st.session_state["disabled"] = False
           
@@ -42,7 +44,7 @@ def read_questao():
     n = len(lista_ques)
     with col2: 
         # Pergunta ao usuário quantas questões deseja criar
-        numero = st.number_input("Quantas questões você gostaria de fazer?", min_value=1, max_value=n, value=1)
+        numero = st.number_input("Quantas questões você gostaria de fazer?", min_value=1, max_value=n, value=1, on_change=click1())
         
     tab_names = []
     # Cria uma lista de nomes para as questões
@@ -250,11 +252,8 @@ def read_questao():
             st.rerun()
         elif st.session_state.time_left == 0:
             st.write("⏳ Tempo finalizado")
-            if st.session_state["botao"] == None:
-                st.write("foi")
-                start_timer()    
             
         #iniciar o temporizador
-        if numero != 1: 
+        if st.session_state["inicio"] or st.session_state["botao"] == None: 
             start_timer()
         
