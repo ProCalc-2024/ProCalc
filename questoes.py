@@ -253,7 +253,7 @@ def read_questao():
         elif st.session_state.time_left == 0:
             st.write("⏳ Tempo finalizado")
             if st.session_state["botao"] == None:
-                st.session_state.time_left = total_time    
+                start_timer()    
             
         #iniciar o temporizador
         start_timer()
