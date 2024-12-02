@@ -227,9 +227,7 @@ def read_questao():
                
             st.session_state.running = True
             st.session_state.start_time = time.time()
-            leu = st.session_state.start_time
-                
-            
+                   
         # Função para atualizar o temporizador
         def update_timer():
             if st.session_state.running:
@@ -253,6 +251,7 @@ def read_questao():
         elif st.session_state.time_left == 0:
             st.write("⏳ Tempo finalizado")
             if st.session_state["botao"] == None:
+                st.write("foi")
                 start_timer()    
             
         #iniciar o temporizador
