@@ -252,6 +252,7 @@ def read_questao():
             st.rerun()
         elif st.session_state.time_left == 0:
             st.write("⏳ Tempo finalizado")
+            clicar_botao()
             
             
         #iniciar o temporizador
