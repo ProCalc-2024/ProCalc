@@ -12,6 +12,19 @@ def local_css(file_name):
 
 local_css(r"styles_questao.css")
 
+def clicar_botao():
+    st.session_state["botao"] = True
+    st.session_state["disabled"] = True
+            
+
+def new_questionario():
+    st.session_state["botao"] = None
+    st.session_state["disabled"] = False
+    random.shuffle(b)
+    st.session_state["ques"] = b
+    for i in range(n):
+        st.session_state[f"embaralho{i}{materia}"] = np.random.choice(lista, 5, replace=False)
+
 def read_questao():
     conn = st.connection("gsheets", type=GSheetsConnection)
     sheet = conn.read(worksheet="Questões")
@@ -181,18 +194,6 @@ def read_questao():
                     res[i] = True
 
     with tabs[numero+1]:   
-        def clicar_botao():
-            st.session_state["botao"] = True
-            st.session_state["disabled"] = True
-            
-
-        def new_questionario():
-            st.session_state["botao"] = None
-            st.session_state["disabled"] = False
-            random.shuffle(b)
-            st.session_state["ques"] = b
-            for i in range(n):
-                st.session_state[f"embaralho{i}{materia}"] = np.random.choice(lista, 5, replace=False)
             
             
         # Mostra o botão somente se ele ainda não foi clicado
@@ -251,6 +252,7 @@ def read_questao():
             st.rerun()
         elif st.session_state.time_left == 0:
             st.write("⏳ Tempo finalizado")
+            
             
         #iniciar o temporizador
         if "tim" not in st.session_state: 
