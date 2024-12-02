@@ -226,12 +226,13 @@ def read_questao():
                 st.session_state.running = True
                 st.session_state.start_time = time.time()
                 leu = st.session_state.start_time
-                st.write(leu)
+                
             
         # Função para atualizar o temporizador
         def update_timer():
             if st.session_state.running:
                 elapsed_time = int(time.time() - st.session_state.start_time)
+                st.write(elapsed_time)
                 st.session_state.time_left = max(0, total_time - elapsed_time)
             
                 # Verificar se o tempo total acabou
