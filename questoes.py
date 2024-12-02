@@ -224,10 +224,10 @@ def read_questao():
             
         # Função para iniciar o temporizador
         def start_timer():
-            if numero != 1:    
-                st.session_state.running = True
-                st.session_state.start_time = time.time()
-                leu = st.session_state.start_time
+               
+            st.session_state.running = True
+            st.session_state.start_time = time.time()
+            leu = st.session_state.start_time
                 
             
         # Função para atualizar o temporizador
@@ -256,5 +256,6 @@ def read_questao():
                 start_timer()    
             
         #iniciar o temporizador
-        start_timer()
+        if numero != 1: 
+            start_timer()
         
