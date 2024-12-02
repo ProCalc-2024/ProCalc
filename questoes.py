@@ -252,10 +252,9 @@ def read_questao():
             st.rerun()
         
         elif st.session_state.time_left == 0:
-            st.session_state["botao"] = True
-            st.session_state["disabled"] = True
+            clicar_botao()
             st.write("⏳ Tempo finalizado")
-            st.rerun()    
+            
         #iniciar o temporizador
         if "tim" not in st.session_state: 
             start_timer()
