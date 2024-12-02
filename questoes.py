@@ -11,8 +11,7 @@ def local_css(file_name):
         st.markdown(f"<style>{f.read()}</style>", unsafe_allow_html=True)
 
 local_css(r"styles_questao.css")
-def click1():
-    st.session_state["inicio"] = True
+
 def read_questao():
     conn = st.connection("gsheets", type=GSheetsConnection)
     sheet = conn.read(worksheet="Questões")
@@ -28,7 +27,7 @@ def read_questao():
     res = {}
     opcoes = {}
     if "botao" not in st.session_state:
-        st.session_state["inicio"] = False
+    
         st.session_state["botao"] = False
         st.session_state["disabled"] = False
           
@@ -254,6 +253,6 @@ def read_questao():
             st.write("⏳ Tempo finalizado")
             
         #iniciar o temporizador
-        if st.session_state["inicio"] or st.session_state["botao"] == None: 
+        if st.session_state["botao"] == None: 
             start_timer()
         
