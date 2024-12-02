@@ -236,11 +236,14 @@ def read_questao():
                 elapsed_time = int(time.time() - st.session_state.start_time)
                 st.write(elapsed_time)
                 st.session_state.time_left = max(0, total_time - elapsed_time)
-            
+
+                if st.session_state["botao"] == True:
+                    st.session_state.time_left = 0
+                
                 # Verificar se o tempo total acabou
                 if st.session_state.time_left == 0:
                     st.session_state.running = False
-            
+                
         # Interface do Temporizador
         if st.session_state.running:
             update_timer()
@@ -249,7 +252,7 @@ def read_questao():
             st.rerun()
         elif st.session_state.time_left == 0:
             st.write("⏳ Tempo finalizado")
-            if st.session_state["botao"] == True:
+            if st.session_state["botao"] == None:
                 st.session_state.time_left = total_time    
             
         #iniciar o temporizador
