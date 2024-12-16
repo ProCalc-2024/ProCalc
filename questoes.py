@@ -5,6 +5,7 @@ def read_questao():
    # Inicializa o estado da aba ativa
    if "active_tab" not in st.session_state:
        st.session_state.active_tab = 0  # Começa na Aba 1
+       st.rerun()
    
    # Criação das abas
    tab1, tab2, tab3 = st.tabs(["Aba 1", "Aba 2", "Aba 3"])
