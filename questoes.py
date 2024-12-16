@@ -35,3 +35,4 @@ elif selected_tab == "Aba 2":
     tabs[1].empty()
 elif selected_tab == "Aba 3":
     tabs[2].empty()
+st.button("Say hello")
