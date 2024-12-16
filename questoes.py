@@ -189,7 +189,7 @@ def read_questao():
             
 
         def new_questionario():
-            start_timer()
+            
             st.session_state["botao"] = None
             st.session_state["disabled"] = False
             random.shuffle(b)
