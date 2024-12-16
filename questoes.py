@@ -187,7 +187,6 @@ def read_questao():
             st.session_state["botao"] = True
             st.session_state["disabled"] = True
             
-
         def new_questionario():
             start_timer()
             st.session_state["botao"] = None
@@ -205,13 +204,16 @@ def read_questao():
         
         if st.session_state["botao"]:       
             
-            if st.button("Novas Perguntas"):
+            if st.button("Novas Perguntas", on_click=new_questionario()):
                 pass  # O estado muda ao clicar, e o botão desaparece na próxima renderização
         
         # Define a variável com base no estado do botão
         botao = st.session_state["botao"]
     
     with col1:
+        if st.session_state["botao"] == None:
+            if st.button("Iniciar questionario"):
+                pass
         time_per_question = 60
         # Calcular o tempo total
         total_time = numero * time_per_question
