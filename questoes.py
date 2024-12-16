@@ -4,24 +4,27 @@ def read_questao():
 
    # Inicializa o estado da aba ativa
    if "active_tab" not in st.session_state:
-       st.session_state.active_tab = "Aba 1"
+       st.session_state.active_tab = 0  # Começa na Aba 1
    
-   # Função para atualizar a aba ativa
-   def set_tab(tab_name):
-       st.session_state.active_tab = tab_name
+   # Criação das abas
+   tab1, tab2, tab3 = st.tabs(["Aba 1", "Aba 2", "Aba 3"])
    
-   # Definição das abas
-   tabs = ["Aba 1", "Aba 2", "Aba 3"]
+   # Função para manter a aba ativa
+   def set_active_tab(index):
+       st.session_state.active_tab = index
    
-   # Renderiza as abas com controle de estado
-   selected_tab = st.radio("Escolha uma aba:", tabs, index=tabs.index(st.session_state.active_tab), horizontal=True, on_change=lambda: set_tab(st.session_state.active_tab))
+   # Renderização do conteúdo de acordo com a aba ativa
+   if st.session_state.active_tab == 0:
+       with tab1:
+           st.write("Conteúdo da Aba 1")
+           set_active_tab(0)
    
-   if selected_tab == "Aba 1":
-       set_tab("Aba 1")
-       st.write("Conteúdo da Aba 1")
-   elif selected_tab == "Aba 2":
-       set_tab("Aba 2")
-       st.write("Conteúdo da Aba 2")
-   elif selected_tab == "Aba 3":
-       set_tab("Aba 3")
-       st.write("Conteúdo da Aba 3")
+   if st.session_state.active_tab == 1:
+       with tab2:
+           st.write("Conteúdo da Aba 2")
+           set_active_tab(1)
+   
+   if st.session_state.active_tab == 2:
+       with tab3:
+           st.write("Conteúdo da Aba 3")
+           set_active_tab(2)
