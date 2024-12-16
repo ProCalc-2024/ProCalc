@@ -213,8 +213,9 @@ def read_questao():
     with col1:
         if st.session_state["disabled"] == False:
             if st.button("Iniciar questionario", on_click=new_questionario):
-                pass
                 st.rerun()
+                pass
+                
         time_per_question = 60
         # Calcular o tempo total
         total_time = numero * time_per_question
