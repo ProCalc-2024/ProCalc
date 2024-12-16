@@ -28,3 +28,4 @@ def read_questao():
        with tab3:
            st.write("Conteúdo da Aba 3")
            set_active_tab(2)
+   st.button("Say hello")       
