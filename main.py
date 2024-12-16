@@ -65,7 +65,7 @@ if st.session_state["authentication_status"]:
 
         with tab3:
              
-       
+                st.info('This is a purely informational message', icon="ℹ️")
 
         with tab4:
             authenticator.logout()
