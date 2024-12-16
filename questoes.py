@@ -211,7 +211,7 @@ def read_questao():
         botao = st.session_state["botao"]
     
     with col1:
-        if st.session_state["disabled"] == False:
+        if st.session_state["disabled"] == True or st.session_state["disabled"] == False:
             if st.button("Iniciar questionario", on_click=new_questionario):
                 st.rerun()
                 pass
