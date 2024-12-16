@@ -211,7 +211,7 @@ def read_questao():
         botao = st.session_state["botao"]
     
     with col1:
-        if st.session_state["disabled"] == None:
+        if st.session_state["disabled"] == False:
             if st.button("Iniciar questionario", on_click=new_questionario):
                 pass
         time_per_question = 60
