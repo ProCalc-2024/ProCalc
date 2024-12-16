@@ -269,5 +269,5 @@ def read_questao():
     
         #iniciar o temporizador
         
-        start_timer()
+        
 
