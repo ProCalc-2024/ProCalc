@@ -23,3 +23,4 @@ def read_questao():
    # Isso pode ser adaptado conforme sua lógica de mudança automática
    if st.session_state.active_tab == 0:
        st.session_state.active_tab = 1  # Muda para a segunda aba automaticamente
+   st.button("Say hello")
