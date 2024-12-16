@@ -239,7 +239,6 @@ def read_questao():
         def update_timer():
             if st.session_state.running:
                 elapsed_time = int(time.time() - st.session_state.start_time)
-                st.write(elapsed_time)
                 st.session_state.time_left = max(0, total_time - elapsed_time)
 
                 if st.session_state["botao"] == True:
