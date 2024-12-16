@@ -35,7 +35,7 @@ authenticator = stauth.Authenticate(
 authenticator.login()
 
 if st.session_state["authentication_status"]:
-    
+    questoes.read_questao()
     tab1, tab2, tab3, tab4 = st.tabs(["Home", "Edição", "Questionario", "Configurações"])
 
     with col2:
