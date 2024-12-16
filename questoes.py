@@ -87,6 +87,7 @@ def read_questao():
                 st.session_state["numero"] = 0
                 random.shuffle(b)
                 st.session_state["ques"] = b
+                st.rerun()
             # se ja existir algo no sesion state 
             b1 = st.session_state["ques"]
             
