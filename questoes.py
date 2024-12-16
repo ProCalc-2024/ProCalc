@@ -2,25 +2,26 @@ import streamlit as st
 
 def read_questao():
 
-   # Inicializa o estado no session_state
+   # Inicializa o estado da aba ativa
    if "active_tab" not in st.session_state:
-       st.session_state.active_tab = 0  # Começa na primeira aba (índice 0)
+       st.session_state.active_tab = "Aba 1"
    
-   # Lista de abas
+   # Função para atualizar a aba ativa
+   def set_tab(tab_name):
+       st.session_state.active_tab = tab_name
+   
+   # Definição das abas
    tabs = ["Aba 1", "Aba 2", "Aba 3"]
    
-   # Cria as abas e identifica qual aba está ativa
-   tab_objects = st.tabs(tabs)
+   # Renderiza as abas com controle de estado
+   selected_tab = st.radio("Escolha uma aba:", tabs, index=tabs.index(st.session_state.active_tab), horizontal=True, on_change=lambda: set_tab(st.session_state.active_tab))
    
-   # Mostra o conteúdo da aba automaticamente baseada no estado
-   for i, tab in enumerate(tab_objects):
-       with tab:
-           if i == st.session_state.active_tab:
-               st.write(f"Você está em: {tabs[i]}")
-               st.session_state.active_tab = i  # Atualiza o índice caso algo seja alterado
-   
-   # Simula uma mudança automática no estado (exemplo: mudar para "Aba 2" após a renderização)
-   # Isso pode ser adaptado conforme sua lógica de mudança automática
-   if st.session_state.active_tab == 0:
-       st.session_state.active_tab = 1  # Muda para a segunda aba automaticamente
-   st.button("Say hello")
+   if selected_tab == "Aba 1":
+       set_tab("Aba 1")
+       st.write("Conteúdo da Aba 1")
+   elif selected_tab == "Aba 2":
+       set_tab("Aba 2")
+       st.write("Conteúdo da Aba 2")
+   elif selected_tab == "Aba 3":
+       set_tab("Aba 3")
+       st.write("Conteúdo da Aba 3")
