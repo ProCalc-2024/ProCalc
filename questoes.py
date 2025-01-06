@@ -215,10 +215,10 @@ def read_questao():
             if st.button("Iniciar questionario", on_click=new_questionario):
                 pass
                 
-                
-        time_per_question = 60
+        min_question = st.slider("Timer do formulario", 0, 59, 0)        
+        hor_question = st.slider("", 0, 6, 0)
         # Calcular o tempo total
-        total_time = numero * time_per_question
+        total_time = hor_question*60*60 + min_question*60
         
         
         # Inicializar variáveis de sessão
