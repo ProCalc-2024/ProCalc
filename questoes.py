@@ -37,7 +37,7 @@ def read_questao():
     # lista de matérias
     lista = list(set(dict["Materia"]))
     
-    with col2:       
+    with col1:       
         materia = st.selectbox("Selecione um assunto", lista,disabled=disabled3)    
 
     # lista de questões de acordo com a matéria escolhida
@@ -45,7 +45,7 @@ def read_questao():
 
     # Número de questões
     n = len(lista_ques)
-    with col2: 
+    with col1: 
         # Pergunta ao usuário quantas questões deseja criar
         numero = st.number_input("Quantas questões você gostaria de fazer?", min_value=1, max_value=n, value=1, disabled=disabled3)
         
@@ -216,7 +216,7 @@ def read_questao():
         # Define a variável com base no estado do botão
         botao = st.session_state["botao"]
     
-    with col1:
+    with col2:
 
                 
         min_question = st.slider("Timer do formulario", 0, 59, 0,  disabled=disabled3)        
