@@ -211,15 +211,15 @@ def read_questao():
         botao = st.session_state["botao"]
     
     with col1:
-        if st.session_state["disabled"] == True or st.session_state["disabled"] == False:
-            if st.button("Iniciar questionario", on_click=new_questionario):
-                pass
+
                 
         min_question = st.slider("Timer do formulario", 0, 59, 0)        
         hor_question = st.slider("", 0, 6, 0)
         # Calcular o tempo total
         total_time = hor_question*60*60 + min_question*60
-        
+        if st.session_state["disabled"] == True or st.session_state["disabled"] == False:
+            if st.button("Iniciar questionario", on_click=new_questionario):
+                pass
         
         # Inicializar variáveis de sessão
         if "time_left" not in st.session_state:
