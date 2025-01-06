@@ -213,8 +213,8 @@ def read_questao():
     with col1:
 
                 
-        min_question = st.slider("Timer do formulario", 0, 59, 0,disabled= not disabled2)        
-        hor_question = st.slider("", 0, 6, 0)
+        min_question = st.slider("Timer do formulario", 0, 59, 0, disabled=disabled2)        
+        hor_question = st.slider("", 0, 6, 0, disabled=disabled2)
         # Calcular o tempo total
         total_time = hor_question*60*60 + min_question*60
         if st.session_state["disabled"] == True or st.session_state["disabled"] == False:
