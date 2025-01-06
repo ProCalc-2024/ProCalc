@@ -192,7 +192,7 @@ def read_questao():
             start_timer()
             st.session_state["botao"] = None
             st.session_state["disabled"] = False
-            st.session_state.visibility = "hidden"
+            st.session_state["disabledtime"]  = True
             random.shuffle(b)
             st.session_state["ques"] = b
             for i in range(n):
