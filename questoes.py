@@ -221,14 +221,13 @@ def read_questao():
     with col2:
 
                 
-        min_question = st.slider("Timer do formulario", 0, 59, 0,  disabled=disabled3)        
-        hor_question = st.slider("", 0, 6, 0, disabled=disabled3)
+        min_question = st.slider("tempo de resolução do formulario horas", 0, 59, 0,  disabled=disabled3)        
+        hor_question = st.slider("tempo de resolução do formulario minutos", 0, 6, 0, disabled=disabled3)
         
         # Calcular o tempo total
         total_time = hor_question*60*60 + min_question*60
-        if st.session_state["disabled"] == True or st.session_state["disabled"] == False:
-            if st.button("Iniciar questionario", on_click=new_questionario):
-                pass
+        
+        
         
         # Inicializar variáveis de sessão
         if "time_left" not in st.session_state:
@@ -274,7 +273,10 @@ def read_questao():
         
         elif st.session_state.time_left == 0:
             st.write("⏳ Tempo finalizado")
-    
+        
+        if st.session_state["disabled"] == True or st.session_state["disabled"] == False:
+            if st.button("Iniciar questionario", on_click=new_questionario):
+                pass
         #iniciar o temporizador
         
         
