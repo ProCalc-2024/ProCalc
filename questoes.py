@@ -227,7 +227,7 @@ def read_questao():
         # Calcular o tempo total
         total_time = hor_question*60*60 + min_question*60
         
-        
+        st.write(f"{hor_question:02}:{min_question:02}:00")
         
         # Inicializar variáveis de sessão
         if "time_left" not in st.session_state:
@@ -259,7 +259,7 @@ def read_questao():
         if disabled3:
             hours, remainder = divmod(st.session_state.time_left, 3600)
             minutes, seconds = divmod(remainder, 60)
-            formatted_time = f"{int(hours):02}:{int(minutes):02}:{int(seconds):02}"
+            formatted_time = f"⏳ {int(hours):02}:{int(minutes):02}:{int(seconds):02}"
             # Exibir o tempo restante
             st.write(f"⏳ {formatted_time}")
             
