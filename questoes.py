@@ -210,6 +210,7 @@ def read_questao():
         if st.session_state["botao"]:       
             
             if st.button("Novas Perguntas"):
+                st.session_state["disabledtime"]  = False
                 pass  # O estado muda ao clicar, e o botão desaparece na próxima renderização
         
         # Define a variável com base no estado do botão
