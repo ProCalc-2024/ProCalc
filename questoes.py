@@ -188,7 +188,9 @@ def read_questao():
                     res[i] = True
 
     with tabs[numero+1]:   
-        
+        def clicar_botao22():
+            st.session_state["disabledtime"]  = False
+            
         def clicar_botao():
             st.session_state["botao"] = True
             st.session_state["disabled"] = True
@@ -211,8 +213,7 @@ def read_questao():
         
         if st.session_state["botao"]:       
             
-            if st.button("Novas Perguntas"):
-                st.session_state["disabledtime"]  = False
+            if st.button("Novas Perguntas", on_click=clicar_botao22):
                 pass  # O estado muda ao clicar, e o botão desaparece na próxima renderização
         
         # Define a variável com base no estado do botão
