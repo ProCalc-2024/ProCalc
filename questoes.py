@@ -273,7 +273,8 @@ def read_questao():
             st.rerun()
         
         elif st.session_state.time_left == 0:
-            st.write("⏳ Tempo finalizado")
+            if disabled3:
+                st.write("⏳ Tempo finalizado")
         
         if st.session_state["disabled"] == True or st.session_state["disabled"] == False:
             if st.button("Iniciar questionario", on_click=new_questionario):
