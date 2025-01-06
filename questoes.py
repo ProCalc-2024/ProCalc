@@ -31,11 +31,14 @@ def read_questao():
         st.session_state["botao"] = False
         st.session_state["disabled"] = False
         st.session_state["disabledtime"] = False
-          
+    
+    disabled3 = st.session_state["disabledtime"]
+    
     # lista de matérias
     lista = list(set(dict["Materia"]))
+    
     with col2:       
-        materia = st.selectbox("Selecione um assunto", lista)    
+        materia = st.selectbox("Selecione um assunto", lista,disabled=disabled3)    
 
     # lista de questões de acordo com a matéria escolhida
     lista_ques = [linha for linha in dict.iloc if linha["Materia"] == materia]
@@ -44,7 +47,7 @@ def read_questao():
     n = len(lista_ques)
     with col2: 
         # Pergunta ao usuário quantas questões deseja criar
-        numero = st.number_input("Quantas questões você gostaria de fazer?", min_value=1, max_value=n, value=1)
+        numero = st.number_input("Quantas questões você gostaria de fazer?", min_value=1, max_value=n, value=1, disabled=disabled3)
         
     tab_names = []
     # Cria uma lista de nomes para as questões
@@ -73,7 +76,7 @@ def read_questao():
             b = list(range(n))
             
             disabled2 = st.session_state["disabled"]
-            disabled3 = st.session_state["disabledtime"]
+            
             # Embaralha as alternativas
             lista = ["Alternativa_A", "Alternativa_B", "Alternativa_C", "Alternativa_D", "Alternativa_E"]
             if f"embaralho{i}{materia}" not in st.session_state:
