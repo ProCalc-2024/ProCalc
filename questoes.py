@@ -73,7 +73,7 @@ def read_questao():
             b = list(range(n))
             
             disabled2 = st.session_state["disabled"]
-            disabled3 = st.session_state.visibility
+            
             # Embaralha as alternativas
             lista = ["Alternativa_A", "Alternativa_B", "Alternativa_C", "Alternativa_D", "Alternativa_E"]
             if f"embaralho{i}{materia}" not in st.session_state:
@@ -215,8 +215,8 @@ def read_questao():
     with col1:
 
                 
-        min_question = st.slider("Timer do formulario", 0, 59, 0, label_visibility=disabled3)        
-        hor_question = st.slider("", 0, 6, 0, label_visibility=disabled3)
+        min_question = st.slider("Timer do formulario", 0, 59, 0, label_visibility=st.session_state.visibility)        
+        hor_question = st.slider("", 0, 6, 0, label_visibility=st.session_state.visibility)
         # Calcular o tempo total
         total_time = hor_question*60*60 + min_question*60
         if st.session_state["disabled"] == True or st.session_state["disabled"] == False:
