@@ -227,7 +227,7 @@ def read_questao():
         # Calcular o tempo total
         total_time = hor_question*60*60 + min_question*60
         
-        if disabled3:
+        if not disabled3:
             st.write(f"⏳ {hor_question:02}:{min_question:02}:00")
         
         # Inicializar variáveis de sessão
