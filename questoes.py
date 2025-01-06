@@ -29,7 +29,7 @@ def read_questao():
     if "botao" not in st.session_state:
     
         st.session_state["botao"] = False
-        st.session_state["disabled"] = False
+        st.session_state["disabled"] = True
         st.session_state["disabledtime"] = False
     
     disabled3 = st.session_state["disabledtime"]
@@ -60,8 +60,10 @@ def read_questao():
     #with tabs[numero]:
     col_list = [1] * numero
     coluna = st.columns(col_list)
+    
     with col1:
         st.title("Perguntas")
+        
     with tabs[0]:
         st.info('This is a purely informational message', icon="ℹ️")
         
