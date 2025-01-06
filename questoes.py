@@ -256,7 +256,13 @@ def read_questao():
                 if st.session_state.time_left == 0:
                     st.session_state.running = False
                     clicar_botao()
-                
+        if disabled3:
+            hours, remainder = divmod(st.session_state.time_left, 3600)
+            minutes, seconds = divmod(remainder, 60)
+            formatted_time = f"{int(hours):02}:{int(minutes):02}:{int(seconds):02}"
+            # Exibir o tempo restante
+            st.write(f"⏳ {formatted_time}")
+            
         # Interface do Temporizador
         if st.session_state.running:
             
