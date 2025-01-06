@@ -30,7 +30,7 @@ def read_questao():
     
         st.session_state["botao"] = False
         st.session_state["disabled"] = False
-        st.session_state["disabledtime"] = "visible"
+        st.session_state.visibility = "visible"
           
     # lista de matérias
     lista = list(set(dict["Materia"]))
@@ -73,7 +73,7 @@ def read_questao():
             b = list(range(n))
             
             disabled2 = st.session_state["disabled"]
-            disabled3 = st.session_state["disabledtime"]
+            disabled3 = st.session_state.visibility
             # Embaralha as alternativas
             lista = ["Alternativa_A", "Alternativa_B", "Alternativa_C", "Alternativa_D", "Alternativa_E"]
             if f"embaralho{i}{materia}" not in st.session_state:
@@ -192,7 +192,7 @@ def read_questao():
             start_timer()
             st.session_state["botao"] = None
             st.session_state["disabled"] = False
-            st.session_state["disabledtime"] = "hidden"
+            st.session_state.visibility = "hidden"
             random.shuffle(b)
             st.session_state["ques"] = b
             for i in range(n):
