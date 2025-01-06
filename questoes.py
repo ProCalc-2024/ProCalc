@@ -30,7 +30,7 @@ def read_questao():
     
         st.session_state["botao"] = False
         st.session_state["disabled"] = False
-        st.session_state["disabled2"] = False
+        st.session_state["disabledtime"] = False
           
     # lista de matérias
     lista = list(set(dict["Materia"]))
@@ -73,7 +73,7 @@ def read_questao():
             b = list(range(n))
             
             disabled2 = st.session_state["disabled"]
-            disabled3 = st.session_state["disabled2"]
+            disabled3 = st.session_state["disabledtime"]
             # Embaralha as alternativas
             lista = ["Alternativa_A", "Alternativa_B", "Alternativa_C", "Alternativa_D", "Alternativa_E"]
             if f"embaralho{i}{materia}" not in st.session_state:
@@ -192,7 +192,7 @@ def read_questao():
             start_timer()
             st.session_state["botao"] = None
             st.session_state["disabled"] = False
-            st.session_state["disabled2"] = True
+            st.session_state["disabledtime"] = True
             random.shuffle(b)
             st.session_state["ques"] = b
             for i in range(n):
@@ -215,8 +215,8 @@ def read_questao():
     with col1:
 
                 
-        min_question = st.slider("Timer do formulario", 0, 59, 0, disabled=disabled3)        
-        hor_question = st.slider("", 0, 6, 0, disabled=disabled3)
+        min_question = st.slider("Timer do formulario", 0, 59, 0, disabled=disabledtime)        
+        hor_question = st.slider("", 0, 6, 0, disabled=disabledtime)
         # Calcular o tempo total
         total_time = hor_question*60*60 + min_question*60
         if st.session_state["disabled"] == True or st.session_state["disabled"] == False:
