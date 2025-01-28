@@ -4,7 +4,7 @@ import gspread
 from streamlit_gsheets import GSheetsConnection
 import numpy as np
 
-def inserir_ques():   
+def inserir_usuario():   
 
     container = st.container(border=True)
     
