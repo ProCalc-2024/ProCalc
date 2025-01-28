@@ -1,62 +1,86 @@
 import streamlit as st
 import pandas as pd
+import gspread
 from streamlit_gsheets import GSheetsConnection
+import numpy as np
 
-# Função para inserir um novo usuário na planilha
-try:
-    # Conexão com o Google Sheets
+def inserir_ques():   
+
+    container = st.container(border=True)
+    
     conn = st.connection("gsheets", type=GSheetsConnection)
+    sheet = conn.read(worksheet="Usuários")
+    dict = pd.DataFrame(sheet)
+    # adicionar uma nova pergunta
+    result = {}
+    
+    col1, col2 = st.columns([1, 1])
+
+    lista =  [linha for linha in dict["Nome"]]
+
+    with col2:
+        materia = st.selectbox("selecione uma materia", lista)
+
+    with col1:
+        descricao = st.text_input("descrição")
+    
+    Nome_user = st.text_input("Nome do Usuário", placeholder= "digite aqui seu Nome", key = "Nome_user") 
+    Email_user = st.text_input("Email do Usuário", placeholder= "digite aqui seu Email", key = "Email_user")
+    Senha_user = st.text_input("", placeholder= "digite aqui sua senha", key = "Senha_user") 
+    id_user = "Usuário" 
+
+    existing_data = conn.read(worksheet="Usuários")
+    novo = pd.DataFrame({
+        'Nome': [Nome_user],
+        'Email': [Email_user],
+        'Senha': [Senha_user],
+        'Identificação': [id_user]
+    })
+    
+    combined_data = pd.concat([existing_data, novo], ignore_index=True)
+    lista_ques = []
         
-    # Leitura dos dados da planilha "Usuários"
-    sheet_data = conn.read(worksheet="Usuários")
-    df = pd.DataFrame(sheet_data)
-
-    # Verificando se o e-mail já está cadastrado
-    if email in df['Email'].values:
-        st.warning("Este e-mail já está cadastrado!")
-        return
+        # escolha de questão aleatoria
+        for linha in novo.iloc: 
+            lista_ques.append(linha)
+    
+        #comando da questão  
+        questao = lista_ques[0]
         
-    # Criando um novo registro
-    novo_usuario = {
-        "Nome": nome,
-        "Email": email,
-        "Senha": senha,
-        "Tipo": tipo_usuario
-    }
-    # Adicionando o registro à planilha
-    df = df.append(novo_usuario, ignore_index=True)
-    conn.write(df, worksheet="Usuários")  # Salvando os dados na planilha
-    st.success("Usuário cadastrado com sucesso!")
-except Exception as e:
-    st.error(f"Erro ao cadastrar usuário: {e}")
+        st.write("")
+        st.write(questao["Enunciado"])
+            
+        st.subheader('', divider = 'gray')
+        
+        opções = [questao[embaralho[0]], questao[embaralho[1]], questao[embaralho[2]], questao[embaralho[3]], questao[embaralho[4]]]    
+        
+        alternativa = st.radio("", options = opções, index=None)
+            
+        st.session_state["resposta"] = questao["Alternativa_A"]
+    
+        butao = st.button("Submeter", key = "button_save_questoes") 
+                
+        # salva a sequencia de questoes
 
-# Interface principal
-st.title("Gerenciador de Usuários")
-menu = st.sidebar.radio("Menu", ["Cadastro de Usuário", "Lista de Usuários"])
+        resposta = alternativa == questao["Alternativa_A"]
+        
+        if butao and resposta:         
+            st.toast(':green-background[Resposta Certa]', icon='🎉')
+    
+        elif butao and (resposta is False):
+            st.toast(':red-background[Resposta Errada]', icon="⚠️")
+        
+    if st.button("Salvar"):   
+        
+            
+        conn.update(worksheet="Questões", data=combined_data)
+       
+        conn.read(
+        worksheet="Questões",  # Nome da planilha
+        ttl="10m"                  # Cache de 10 minutos
+        )
+        
+        st.success(':green-background[Questão salva]', icon='✔️')
+        
+        st.rerun()
 
-if menu == "Cadastro de Usuário":
-    st.subheader("Cadastro de Novo Usuário")
-
-    # Campos do formulário
-    nome = st.text_input("Nome")
-    email = st.text_input("E-mail")
-    senha = st.text_input("Senha", type="password")
-    tipo_usuario = "Usuário"  # Variável constante
-
-    # Botão para cadastrar o usuário
-    if st.button("Cadastrar"):
-        if nome and email and senha:
-            cadastrar_usuario(nome, email, senha, tipo_usuario)
-        else:
-            st.warning("Por favor, preencha todos os campos.")
-
-elif menu == "Lista de Usuários":
-    st.subheader("Lista de Usuários Cadastrados")
-    try:
-        # Conexão com o Google Sheets
-        conn = st.connection("gsheets", type=GSheetsConnection)
-        sheet_data = conn.read(worksheet="Usuários")
-        df = pd.DataFrame(sheet_data)
-        st.dataframe(df)
-    except Exception as e:
-        st.error(f"Erro ao acessar a planilha: {e}")
