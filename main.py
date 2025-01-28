@@ -11,6 +11,7 @@ from yaml.loader import SafeLoader
 from streamlit_option_menu import option_menu
 from git import Repo
 import requests
+import testea
 
 
 def local_css(file_name):
@@ -40,9 +41,10 @@ if st.session_state["authentication_status"]:
 
     with col2:
         with tab1:
+                testea()
 
                 # Exibir a imagem no Streamlit
-                st.image("grafico.png", caption='Imagem do Google Drive')
+                # st.image("grafico.png", caption='Imagem do Google Drive')
             
         with tab2:
             co1, co2 = st.columns([1, 1])
