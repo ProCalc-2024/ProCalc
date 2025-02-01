@@ -38,24 +38,7 @@ def inserir_usuario():
     })
     
     combined_data = pd.concat([existing_data, novo], ignore_index=True)
-    lista_ques = []
-        
-    # escolha de questão aleatoria
-    for linha in novo.iloc: 
-        lista_ques.append(linha)
-    
-    #comando da questão  
-    questao = lista_ques[0]
-        
-    st.write("")
-    st.write(questao["Enunciado"])
-            
-    st.subheader('', divider = 'gray')
-        
-    opções = [questao[embaralho[0]], questao[embaralho[1]], questao[embaralho[2]], questao[embaralho[3]], questao[embaralho[4]]]    
-        
-    alternativa = st.radio("", options = opções, index=None)
-            
+    st.write(combined_data)        
     st.session_state["resposta"] = questao["Alternativa_A"]
     
     butao = st.button("Submeter", key = "button_save_questoes") 
