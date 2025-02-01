@@ -40,37 +40,37 @@ def inserir_usuario():
     combined_data = pd.concat([existing_data, novo], ignore_index=True)
     lista_ques = []
         
-        # escolha de questão aleatoria
-        for linha in novo.iloc: 
-            lista_ques.append(linha)
+    # escolha de questão aleatoria
+    for linha in novo.iloc: 
+        ista_ques.append(linha)
     
-        #comando da questão  
-        questao = lista_ques[0]
+    #comando da questão  
+    questao = lista_ques[0]
         
-        st.write("")
-        st.write(questao["Enunciado"])
+    st.write("")
+    st.write(questao["Enunciado"])
             
-        st.subheader('', divider = 'gray')
+    st.subheader('', divider = 'gray')
         
-        opções = [questao[embaralho[0]], questao[embaralho[1]], questao[embaralho[2]], questao[embaralho[3]], questao[embaralho[4]]]    
+    opções = [questao[embaralho[0]], questao[embaralho[1]], questao[embaralho[2]], questao[embaralho[3]], questao[embaralho[4]]]    
         
-        alternativa = st.radio("", options = opções, index=None)
+    alternativa = st.radio("", options = opções, index=None)
             
-        st.session_state["resposta"] = questao["Alternativa_A"]
+    st.session_state["resposta"] = questao["Alternativa_A"]
     
-        butao = st.button("Submeter", key = "button_save_questoes") 
+    butao = st.button("Submeter", key = "button_save_questoes") 
                 
-        # salva a sequencia de questoes
+    # salva a sequencia de questoes
 
-        resposta = alternativa == questao["Alternativa_A"]
+    resposta = alternativa == questao["Alternativa_A"]
         
-        if butao and resposta:         
-            st.toast(':green-background[Resposta Certa]', icon='🎉')
+    if butao and resposta:         
+        st.toast(':green-background[Resposta Certa]', icon='🎉')
     
-        elif butao and (resposta is False):
-            st.toast(':red-background[Resposta Errada]', icon="⚠️")
+    elif butao and (resposta is False):
+        st.toast(':red-background[Resposta Errada]', icon="⚠️")
         
-    if st.button("Salvar"):   
+    if st.button("Cadastrar-se"):   
         
             
         conn.update(worksheet="Questões", data=combined_data)
