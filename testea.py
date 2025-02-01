@@ -42,7 +42,7 @@ def inserir_usuario():
         
     # escolha de questão aleatoria
     for linha in novo.iloc: 
-        ista_ques.append(linha)
+        lista_ques.append(linha)
     
     #comando da questão  
     questao = lista_ques[0]
