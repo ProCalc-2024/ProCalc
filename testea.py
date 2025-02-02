@@ -41,10 +41,10 @@ def inserir_usuario():
     if st.button("Cadastrar-se"):   
         
             
-        conn.update(worksheet="Questões", data=combined_data)
+        conn.update(worksheet="Usuários", data=combined_data)
        
         conn.read(
-        worksheet="Questões",  # Nome da planilha
+        worksheet="Usuários",  # Nome da planilha
         ttl="1s"                  # Cache de 10 minutos
         )
         
