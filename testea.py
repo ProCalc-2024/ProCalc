@@ -17,12 +17,6 @@ def inserir_usuario():
     col1, col2 = st.columns([1, 1])
 
     lista =  [linha for linha in dict["Nome"]]
-
-    with col2:
-        materia = st.selectbox("selecione uma materia", lista)
-
-    with col1:
-        descricao = st.text_input("descrição")
     
     Nome_user = st.text_input("Nome do Usuário", placeholder= "digite aqui seu Nome", key = "Nome_user") 
     Email_user = st.text_input("Email do Usuário", placeholder= "digite aqui seu Email", key = "Email_user")
