@@ -39,16 +39,15 @@ def inserir_usuario():
     #st.toast(':red-background[Resposta Errada]', icon="⚠️")
         
     if st.button("Cadastrar-se"):   
-        
             
         conn.update(worksheet="Usuários", data=combined_data)
        
         conn.read(
         worksheet="Usuários",  # Nome da planilha
-        ttl="1s"                  # Cache de 10 minutos
+        ttl="1s"                  # Cache de 1 segundo
         )
         
-        st.success(':green-background[Questão salva]', icon='✔️')
+        st.success(':green-background[Novo Usuario Adicionado]', icon='✔️')
         
         st.rerun()
 
