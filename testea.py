@@ -4,50 +4,68 @@ import gspread
 from streamlit_gsheets import GSheetsConnection
 import numpy as np
 
-def inserir_usuario():   
+# Simulação de banco de dados de usuários (substituir por um banco real)
+usuarios = {"admin": "1234", "user": "abcd"}  # login: senha
 
-    container = st.container(border=True)
-    
-    conn = st.connection("gsheets", type=GSheetsConnection)
-    sheet = conn.read(worksheet="Usuários")
-    dict = pd.DataFrame(sheet)
-    # adicionar uma nova pergunta
-    result = {}
-    
-    col1, col2 = st.columns([1, 1])
+# Caixa de diálogo automática com login
+def exibir_login():
+    with st.modal("Login", closable=False):
+        st.write("Por favor, faça login para continuar.")
 
-    lista =  [linha for linha in dict["Nome"]]
-    
-    Nome_user = st.text_input("Nome do Usuário", placeholder= "digite aqui seu Nome", key = "Nome_user") 
-    Email_user = st.text_input("Email do Usuário", placeholder= "digite aqui seu Email", key = "Email_user")
-    Senha_user = st.text_input("Senha do Usuario", placeholder= "digite aqui sua senha", key = "Senha_user", type="password") 
-    id_user = "Usuário" 
+        # Inputs de login
+        usuario = st.text_input("Usuário", key="usuario")
+        senha = st.text_input("Senha", type="password", key="senha")
 
-    existing_data = conn.read(worksheet="Usuários")
-    novo = pd.DataFrame({
-        'Nome': [Nome_user],
-        'Email': [Email_user],
-        'Senha': [Senha_user],
-        'Identificação': [id_user]
-    })
-    
-    combined_data = pd.concat([existing_data, novo], ignore_index=True)
-    st.write(combined_data)        
-                
-    #st.toast(':green-background[Resposta Certa]', icon='🎉')
-    
-    #st.toast(':red-background[Resposta Errada]', icon="⚠️")
-        
-    if st.button("Cadastrar-se"):   
-            
-        conn.update(worksheet="Usuários", data=combined_data)
-       
-        conn.read(
-        worksheet="Usuários",  # Nome da planilha
-        ttl="1s"                  # Cache de 1 segundo
-        )
-        
-        st.success(':green-background[Novo Usuario Adicionado]', icon='✔️')
-        
+        col1, col2 = st.columns(2)
+        with col1:
+            entrar = st.button("Entrar")
+        with col2:
+            cadastrar = st.button("Cadastrar-se")
+
+        if entrar:
+            if usuario in usuarios and usuarios[usuario] == senha:
+                st.session_state["logado"] = True
+                st.success("Login bem-sucedido! Bem-vindo, " + usuario)
+                st.rerun()
+            else:
+                st.error("Usuário ou senha incorretos!")
+
+        if cadastrar:
+            st.session_state["cadastro"] = True
+            st.rerun()
+
+# Caixa de diálogo para cadastro de usuário
+def exibir_cadastro():
+    with st.modal("Cadastro", closable=False):
+        st.write("Crie sua conta para acessar o sistema.")
+
+        novo_usuario = st.text_input("Novo Usuário", key="novo_usuario")
+        nova_senha = st.text_input("Nova Senha", type="password", key="nova_senha")
+
+        if st.button("Registrar"):
+            if novo_usuario in usuarios:
+                st.error("Usuário já existe! Tente outro nome.")
+            elif novo_usuario and nova_senha:
+                usuarios[novo_usuario] = nova_senha
+                st.success("Cadastro realizado com sucesso! Faça login agora.")
+                st.session_state["cadastro"] = False
+                st.rerun()
+            else:
+                st.error("Preencha todos os campos!")
+
+# Verifica se o usuário está logado
+if "logado" not in st.session_state:
+    st.session_state["logado"] = False
+
+# Se estiver logado, exibe o conteúdo principal
+if st.session_state["logado"]:
+    st.write("🎉 Bem-vindo ao sistema!")
+    if st.button("Sair"):
+        st.session_state["logado"] = False
         st.rerun()
-
+else:
+    # Se não estiver cadastrado, exibe o login. Senão, exibe o cadastro.
+    if st.session_state.get("cadastro", False):
+        exibir_cadastro()
+    else:
+        exibir_login()
