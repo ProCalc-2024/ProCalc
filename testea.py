@@ -45,7 +45,7 @@ def inserir_usuario():
        
         conn.read(
         worksheet="Questões",  # Nome da planilha
-        ttl="10m"                  # Cache de 10 minutos
+        ttl="1s"                  # Cache de 10 minutos
         )
         
         st.success(':green-background[Questão salva]', icon='✔️')
