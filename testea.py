@@ -20,7 +20,7 @@ def inserir_usuario():
     
     Nome_user = st.text_input("Nome do Usuário", placeholder= "digite aqui seu Nome", key = "Nome_user") 
     Email_user = st.text_input("Email do Usuário", placeholder= "digite aqui seu Email", key = "Email_user")
-    Senha_user = st.text_input("Senha do Usuario", placeholder= "digite aqui sua senha", key = "Senha_user") 
+    Senha_user = st.text_input("Senha do Usuario", placeholder= "digite aqui sua senha", key = "Senha_user", type="password") 
     id_user = "Usuário" 
 
     existing_data = conn.read(worksheet="Usuários")
