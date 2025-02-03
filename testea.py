@@ -43,12 +43,10 @@ def cadastrar_usuario():
             conn.update(worksheet="Usuários", data=df)
 
             st.success("Usuário cadastrado com sucesso! Faça login agora.")
-            st.session_state["pagina"] = "Login"
-            st.rerun()
             
-    if st.button("Ir para Login"):
-        st.session_state["pagina"] = "Login"
-        st.rerun()
+            if st.button("Ir para Login"):
+                st.session_state["pagina"] = "Login"
+                st.rerun()
 
 def login_usuario():
     # Conexão com o Google Sheets
