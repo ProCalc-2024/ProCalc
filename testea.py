@@ -13,7 +13,7 @@ def inserir_usuario():
     dict = pd.DataFrame(sheet)
     # adicionar uma nova pergunta
     result = {}
-    
+    st.write(dict)
     col1, col2 = st.columns([1, 1])
 
     lista =  [linha for linha in dict["Nome"]]
