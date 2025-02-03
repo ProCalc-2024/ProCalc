@@ -14,6 +14,9 @@ def main():
     else:
         cadastrar_usuario()
 
+if __name__ == "__main__":
+    main()
+
 def cadastrar_usuario():
     # Conexão com o Google Sheets
     conn = st.connection("gsheets", type=GSheetsConnection)
@@ -76,5 +79,3 @@ def login_usuario():
         st.session_state["pagina"] = "Cadastro"
         st.rerun()
 
-if __name__ == "__main__":
-    main()
