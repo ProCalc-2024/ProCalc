@@ -31,5 +31,6 @@ def cadastrar_usuario():
 
             # Atualiza a planilha com os novos dados
             conn.update(worksheet="Usuários", data=df)
-
+            
             st.success("Usuário cadastrado com sucesso!")
+            st.rerun
