@@ -4,49 +4,32 @@ import gspread
 from streamlit_gsheets import GSheetsConnection
 import numpy as np
 
-def inserir_usuario():   
-
-    container = st.container(border=True)
-    
+def cadastrar_usuario():
+    # Conexão com o Google Sheets
     conn = st.connection("gsheets", type=GSheetsConnection)
-    sheet = conn.read(worksheet="Usuários")
-    dict = pd.DataFrame(sheet)
-    # adicionar uma nova pergunta
-    result = {}
-    st.write(dict)
-    col1, col2 = st.columns([1, 1])
+    sheet = conn.read(worksheet="Usuarios")
+    df = pd.DataFrame(sheet)
 
-    lista =  [linha for linha in dict["Nome"]]
-    
-    Nome_user = st.text_input("Nome do Usuário", placeholder= "digite aqui seu Nome", key = "Nome_user") 
-    Email_user = st.text_input("Email do Usuário", placeholder= "digite aqui seu Email", key = "Email_user")
-    Senha_user = st.text_input("Senha do Usuario", placeholder= "digite aqui sua senha", key = "Senha_user", type="password") 
-    id_user = "Usuário" 
+    st.title("Cadastro de Usuário")
 
-    existing_data = conn.read(worksheet="Usuários")
-    novo = pd.DataFrame({
-        'Nome': [Nome_user],
-        'Email': [Email_user],
-        'Senha': [Senha_user],
-        'Identificação': [id_user]
-    })
-    
-    combined_data = pd.concat([existing_data, novo], ignore_index=True)
-    st.write(combined_data)       
-                
-    #st.toast(':green-background[Resposta Certa]', icon='🎉')
-    
-    #st.toast(':red-background[Resposta Errada]', icon="⚠️")
-        
-    if st.button("Cadastrar-se"):   
-        conn.update(worksheet="Usuários", data=novo)
-        conn.update(worksheet="Usuários", data=combined_data)
-       
-        conn.read(
-        worksheet="Usuários",  # Nome da planilha
-        ttl="1s"                  # Cache de 1 segundo
-        )
-        
-        st.success(':green-background[Novo Usuario Adicionado]', icon='✔️')
-        
-        st.rerun()
+    # Campos de entrada para nome, e-mail e senha
+    with st.form("cadastro_usuario"):
+        nome = st.text_input("Nome:")
+        email = st.text_input("E-mail:")
+        senha = st.text_input("Senha:", type="password")
+        confirmar_senha = st.text_input("Confirmar Senha:", type="password")
+        submit_button = st.form_submit_button("Cadastrar")
+
+    if submit_button:
+        if senha != confirmar_senha:
+            st.error("As senhas não coincidem. Tente novamente.")
+        elif email in df["E-mail"].values:
+            st.error("E-mail já cadastrado. Use outro e-mail.")
+        else:
+            novo_usuario = pd.DataFrame({"Nome": [nome], "E-mail": [email], "Senha": [senha]})
+            df = pd.concat([df, novo_usuario], ignore_index=True)
+
+            # Atualiza a planilha com os novos dados
+            conn.update(worksheet="Usuarios", data=df)
+
+            st.success("Usuário cadastrado com sucesso!")
