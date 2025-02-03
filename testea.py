@@ -49,9 +49,9 @@ def cadastrar_usuario():
             
             st.success("Usuário cadastrado com sucesso! Faça login agora.")
             
-            if st.button("Ir para Login"):
-                st.session_state["pagina"] = "Login"
-                st.rerun()
+    if st.button("Ir para Login"):
+    st.session_state["pagina"] = "Login"
+    st.rerun()
 
 def login_usuario():
     # Conexão com o Google Sheets
