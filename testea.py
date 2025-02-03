@@ -5,7 +5,7 @@ from streamlit_gsheets import GSheetsConnection
 import numpy as np
 
 def main():
-    st.title("Sistema de Login e Cadastro")
+    #Sistema de Login e Cadastro
     if "pagina" not in st.session_state:
         st.session_state["pagina"] = "Login"
     
