@@ -23,25 +23,23 @@ def inserir_usuario():
     Senha_user = st.text_input("Senha do Usuario", placeholder= "digite aqui sua senha", key = "Senha_user", type="password") 
     id_user = "Usuário" 
 
-           
+    existing_data = conn.read(worksheet="Usuários")
+    novo = pd.DataFrame({
+        'Nome': [Nome_user],
+        'Email': [Email_user],
+        'Senha': [Senha_user],
+        'Identificação': [id_user]
+    })
+    
+    combined_data = pd.concat([existing_data, novo], ignore_index=True)
+    st.write(combined_data)       
                 
     #st.toast(':green-background[Resposta Certa]', icon='🎉')
     
     #st.toast(':red-background[Resposta Errada]', icon="⚠️")
         
     if st.button("Cadastrar-se"):   
-        
-        existing_data = conn.read(worksheet="Usuários")
-        novo = pd.DataFrame({
-            'Nome': [Nome_user],
-            'Email': [Email_user],
-            'Senha': [Senha_user],
-            'Identificação': [id_user]
-        })
-        
-        combined_data = pd.concat([existing_data, novo], ignore_index=True)
-        st.write(combined_data)
-    
+        conn.update(worksheet="Usuários", data=novo)
         conn.update(worksheet="Usuários", data=combined_data)
        
         conn.read(
