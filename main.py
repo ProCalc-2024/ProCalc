@@ -41,7 +41,7 @@ if st.session_state["authentication_status"]:
 
     with col2:
         with tab1:
-                testea()
+                testea.main()
 
                 # Exibir a imagem no Streamlit
                 # st.image("grafico.png", caption='Imagem do Google Drive')
