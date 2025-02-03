@@ -7,7 +7,7 @@ import numpy as np
 def cadastrar_usuario():
     # Conexão com o Google Sheets
     conn = st.connection("gsheets", type=GSheetsConnection)
-    sheet = conn.read(worksheet="Usuarios")
+    sheet = conn.read(worksheet="Usuários")
     df = pd.DataFrame(sheet)
 
     st.title("Cadastro de Usuário")
@@ -30,6 +30,6 @@ def cadastrar_usuario():
             df = pd.concat([df, novo_usuario], ignore_index=True)
 
             # Atualiza a planilha com os novos dados
-            conn.update(worksheet="Usuarios", data=df)
+            conn.update(worksheet="Usuários", data=df)
 
             st.success("Usuário cadastrado com sucesso!")
