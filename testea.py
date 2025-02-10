@@ -3,6 +3,7 @@ import pandas as pd
 import gspread
 from streamlit_gsheets import GSheetsConnection
 import numpy as np
+from cryptography.fernet import Fernet
 
 def main():
     #Sistema de Login e Cadastro
@@ -18,6 +19,8 @@ if __name__ == "__main__":
     main()
 
 def cadastrar_usuario():
+    chave = Fernet.generate_key()
+    cipher = Fernet(chave)
     # Conexão com o Google Sheets
     conn = st.connection("gsheets", type=GSheetsConnection)
     sheet = conn.read(worksheet="Usuários")
@@ -33,8 +36,8 @@ def cadastrar_usuario():
         confirmar_senha = st.text_input("Confirmar Senha:", type="password")
         submit_button = st.form_submit_button("Cadastrar")
         Identificação = "Usuário"
-        senha_criptografada = senha
-        st.write(f"Senha criptografada: {senha_criptografada}")
+        senha_encriptada = cipher.encrypt(senha.encode())
+        st.write(f"Senha criptografada: {senha_encriptada}")
         
     if submit_button:
         if senha != confirmar_senha:
@@ -42,7 +45,7 @@ def cadastrar_usuario():
         elif email in df["E-mail"].values:
             st.error("E-mail já cadastrado. Use outro e-mail.")
         else:
-            novo_usuario = pd.DataFrame({"Nome": [nome], "E-mail": [email], "Identificação": [Identificação], "Senha": [senha_criptografada]})
+            novo_usuario = pd.DataFrame({"Nome": [nome], "E-mail": [email], "Identificação": [Identificação], "Senha": [senha_encriptada]})
             df = pd.concat([df, novo_usuario], ignore_index=True)
 
             # Atualiza a planilha com os novos dados
