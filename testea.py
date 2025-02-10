@@ -23,7 +23,8 @@ def hash_senha(senha: str) -> str:
     hashed = bcrypt.hashpw(senha.encode(), salt)
     return hashed.decode()
 
-
+def verificar_senha(senha: str, hashed: str) -> bool:
+    return bcrypt.checkpw(senha.encode(), hashed.encode())
 
 def cadastrar_usuario():
     # Conexão com o Google Sheets
@@ -50,7 +51,7 @@ def cadastrar_usuario():
         elif email in df["E-mail"].values:
             st.error("E-mail já cadastrado. Use outro e-mail.")
         else:
-            novo_usuario = pd.DataFrame({"Nome": [nome], "E-mail": [email], "Identificação": [Identificação], "Senha": [senha]})
+            novo_usuario = pd.DataFrame({"Nome": [nome], "E-mail": [email], "Identificação": [Identificação], "Senha": [senha_criptografada]})
             df = pd.concat([df, novo_usuario], ignore_index=True)
 
             # Atualiza a planilha com os novos dados
@@ -78,6 +79,12 @@ def login_usuario():
     if st.button("Login"):
         if email in df["E-mail"].values:
             user_data = df[df["E-mail"] == email].iloc[0]
+            
+            if verificar_senha(senha, user_data["Senha"]):
+                st.success("Senha correta!")
+            else:
+                st.error("Senha incorreta!")
+            
             if senha == user_data["Senha"]:
                 st.success("Login realizado com sucesso!")
             else:
