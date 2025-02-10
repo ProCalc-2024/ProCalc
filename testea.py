@@ -75,7 +75,7 @@ def login_usuario():
             user_data = df[df["E-mail"] == email].iloc[0]
             sen = user_data["Senha"]
             st.write(sen)
-            senha_original = cipher.decrypt(sen).decode()
+            senha_original = cipher.decrypt(user_data["Senha"]).decode()
             
             if senha == senha_original:
                 st.success("Login realizado com sucesso!")
