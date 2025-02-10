@@ -3,6 +3,7 @@ import pandas as pd
 import gspread
 from streamlit_gsheets import GSheetsConnection
 import numpy as np
+import bcrypt
 
 def main():
     #Sistema de Login e Cadastro
@@ -16,6 +17,13 @@ def main():
 
 if __name__ == "__main__":
     main()
+
+def hash_senha(senha: str) -> str:
+    salt = bcrypt.gensalt()
+    hashed = bcrypt.hashpw(senha.encode(), salt)
+    return hashed.decode()
+
+
 
 def cadastrar_usuario():
     # Conexão com o Google Sheets
@@ -33,7 +41,9 @@ def cadastrar_usuario():
         confirmar_senha = st.text_input("Confirmar Senha:", type="password")
         submit_button = st.form_submit_button("Cadastrar")
         Identificação = "Usuário"
-        st.write(df)
+        senha_criptografada = hash_senha(senha)
+        st.write(f"Senha criptografada: {senha_criptografada}")
+        
     if submit_button:
         if senha != confirmar_senha:
             st.error("As senhas não coincidem. Tente novamente.")
