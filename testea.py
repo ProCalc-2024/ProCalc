@@ -69,7 +69,9 @@ def login_usuario():
 
     email = st.text_input("E-mail:")
     senha = st.text_input("Senha:", type="password")
-    
+    user_data = df[df["E-mail"] == email].iloc[0]
+    sen = user_data["Senha"]
+    st.write(sen)
     if st.button("Login"):
         if email in df["E-mail"].values:
             user_data = df[df["E-mail"] == email].iloc[0]
