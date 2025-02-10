@@ -33,7 +33,7 @@ def cadastrar_usuario():
         confirmar_senha = st.text_input("Confirmar Senha:", type="password")
         submit_button = st.form_submit_button("Cadastrar")
         Identificação = "Usuário"
-
+        st.write(df)
     if submit_button:
         if senha != confirmar_senha:
             st.error("As senhas não coincidem. Tente novamente.")
