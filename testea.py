@@ -80,10 +80,6 @@ def login_usuario():
         if email in df["E-mail"].values:
             user_data = df[df["E-mail"] == email].iloc[0]
             st.write(user_data["Senha"])
-            if verificar_senha(senha, user_data["Senha"]):
-                st.success("Senha correta!")
-            else:
-                st.error("Senha incorreta!")
             
             if senha == user_data["Senha"]:
                 st.success("Login realizado com sucesso!")
