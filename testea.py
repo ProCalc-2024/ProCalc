@@ -32,6 +32,7 @@ def cadastrar_usuario():
         senha = st.text_input("Senha:", type="password")
         confirmar_senha = st.text_input("Confirmar Senha:", type="password")
         submit_button = st.form_submit_button("Cadastrar")
+        Identificação = "Usuário"
 
     if submit_button:
         if senha != confirmar_senha:
@@ -39,7 +40,7 @@ def cadastrar_usuario():
         elif email in df["E-mail"].values:
             st.error("E-mail já cadastrado. Use outro e-mail.")
         else:
-            novo_usuario = pd.DataFrame({"Nome": [nome], "E-mail": [email], "Senha": [senha]})
+            novo_usuario = pd.DataFrame({"Nome": [nome], "E-mail": [email], "Identificação": [Identificação], "Senha": [senha]})
             df = pd.concat([df, novo_usuario], ignore_index=True)
 
             # Atualiza a planilha com os novos dados
