@@ -60,6 +60,8 @@ def cadastrar_usuario():
         st.rerun()
 
 def login_usuario():
+    chave = Fernet.generate_key()
+    cipher = Fernet(chave)
     # Conexão com o Google Sheets
     conn = st.connection("gsheets", type=GSheetsConnection)
     sheet = conn.read(worksheet="Usuários")
