@@ -23,9 +23,6 @@ def hash_senha(senha: str) -> str:
     hashed = bcrypt.hashpw(senha.encode(), salt)
     return hashed.decode()
 
-def verificar_senha(senha: str, hashed: str) -> bool:
-    return bcrypt.checkpw(senha.encode(), hashed.encode())
-
 def cadastrar_usuario():
     # Conexão com o Google Sheets
     conn = st.connection("gsheets", type=GSheetsConnection)
@@ -81,6 +78,14 @@ def login_usuario():
             user_data = df[df["E-mail"] == email].iloc[0]
             st.write(user_data["Senha"])
             
+            def verificar_senha(senha: str, hashed: str) -> bool:
+                return bcrypt.checkpw(senha.encode(), hashed.encode())
+                
+            if verificar_senha(senha, user_data["Senha"]):
+                st.success("Senha correta!")
+            else:
+                st.error("Senha incorreta!")
+                
             if senha == user_data["Senha"]:
                 st.success("Login realizado com sucesso!")
             else:
