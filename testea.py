@@ -80,7 +80,7 @@ def login_usuario():
             
             if senha == user_data["Senha"]:
                 st.success("Login realizado com sucesso!")
-                # st.session_state["usuario"] = user_data
+                st.session_state["usuario"] = user_data
                 # return usuario
             else:
                 st.error("Senha incorreta. Tente novamente.")
