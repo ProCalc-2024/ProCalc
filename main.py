@@ -64,7 +64,9 @@ if st.session_state["authentication_status"]:
                 case "Deletar Questão":
                     save_questoes.deletar_ques()
                     pass
-
+        with tab3:
+             
+            questoes.read_questao()
 
         with tab4:
             authenticator.logout()
