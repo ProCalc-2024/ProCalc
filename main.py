@@ -36,17 +36,23 @@ authenticator = stauth.Authenticate(
 authenticator.login()
 
 if st.session_state["authentication_status"]:
-    
+    tab_names = []
+    # Cria uma lista de nomes para as questões
+    tab_names = ["Inicio", "Questionario", "Configurações"]
+    tab_names.append("Edição")
+    # Cria as abas dinamicamente
+    tabs = st.tabs(tab_names) 
+        
     tab1, tab2, tab3, tab4 = st.tabs(["Inicio", "Edição", "Questionario", "Configurações"])
 
     with col2:
-        with tab1:
+        with tabs[0]:
                 testea.main()
 
                 # Exibir a imagem no Streamlit
                 # st.image("grafico.png", caption='Imagem do Google Drive')
             
-        with tab2:
+        with tabs[1]:
             co1, co2 = st.columns([1, 1])
 
             with co1:
@@ -64,11 +70,11 @@ if st.session_state["authentication_status"]:
                 case "Deletar Questão":
                     save_questoes.deletar_ques()
                     pass
-        with tab3:
+        with tabs[3]:
              
             questoes.read_questao()
 
-        with tab4:
+        with tabs[4]:
             authenticator.logout()
 
 
