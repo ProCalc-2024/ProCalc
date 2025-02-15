@@ -46,7 +46,7 @@ if st.session_state["authentication_status"]:
     with col2:
         with tabs[0]:
                 testea.main()
-                if st.session_state["usuario"] != None:
+                if st.session_state["usuario"] != NULL:
                         user = st.session_state["usuario"]
                         st.write(user)
                 # Exibir a imagem no Streamlit
