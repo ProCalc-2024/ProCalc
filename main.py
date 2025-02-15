@@ -74,7 +74,7 @@ if st.session_state["authentication_status"]:
              
             questoes.read_questao()
 
-        with tabs[4]:
+        with tabs[2]:
             authenticator.logout()
 
 
