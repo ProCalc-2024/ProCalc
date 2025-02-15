@@ -76,11 +76,13 @@ def login_usuario():
         if email in df["E-mail"].values:
             user_data = df[df["E-mail"] == email].iloc[0]
             sen = user_data["Senha"]
-            st.write(sen)
+            st.write(user_data)
             senha_original = cipher.decrypt(user_data["Senha"]).decode()
             
             if senha == senha_original:
                 st.success("Login realizado com sucesso!")
+                # st.session_state["usuario"] = user_data
+                # return usuario
             else:
                 st.error("Senha incorreta. Tente novamente.")
         else:
@@ -89,5 +91,6 @@ def login_usuario():
     st.write("Ainda não tem uma conta?")
     if st.button("Cadastre-se"):
         st.session_state["pagina"] = "Cadastro"
+         
         st.rerun()
 
