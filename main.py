@@ -50,7 +50,7 @@ if st.session_state["authentication_status"]:
                 # Exibir a imagem no Streamlit
                 # st.image("grafico.png", caption='Imagem do Google Drive')
             
-        with tabs[1]:
+        with tabs[3]:
             co1, co2 = st.columns([1, 1])
 
             with co1:
@@ -68,7 +68,7 @@ if st.session_state["authentication_status"]:
                 case "Deletar Questão":
                     save_questoes.deletar_ques()
                     pass
-        with tabs[3]:
+        with tabs[1]:
              
             questoes.read_questao()
 
