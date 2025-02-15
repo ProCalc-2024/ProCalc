@@ -42,8 +42,6 @@ if st.session_state["authentication_status"]:
     tab_names.append("Edição")
     # Cria as abas dinamicamente
     tabs = st.tabs(tab_names) 
-        
-    tab1, tab2, tab3, tab4 = st.tabs(["Inicio", "Edição", "Questionario", "Configurações"])
 
     with col2:
         with tabs[0]:
