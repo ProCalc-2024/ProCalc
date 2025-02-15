@@ -34,7 +34,9 @@ authenticator = stauth.Authenticate(
 )
 
 authenticator.login()
-st.write(st.session_state["usuario"])
+user = st.session_state["usuario"]
+st.write(user)
+
 if st.session_state["authentication_status"]:
     tab_names = []
     # Cria uma lista de nomes para as questões
