@@ -28,10 +28,6 @@ if st.session_state["pagina"] == "Login":
         testea.login_usuario()
 if st.session_state["pagina"] == "Cadastro":
         testea.cadastrar_usuario()
-
-log = st.session_state["pagina"]
-user = st.session_state["usuario"]
-st.write(log)
 if st.session_state["pagina"] == "Log":
     tab_names = []
     # Cria uma lista de nomes para as questões
