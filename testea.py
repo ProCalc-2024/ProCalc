@@ -16,7 +16,7 @@ def main():
     if st.session_state["pagina"] == "Cadastro":
         cadastrar_usuario()
     if st.session_state["pagina"] == "Logado":
-        st.write('ola')
+        st.write("oi")
 
 if __name__ == "__main__":
     main()
