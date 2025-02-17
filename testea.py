@@ -6,7 +6,7 @@ import numpy as np
 from cryptography.fernet import Fernet
 
 def main():
-    # Sistema de Login e Cadastro
+    #Sistema de Login e Cadastro
     if "pagina" not in st.session_state:
         st.session_state["pagina"] = "Login"
     
@@ -78,10 +78,10 @@ def login_usuario():
             sen = user_data["Senha"]
             st.write(user_data)
             
-            # Verificar a senha criptografada
-            if cipher.decrypt(sen.encode()).decode() == senha:
+            if senha == user_data["Senha"]:
                 st.success("Login realizado com sucesso!")
                 st.session_state["usuario"] = user_data
+                # return usuario
             else:
                 st.error("Senha incorreta. Tente novamente.")
         else:
@@ -90,12 +90,6 @@ def login_usuario():
     st.write("Ainda não tem uma conta?")
     if st.button("Cadastre-se"):
         st.session_state["pagina"] = "Cadastro"
+         
         st.rerun()
-
-# Verificação de 'usuario' no session_state antes de acessá-lo
-if "usuario" in st.session_state and st.session_state["usuario"] is not None:
-    # Executa a lógica do usuário
-    st.write(f"Bem-vindo, {st.session_state['usuario']['Nome']}!")
-else:
-    st.write("Você precisa fazer login ou criar uma conta.")
 
