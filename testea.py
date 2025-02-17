@@ -4,6 +4,7 @@ import gspread
 from streamlit_gsheets import GSheetsConnection
 import numpy as np
 from cryptography.fernet import Fernet
+import time
 
 def main():
     #Sistema de Login e Cadastro
@@ -85,6 +86,8 @@ def login_usuario():
                 st.toast(f':green-background[Login realizado com sucesso!]', icon='✅')
                 st.session_state["usuario"] = user_data
                 st.session_state["pagina"] == "Logado"
+                time.sleep(1)
+                
             else:
                 st.error("Senha incorreta. Tente novamente.")
         else:
