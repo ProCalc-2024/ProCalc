@@ -36,7 +36,7 @@ if st.session_state["pagina"] == "Logado":
     tabs = st.tabs(tab_names) 
 
     with col2:
-        with tabs[0]:
+        #with tabs[0]:
                 
 
                         
