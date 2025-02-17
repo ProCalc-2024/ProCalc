@@ -79,7 +79,7 @@ def login_usuario():
         if email in df["E-mail"].values:
             user_data = df[df["E-mail"] == email].iloc[0]
             sen = user_data["Senha"]
-            st.write(user_data)
+            
             
             if senha == user_data["Senha"]:
                 st.success("Login realizado com sucesso!")
