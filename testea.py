@@ -4,8 +4,8 @@ from streamlit_gsheets import GSheetsConnection
 from cryptography.fernet import Fernet
 import base64
 
-# Defina uma chave fixa (de preferência, armazene isso de forma segura)
-CHAVE_FIXA = "8zMZjvwNYwKz9SoHCrneN_HoG072ha0Teq_Wo5lia5I="  # Gere uma chave única com Fernet.generate_key() e guarde de forma segura
+
+CHAVE_FIXA = "8zMZjvwNYwKz9SoHCrneN_HoG072ha0Teq_Wo5lia5I="  
 cipher = Fernet(CHAVE_FIXA)
 
 def main():
