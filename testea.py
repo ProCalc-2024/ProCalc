@@ -48,9 +48,17 @@ def cadastrar_usuario():
                 "Identificação": [identificacao],  # Coluna de Identificação
                 "Senha": [senha_encriptada]
             })
+            # Concatenar corretamente e garantir que as colunas existam
             df = pd.concat([df, novo_usuario], ignore_index=True)
-            # Corrigir nome das colunas para manter o padrão
-            df.columns = ["Nome", "E-mail", "Identificação", "Senha"]
+
+            # Verifique o número de colunas e renomeie conforme necessário
+            expected_columns = ["Nome", "E-mail", "Identificação", "Senha"]
+            if len(df.columns) == len(expected_columns):
+                df.columns = expected_columns
+            else:
+                # Se houver mais colunas, apenas garanta que as 4 principais estão no início
+                df = df[expected_columns]
+
             conn.update(worksheet="Usuários", data=df)
             st.success("Usuário cadastrado com sucesso! Faça login agora.")
             
@@ -93,5 +101,4 @@ def login_usuario():
     if st.button("Cadastre-se"):
         st.session_state["pagina"] = "Cadastro"
         st.rerun()
-
 
