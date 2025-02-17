@@ -17,11 +17,12 @@ def main():
     if st.session_state["pagina"] == "Cadastro":
         cadastrar_usuario()
     if st.session_state["pagina"] == "Logado":
-        st.write("oi")
+        oi()
 
 #if __name__ == "__main__":
     #main()
-
+def oi()
+    st.write("oi")
 def cadastrar_usuario():
     chave = Fernet.generate_key()
     cipher = Fernet(chave)
@@ -86,8 +87,7 @@ def login_usuario():
                 st.toast(f':green-background[Login realizado com sucesso!]', icon='✅')
                 st.session_state["usuario"] = user_data
                 st.session_state["pagina"] == "Logado"
-                time.sleep(1)
-                st.rerun()
+                
             else:
                 st.error("Senha incorreta. Tente novamente.")
         else:
