@@ -77,8 +77,12 @@ def login_usuario():
     senha = st.text_input("Senha:", type="password")
     
     if st.button("Login"):
-        if email in df["E-mail"].str.strip().values:  # Remover espaços extras
-            user_data = df[df["E-mail"].str.strip() == email].iloc[0]  # Remover espaços extras para a busca
+        # Normalizando os e-mails para garantir que a comparação seja feita sem espaços e sem distinção de maiúsculas e minúsculas
+        df["E-mail"] = df["E-mail"].str.strip().str.lower()  # Remove espaços e converte para minúsculas
+        email_normalizado = email.strip().lower()  # Normaliza o e-mail inserido
+        
+        if email_normalizado in df["E-mail"].values:  # Busca pelo e-mail normalizado
+            user_data = df[df["E-mail"] == email_normalizado].iloc[0]
             senha_criptografada = user_data["Senha"]
             
             try:
