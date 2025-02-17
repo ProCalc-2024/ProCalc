@@ -64,3 +64,5 @@ if st.session_state["pagina"] == "Logado":
             questoes.read_questao()
 
         with tabs[2]:
+            st.button("logout")
+                    
