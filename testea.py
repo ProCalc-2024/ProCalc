@@ -9,6 +9,7 @@ def main():
     #Sistema de Login e Cadastro
     if "pagina" not in st.session_state:
         st.session_state["pagina"] = "Login"
+        st.session_state["usuario"] = []
     
     if st.session_state["pagina"] == "Login":
         login_usuario()
