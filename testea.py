@@ -41,12 +41,16 @@ def cadastrar_usuario():
             st.error("E-mail já cadastrado. Use outro e-mail.")
         else:
             senha_encriptada = cipher.encrypt(senha.encode()).decode()
+            identificacao = "Usuário"  # Adicionando identificação
             novo_usuario = pd.DataFrame({
                 "Nome": [nome],
                 "E-mail": [email],
+                "Identificação": [identificacao],  # Coluna de Identificação
                 "Senha": [senha_encriptada]
             })
             df = pd.concat([df, novo_usuario], ignore_index=True)
+            # Corrigir nome das colunas para manter o padrão
+            df.columns = ["Nome", "E-mail", "Identificação", "Senha"]
             conn.update(worksheet="Usuários", data=df)
             st.success("Usuário cadastrado com sucesso! Faça login agora.")
             
@@ -65,8 +69,8 @@ def login_usuario():
     senha = st.text_input("Senha:", type="password")
     
     if st.button("Login"):
-        if email in df["E-mail"].values:
-            user_data = df[df["E-mail"] == email].iloc[0]
+        if email in df["E-mail"].str.strip().values:  # Remover espaços extras
+            user_data = df[df["E-mail"].str.strip() == email].iloc[0]  # Remover espaços extras para a busca
             senha_criptografada = user_data["Senha"]
             
             try:
@@ -74,6 +78,11 @@ def login_usuario():
                 if senha == senha_decifrada:
                     st.success("Login realizado com sucesso!")
                     st.session_state["usuario"] = user_data
+                    
+                    # Exibindo todas as informações do usuário
+                    st.write(f"Nome: {user_data['Nome']}")
+                    st.write(f"E-mail: {user_data['E-mail']}")
+                    st.write(f"Identificação: {user_data['Identificação']}")
                 else:
                     st.error("Senha incorreta. Tente novamente.")
             except:
