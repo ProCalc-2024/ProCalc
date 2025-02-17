@@ -73,7 +73,7 @@ def login_usuario():
                 senha_decifrada = cipher.decrypt(senha_criptografada.encode()).decode()
                 if senha == senha_decifrada:
                     st.success("Login realizado com sucesso!")
-                    st.session_state["usuario"] = user_data
+                    st.session_state["usuario"] = user_data  # Define a chave "usuario"
                 else:
                     st.error("Senha incorreta. Tente novamente.")
             except:
@@ -84,4 +84,11 @@ def login_usuario():
     if st.button("Cadastre-se"):
         st.session_state["pagina"] = "Cadastro"
         st.rerun()
+
+    # Verifique se o usuário está autenticado antes de acessar a chave "usuario"
+    if "usuario" in st.session_state and st.session_state["usuario"] is not None:
+        st.write(f"Bem-vindo, {st.session_state['usuario']['Nome']}")
+    else:
+        st.warning("Por favor, faça login.")
+
 
