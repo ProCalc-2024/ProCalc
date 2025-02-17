@@ -68,7 +68,7 @@ def login_usuario():
     if st.button("Login"):
         if email in df["E-mail"].values:
             user_data = df[df["E-mail"] == email].iloc[0]
-            
+            st.write(user_data)
             if senha == user_data["Senha"]:
                 st.toast(f':green-background[Login realizado com sucesso!]', icon='✅')
                 st.session_state["usuario"] = user_data
