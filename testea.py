@@ -18,8 +18,8 @@ def main():
     if st.session_state["pagina"] == "Logado":
         st.write("oi")
 
-if __name__ == "__main__":
-    main()
+#if __name__ == "__main__":
+    #main()
 
 def cadastrar_usuario():
     chave = Fernet.generate_key()
