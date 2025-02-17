@@ -40,12 +40,9 @@ if st.session_state["pagina"] == "Log":
     tabs = st.tabs(tab_names) 
 
     with col2:
-        #with tabs[0]:
-                
-
-                        
-                # Exibir a imagem no Streamlit
-                # st.image("grafico.png", caption='Imagem do Google Drive')
+        #with tabs[0]:        
+        # Exibir a imagem no Streamlit
+        # st.image("grafico.png", caption='Imagem do Google Drive')
         if user["Identificação"] == "Administrador" or user["Identificação"] == "Moderador":      
                 with tabs[3]:
                     co1, co2 = st.columns([1, 1])
@@ -70,5 +67,9 @@ if st.session_state["pagina"] == "Log":
             questoes.read_questao()
 
         with tabs[2]:
-            st.button("logout")
+            if st.button("logout"):
+                    st.session_state["usuario"] = []
+                    st.session_state["pagina"] = "Login"
+
+                    st.rerun()
                     
