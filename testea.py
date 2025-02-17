@@ -1,12 +1,14 @@
 import streamlit as st
 import pandas as pd
-import gspread
 from streamlit_gsheets import GSheetsConnection
-import numpy as np
 from cryptography.fernet import Fernet
+import base64
+
+# Defina uma chave fixa (de preferência, armazene isso de forma segura)
+CHAVE_FIXA = "8zMZjvwNYwKz9SoHCrneN_HoG072ha0Teq_Wo5lia5I="  # Gere uma chave única com Fernet.generate_key() e guarde de forma segura
+cipher = Fernet(CHAVE_FIXA)
 
 def main():
-    #Sistema de Login e Cadastro
     if "pagina" not in st.session_state:
         st.session_state["pagina"] = "Login"
     
@@ -19,40 +21,33 @@ if __name__ == "__main__":
     main()
 
 def cadastrar_usuario():
-    chave = Fernet.generate_key()
-    cipher = Fernet(chave)
-    # Conexão com o Google Sheets
     conn = st.connection("gsheets", type=GSheetsConnection)
     sheet = conn.read(worksheet="Usuários")
     df = pd.DataFrame(sheet)
 
     st.subheader("Cadastro de Usuário")
 
-    # Campos de entrada para nome, e-mail e senha
     with st.form("cadastro_usuario"):
         nome = st.text_input("Nome:")
         email = st.text_input("E-mail:")
         senha = st.text_input("Senha:", type="password")
         confirmar_senha = st.text_input("Confirmar Senha:", type="password")
         submit_button = st.form_submit_button("Cadastrar")
-        Identificação = "Usuário"
-        senha_encriptada = cipher.encrypt(senha.encode())
-        st.write(f"Senha criptografada: {senha_encriptada}")
-        
+
     if submit_button:
         if senha != confirmar_senha:
             st.error("As senhas não coincidem. Tente novamente.")
         elif email in df["E-mail"].values:
             st.error("E-mail já cadastrado. Use outro e-mail.")
         else:
-            novo_usuario = pd.DataFrame({"Nome": [nome], "E-mail": [email], "Identificação": [Identificação], "Senha": [senha_encriptada]})
+            senha_encriptada = cipher.encrypt(senha.encode()).decode()
+            novo_usuario = pd.DataFrame({
+                "Nome": [nome],
+                "E-mail": [email],
+                "Senha": [senha_encriptada]
+            })
             df = pd.concat([df, novo_usuario], ignore_index=True)
-
-            # Atualiza a planilha com os novos dados
             conn.update(worksheet="Usuários", data=df)
-
-            conn.read(worksheet="Usuários", ttl="1s")
-            
             st.success("Usuário cadastrado com sucesso! Faça login agora.")
             
     if st.button("Ir para Login"):
@@ -60,9 +55,6 @@ def cadastrar_usuario():
         st.rerun()
 
 def login_usuario():
-    chave = Fernet.generate_key()
-    cipher = Fernet(chave)
-    # Conexão com o Google Sheets
     conn = st.connection("gsheets", type=GSheetsConnection)
     sheet = conn.read(worksheet="Usuários")
     df = pd.DataFrame(sheet)
@@ -75,22 +67,21 @@ def login_usuario():
     if st.button("Login"):
         if email in df["E-mail"].values:
             user_data = df[df["E-mail"] == email].iloc[0]
-            sen = user_data["Senha"]
-            st.write(user_data)
+            senha_criptografada = user_data["Senha"]
             
-            if senha == user_data["Senha"]:
-                st.success("Login realizado com sucesso!")
-                st.session_state["usuario"] = user_data
-                # return usuario
-            else:
-                st.error("Senha incorreta. Tente novamente.")
+            try:
+                senha_decifrada = cipher.decrypt(senha_criptografada.encode()).decode()
+                if senha == senha_decifrada:
+                    st.success("Login realizado com sucesso!")
+                    st.session_state["usuario"] = user_data
+                else:
+                    st.error("Senha incorreta. Tente novamente.")
+            except:
+                st.error("Erro ao processar a senha. Tente novamente.")
         else:
             st.error("E-mail não encontrado.")
     
-    st.write("Ainda não tem uma conta?")
     if st.button("Cadastre-se"):
         st.session_state["pagina"] = "Cadastro"
-         
         st.rerun()
-
 
