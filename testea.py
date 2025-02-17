@@ -15,6 +15,8 @@ def main():
         login_usuario()
     if st.session_state["pagina"] == "Cadastro":
         cadastrar_usuario()
+    if st.session_state["pagina"] == "Logado":
+        st.write('ola')
 
 if __name__ == "__main__":
     main()
@@ -82,6 +84,7 @@ def login_usuario():
             if senha == user_data["Senha"]:
                 st.success("Login realizado com sucesso!")
                 st.session_state["usuario"] = user_data
+                st.session_state["pagina"] == "Logado"
                 # return usuario
             else:
                 st.error("Senha incorreta. Tente novamente.")
