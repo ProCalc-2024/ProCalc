@@ -11,18 +11,7 @@ def main():
     if "pagina" not in st.session_state:
         st.session_state["pagina"] = "Login"
         st.session_state["usuario"] = []
-    
-    if st.session_state["pagina"] == "Login":
-        login_usuario()
-    if st.session_state["pagina"] == "Cadastro":
-        cadastrar_usuario()
-    if st.session_state["pagina"] == "Log":
-        oi()
 
-if __name__ == "__main__":
-    main()
-def oi():
-    st.write("oi")
 def cadastrar_usuario():
     chave = Fernet.generate_key()
     cipher = Fernet(chave)
