@@ -87,6 +87,7 @@ def login_usuario():
                 st.toast(f':green-background[Login realizado com sucesso!]', icon='✅')
                 st.session_state["usuario"] = user_data
                 st.session_state["pagina"] == "Logado"
+                st.rerun
                 
             else:
                 st.error("Senha incorreta. Tente novamente.")
