@@ -46,25 +46,25 @@ if st.session_state["pagina"] == "Log":
                         
                 # Exibir a imagem no Streamlit
                 # st.image("grafico.png", caption='Imagem do Google Drive')
-            
-        with tabs[3]:
-            co1, co2 = st.columns([1, 1])
-
-            with co1:
-        # Adiciona "Editar Questões" como uma opção no selectbox
-                option = st.selectbox("", ("Adicionar Questões", "Adicionar Materias", "Editar Questões", "Deletar Questão"), 
-                              index=None, placeholder="Escolha uma ação")
-
-            match option:
-                case "Adicionar Questões":
-                    save_questoes.inserir_ques()
-                case "Adicionar Materias":
-                    save_questoes.inserir_assun()
-                case "Editar Questões":
-                    save_questoes.editar_ques()  # Chama a função para editar questões
-                case "Deletar Questão":
-                    save_questoes.deletar_ques()
-                    pass
+        if user["Identificação"] == "Administrador" or user["Identificação"] == "Moderador":      
+                with tabs[3]:
+                    co1, co2 = st.columns([1, 1])
+        
+                    with co1:
+                # Adiciona "Editar Questões" como uma opção no selectbox
+                        option = st.selectbox("", ("Adicionar Questões", "Adicionar Materias", "Editar Questões", "Deletar Questão"), 
+                                      index=None, placeholder="Escolha uma ação")
+        
+                    match option:
+                        case "Adicionar Questões":
+                            save_questoes.inserir_ques()
+                        case "Adicionar Materias":
+                            save_questoes.inserir_assun()
+                        case "Editar Questões":
+                            save_questoes.editar_ques()  # Chama a função para editar questões
+                        case "Deletar Questão":
+                            save_questoes.deletar_ques()
+                            pass
         with tabs[1]:
              
             questoes.read_questao()
