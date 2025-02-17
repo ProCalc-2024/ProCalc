@@ -29,8 +29,8 @@ if st.session_state["pagina"] == "Logado":
     tab_names = []
     # Cria uma lista de nomes para as questões
     tab_names = ["Inicio", "Questionario", "Configurações"]
-    if         
-        tab_names.append("Edição")
+           
+    tab_names.append("Edição")
     # Cria as abas dinamicamente
     tabs = st.tabs(tab_names) 
 
