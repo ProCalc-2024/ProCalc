@@ -21,7 +21,7 @@ def main():
 
 #if __name__ == "__main__":
     #main()
-def oi()
+def oi():
     st.write("oi")
 def cadastrar_usuario():
     chave = Fernet.generate_key()
