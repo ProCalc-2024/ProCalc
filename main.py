@@ -26,7 +26,7 @@ testea.main()
 
 user = st.session_state["usuario"]
 st.write(user)
-if st.session_state["pagina"] == "Logado":
+if st.session_state["pagina"] == "Log":
     tab_names = []
     # Cria uma lista de nomes para as questões
     tab_names = ["Inicio", "Questionario", "Configurações"]
