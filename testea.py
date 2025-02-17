@@ -92,3 +92,10 @@ def login_usuario():
         st.session_state["pagina"] = "Cadastro"
         st.rerun()
 
+# Verificação de 'usuario' no session_state antes de acessá-lo
+if "usuario" in st.session_state and st.session_state["usuario"] is not None:
+    # Executa a lógica do usuário
+    st.write(f"Bem-vindo, {st.session_state['usuario']['Nome']}!")
+else:
+    st.write("Você precisa fazer login ou criar uma conta.")
+
