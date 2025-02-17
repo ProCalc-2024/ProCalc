@@ -85,7 +85,6 @@ def login_usuario():
                 st.success("Login realizado com sucesso!")
                 st.session_state["usuario"] = user_data
                 st.session_state["pagina"] == "Logado"
-                st.rerun()
                 # return usuario
             else:
                 st.error("Senha incorreta. Tente novamente.")
