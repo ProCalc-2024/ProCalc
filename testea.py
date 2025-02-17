@@ -40,7 +40,7 @@ def cadastrar_usuario():
         submit_button = st.form_submit_button("Cadastrar")
         Identificação = "Usuário"
         senha_encriptada = cipher.encrypt(senha.encode())
-        st.write(f"Senha criptografada: {senha_encriptada}")
+        #st.write(f"Senha criptografada: {senha_encriptada}")
         
     if submit_button:
         if senha != confirmar_senha:
