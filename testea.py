@@ -68,14 +68,12 @@ def login_usuario():
     if st.button("Login"):
         if email in df["E-mail"].values:
             user_data = df[df["E-mail"] == email].iloc[0]
-            sen = user_data["Senha"]
-            
             
             if senha == user_data["Senha"]:
                 st.toast(f':green-background[Login realizado com sucesso!]', icon='✅')
                 st.session_state["usuario"] = user_data
                 st.session_state["pagina"] = "Log"
-                st.rerun
+                st.rerun()
                 
             else:
                 st.error("Senha incorreta. Tente novamente.")
