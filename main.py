@@ -24,6 +24,8 @@ col1, col2, col3 = st.columns([1, 4, 1])
 
 testea.main()
 
+user = st.session_state["usuario"]
+
 if st.session_state["pagina"] == "Login":
         testea.login_usuario()
 if st.session_state["pagina"] == "Cadastro":
@@ -32,8 +34,8 @@ if st.session_state["pagina"] == "Log":
     tab_names = []
     # Cria uma lista de nomes para as questões
     tab_names = ["Inicio", "Questionario", "Configurações"]
-           
-    tab_names.append("Edição")
+    if user["Identificação"] == "Administrador" or user["Identificação"] == "Moderador":   
+            tab_names.append("Edição")
     # Cria as abas dinamicamente
     tabs = st.tabs(tab_names) 
 
