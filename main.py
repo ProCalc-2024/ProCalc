@@ -22,6 +22,8 @@ local_css(r"styles.css")
 
 col1, col2, col3 = st.columns([1, 4, 1])
 
+testea.main()
+
 if st.session_state["pagina"] == "Logado":
     tab_names = []
     # Cria uma lista de nomes para as questões
@@ -33,7 +35,7 @@ if st.session_state["pagina"] == "Logado":
 
     with col2:
         with tabs[0]:
-                testea.main()
+                
                 if st.session_state["usuario"] != None:
                         user = st.session_state["usuario"]
                         st.write(user)
