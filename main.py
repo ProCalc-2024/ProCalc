@@ -25,21 +25,12 @@ with open('config.yaml') as file:
 
 col1, col2, col3 = st.columns([1, 4, 1])
 
-authenticator = stauth.Authenticate(
-    config['credentials'],
-    config['cookie']['name'],
-    config['cookie']['key'],
-    config['cookie']['expiry_days'],
-    config['pre-authorized']
-)
-
-authenticator.login()
-
-if st.session_state["authentication_status"]:
+if st.session_state["pagina"] == "Logado":
     tab_names = []
     # Cria uma lista de nomes para as questões
     tab_names = ["Inicio", "Questionario", "Configurações"]
-    tab_names.append("Edição")
+    if         
+        tab_names.append("Edição")
     # Cria as abas dinamicamente
     tabs = st.tabs(tab_names) 
 
@@ -48,7 +39,7 @@ if st.session_state["authentication_status"]:
                 testea.main()
                 if st.session_state["usuario"] != None:
                         user = st.session_state["usuario"]
-                        st.write("usuario")
+                        st.write(user)
                         
                 # Exibir a imagem no Streamlit
                 # st.image("grafico.png", caption='Imagem do Google Drive')
@@ -76,10 +67,9 @@ if st.session_state["authentication_status"]:
             questoes.read_questao()
 
         with tabs[2]:
-            authenticator.logout()
 
 
-elif st.session_state["authentication_status"] is False:
+elif st.session_state["pagina"] == "Login":
     st.error('O nome de usuário/senha está incorreto')
 elif st.session_state["authentication_status"] is None:
     st.warning('Por favor insira seu nome de usuário e senha')
