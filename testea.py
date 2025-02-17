@@ -12,7 +12,7 @@ def main():
     
     if st.session_state["pagina"] == "Login":
         login_usuario()
-    else:
+    if st.session_state["pagina"] == "Cadastro":
         cadastrar_usuario()
 
 if __name__ == "__main__":
