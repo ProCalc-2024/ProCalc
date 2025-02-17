@@ -60,7 +60,7 @@ def cadastrar_usuario():
             
     if st.button("Ir para Login"):
         st.session_state["pagina"] = "Login"
-        st.rerun()
+        
 
 def login_usuario():
     chave = Fernet.generate_key()
@@ -96,4 +96,4 @@ def login_usuario():
     if st.button("Cadastre-se"):
         st.session_state["pagina"] = "Cadastro"
          
-        st.rerun()
+        
