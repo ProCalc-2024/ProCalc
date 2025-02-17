@@ -82,7 +82,7 @@ def login_usuario():
             
             
             if senha == user_data["Senha"]:
-                st.success("Login realizado com sucesso!")
+                st.toast(f':green-background[Login realizado com sucesso!]', icon='✅')
                 st.session_state["usuario"] = user_data
                 st.session_state["pagina"] == "Logado"
             else:
