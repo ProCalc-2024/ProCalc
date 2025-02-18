@@ -36,14 +36,14 @@ def cadastrar_usuario():
         # Validação
         if senha and len(senha) < 5:
             st.error("A senha deve ter pelo menos 5 caracteres!")
-        if senha != confirmar_senha:
+        elif senha != confirmar_senha:
             st.error("As senhas não coincidem. Tente novamente.")
         elif email in df["E-mail"].values:
             st.error("E-mail já cadastrado. Use outro e-mail.")
         else:
             novo_usuario = pd.DataFrame({"Nome": [nome], "E-mail": [email], "Identificação": [Identificação], "Senha": [senha]})
             df = pd.concat([df, novo_usuario], ignore_index=True)
-
+            
             # Atualiza a planilha com os novos dados
             conn.update(worksheet="Usuários", data=df)
 
