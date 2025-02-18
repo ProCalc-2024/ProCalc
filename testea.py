@@ -33,6 +33,9 @@ def cadastrar_usuario():
         #st.write(f"Senha criptografada: {senha_encriptada}")
         
     if submit_button:
+        # Validação
+        if senha and len(senha) < 5:
+            st.error("A senha deve ter pelo menos 5 caracteres!")
         if senha != confirmar_senha:
             st.error("As senhas não coincidem. Tente novamente.")
         elif email in df["E-mail"].values:
