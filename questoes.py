@@ -117,7 +117,7 @@ def read_questao():
             
             st.write(questao["Enunciado"])
             
-            with st.expander("Visualizar Imagem"):
+            with st.expander("Visualizar imagem"):
                 # Nome do arquivo (você pode definir dinamicamente)
                 file_name = questao["Imagem"]
                 
@@ -134,7 +134,7 @@ def read_questao():
                         image_data = base64.b64decode(image_base64)  # Decodifica de Base64 para bytes
                 
                         # Exibir a imagem no Streamlit
-                        st.image(image_data, caption=file_name, use_column_width=True)
+                        st.image(image_data, caption="", use_column_width=True)
                     else:
                         st.error(f"Erro ao buscar a imagem: {response.json()}")
             
