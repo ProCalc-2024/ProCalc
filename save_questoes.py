@@ -138,21 +138,8 @@ def inserir_ques():
             )
             
             st.success(':green-background[Questão salva]', icon='✔️')
-            coluna = 'Imagem'
-            valor = uploaded_file.name
-            # Verifica se a coluna existe no DataFrame
-            if coluna in dict.columns:
-                # Converte a coluna para string (evita problemas com NaN)
-                df[coluna] = dict[coluna].astype(str)
-                
-                # Verifica se o valor está presente
-                if valor in df[coluna].values:
-                    st.write(f"A imagem '{valor}' já existe na coluna '{coluna}'.")
-                else:
-                    st.write(f"A imagem '{valor}' **não** existe na coluna '{coluna}'.")
-            else:
-                st.write(f"A coluna '{coluna}' não existe na planilha.")
-            
+        
+            st.rerun()
 
 def inserir_assun():    
     
