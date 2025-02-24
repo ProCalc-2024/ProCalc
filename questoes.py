@@ -118,7 +118,7 @@ def read_questao():
             st.write(questao["Enunciado"])
             # Nome do arquivo 
             file_name = questao["Imagem"]
-            st.write(file_name)    
+     
             if pd.notna(file_name) and file_name != "":
                 with st.expander("Visualizar imagem"):
     
