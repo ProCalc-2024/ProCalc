@@ -150,7 +150,7 @@ def inserir_assun():
 
     st.title("Novo Assunto")
     
-    assun = st.text_area("Assunto", placeholder= "Digite aqui o enunciado da questão") 
+    assun = st.text_area("Assunto:", placeholder= "Digite aqui o novo assunto") 
     
     new = pd.DataFrame({
         'Materia': [assun]
