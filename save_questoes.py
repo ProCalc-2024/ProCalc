@@ -100,9 +100,9 @@ def inserir_ques():
             st.toast(':red-background[Resposta Errada]', icon="⚠️")
         
     if st.button("Salvar"):
-        
-        if 'Imagem' in dict.columns and dict['Imagem'].isin([uploaded_file.name]).any():
-            st.write(f"O valor '{valor}' já existe na coluna '{coluna}'.")
+        # existe 
+        if "Imagem" in dict.columns and dict["Imagem"].isin([uploaded_file.name]).any():
+            st.write(f"o nome da Figura '{valor}' já existe.")
         else: 
             if uploaded_file is not None:
             
