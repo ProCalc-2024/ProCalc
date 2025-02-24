@@ -100,36 +100,33 @@ def inserir_ques():
             st.toast(':red-background[Resposta Errada]', icon="⚠️")
         
     if st.button("Salvar"):
-        # existe 
-        if dict['Imagem'].isin([uploaded_file.name]).any():
-            st.write(f"o nome da Figura '{valor}' já existe.")
-        else: 
-            if uploaded_file is not None:
+
+        if uploaded_file is not None:
             
-                image_data = uploaded_file.getvalue()  # Lê os bytes da imagem
-                image_base64 = base64.b64encode(image_data).decode()  # Converte para Base64
+            image_data = uploaded_file.getvalue()  # Lê os bytes da imagem
+            image_base64 = base64.b64encode(image_data).decode()  # Converte para Base64
                 
-                file_path = f"imagens/{uploaded_file.name}"  # Caminho no repositório
+            file_path = f"imagens/{uploaded_file.name}"  # Caminho no repositório
                 
-                novo['Imagem'] = [f"{uploaded_file.name}"]
+            novo['Imagem'] = [f"{uploaded_file.name}"]
                 
-                url = f"https://api.github.com/repos/{REPO_OWNER}/{REPO_NAME}/contents/{file_path}"
+            url = f"https://api.github.com/repos/{REPO_OWNER}/{REPO_NAME}/contents/{file_path}"
                 
-                payload = {
-                    "message": f"Adicionando {uploaded_file.name} via Streamlit",
-                    "content": image_base64,
-                    "branch": BRANCH
-                }
+            payload = {
+                "message": f"Adicionando {uploaded_file.name} via Streamlit",
+                "content": image_base64,
+                "branch": BRANCH
+            }
             
-                headers = {"Authorization": f"token {GITHUB_TOKEN}"}
+            headers = {"Authorization": f"token {GITHUB_TOKEN}"}
             
-                response = requests.put(url, json=payload, headers=headers)
+            response = requests.put(url, json=payload, headers=headers)
             
-                if response.status_code == 201:
-                    st.success(f"Imagem Salva no GITHUB! 📤")
-                    st.markdown(f"[🔗 Ver imagem no GitHub]({response.json()['content']['html_url']})")
-                else:
-                    st.error(f"Erro ao enviar a imagem: {response.json()}")
+            if response.status_code == 201:
+                st.success(f"Imagem Salva no GITHUB! 📤")
+                st.markdown(f"[🔗 Ver imagem no GitHub]({response.json()['content']['html_url']})")
+            else:
+                st.error(f"Erro ao enviar a imagem: {response.json()}")
             
             combined_data = pd.concat([existing_data, novo], ignore_index=True)
             
@@ -141,8 +138,21 @@ def inserir_ques():
             )
             
             st.success(':green-background[Questão salva]', icon='✔️')
+            coluna = "Imagem"
+            valor = uploaded_file.name
+            # Verifica se a coluna existe no DataFrame
+            if coluna in df.columns:
+                # Converte a coluna para string (evita problemas com NaN)
+                df[coluna] = df[coluna].astype(str)
+                
+                # Verifica se o valor está presente
+                if valor in df[coluna].values:
+                    st.write(f"A imagem '{valor}' já existe na coluna '{coluna}'.")
+                else:
+                    st.write(f"A imagem '{valor}' **não** existe na coluna '{coluna}'.")
+            else:
+                st.write(f"A coluna '{coluna}' não existe na planilha.")
             
-            st.rerun()
 
 def inserir_assun():    
     
