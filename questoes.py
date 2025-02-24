@@ -13,6 +13,12 @@ def local_css(file_name):
 local_css(r"styles_questao.css")
 
 def read_questao():
+    # Carregar configurações do secrets para o github
+    GITHUB_TOKEN = st.secrets["github"]["token"]
+    REPO_OWNER = st.secrets["github"]["repo_owner"]
+    REPO_NAME = st.secrets["github"]["repo_name"]
+    BRANCH = st.secrets["github"]["branch"]
+    
     conn = st.connection("gsheets", type=GSheetsConnection)
     sheet = conn.read(worksheet="Questões")
     dict = pd.DataFrame(sheet)
@@ -108,10 +114,10 @@ def read_questao():
             questao = lista_ques[b1[i]]
             
             st.write(questao["Enunciado"])
-            st.write(questao["Imagem"])
+            
             with st.expander("Visualizar Imagem"):
                 # Nome do arquivo (você pode definir dinamicamente)
-                file_name = ""
+                file_name = questao["Imagem"]
                 
                 if file_name:
                     file_path = f"imagens/{file_name}"
