@@ -3,6 +3,9 @@ import pandas as pd
 import gspread
 from streamlit_gsheets import GSheetsConnection
 import numpy as np
+import requests
+import base64
+
 def inserir_ques():   
     # Carregar configurações do secrets
     GITHUB_TOKEN = st.secrets["github"]["token"]
