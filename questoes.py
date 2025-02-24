@@ -35,13 +35,13 @@ def read_questao():
     disabled3 = st.session_state["disabledtime"]
     
     # lista de matérias
-    lista = list(set(dict["Matéria"]))
+    lista = list(set(dict["materia"]))
     
     with col1:       
         materia = st.selectbox("Selecione um assunto", lista,disabled=disabled3)    
 
     # lista de questões de acordo com a matéria escolhida
-    lista_ques = [linha for linha in dict.iloc if linha["Matéria"] == materia]
+    lista_ques = [linha for linha in dict.iloc if linha["materia"] == materia]
 
     # Número de questões
     n = len(lista_ques)
