@@ -52,7 +52,7 @@ def inserir_ques():
     })
       
     lista_ques = []
-    with st.expander("Visualizar Questão"):
+    with st.expander("Visualizar questão"):
         
         st.subheader('', divider = 'gray')
     
