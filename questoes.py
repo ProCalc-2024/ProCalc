@@ -111,7 +111,7 @@ def read_questao():
             st.write(questao["Imagem"])
             with st.expander("Visualizar Imagem"):
                 # Nome do arquivo (você pode definir dinamicamente)
-                file_name = st.text_input("Digite o nome do arquivo (ex: minha_imagem.jpg)")
+                file_name = ""
                 
                 if file_name:
                     file_path = f"imagens/{file_name}"
