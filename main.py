@@ -49,7 +49,7 @@ if st.session_state["pagina"] == "Log":
         
                     with co1:
                 # Adiciona "Editar Questões" como uma opção no selectbox
-                        option = st.selectbox("", ("Adicionar questões", "Adicionar materias", "Editar Questões", "Deletar Questão"), 
+                        option = st.selectbox("", ("Adicionar Questões", "Adicionar Materias", "Editar Questões", "Deletar Questão"), 
                                       index=None, placeholder="Escolha uma ação")
         
                     match option:
