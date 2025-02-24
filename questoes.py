@@ -119,7 +119,7 @@ def read_questao():
             # Nome do arquivo 
             file_name = questao["Imagem"]
             st.write(file_name)    
-            if file_name is not None:
+            if file_name:
                 with st.expander("Visualizar imagem"):
     
                     file_path = f"imagens/{file_name}"
