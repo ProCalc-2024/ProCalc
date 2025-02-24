@@ -7,7 +7,7 @@ import requests
 import base64
 
 def inserir_ques():   
-    # Carregar configurações do secrets
+    # Carregar configurações do secrets para o github
     GITHUB_TOKEN = st.secrets["github"]["token"]
     REPO_OWNER = st.secrets["github"]["repo_owner"]
     REPO_NAME = st.secrets["github"]["repo_name"]
@@ -15,31 +15,6 @@ def inserir_ques():
     
     # Upload da imagem pelo usuário
     uploaded_file = st.file_uploader("Escolha uma imagem...", type=["jpg", "png", "jpeg"])
-    
-    if uploaded_file is not None:
-        st.image(uploaded_file, caption="Imagem carregada.", use_column_width=True)
-    
-        image_data = uploaded_file.getvalue()  # Lê os bytes da imagem
-        image_base64 = base64.b64encode(image_data).decode()  # Converte para Base64
-        
-        file_path = f"imagens/{uploaded_file.name}"  # Caminho no repositório
-        url = f"https://api.github.com/repos/{REPO_OWNER}/{REPO_NAME}/contents/{file_path}"
-    
-        payload = {
-            "message": f"Adicionando {uploaded_file.name} via Streamlit",
-            "content": image_base64,
-            "branch": BRANCH
-        }
-    
-        headers = {"Authorization": f"token {GITHUB_TOKEN}"}
-    
-        response = requests.put(url, json=payload, headers=headers)
-    
-        if response.status_code == 201:
-            st.success(f"Imagem enviada para o GitHub! 📤")
-            st.markdown(f"[🔗 Ver imagem no GitHub]({response.json()['content']['html_url']})")
-        else:
-            st.error(f"Erro ao enviar a imagem: {response.json()}")
         
     conn = st.connection("gsheets", type=GSheetsConnection)
     sheet = conn.read(worksheet="Materias")
@@ -126,7 +101,30 @@ def inserir_ques():
             st.toast(':red-background[Resposta Errada]', icon="⚠️")
         
     if st.button("Salvar"):   
+        if uploaded_file is not None:
+            st.image(uploaded_file, caption="Imagem carregada.", use_column_width=True)
         
+            image_data = uploaded_file.getvalue()  # Lê os bytes da imagem
+            image_base64 = base64.b64encode(image_data).decode()  # Converte para Base64
+            
+            file_path = f"imagens/{uploaded_file.name}"  # Caminho no repositório
+            url = f"https://api.github.com/repos/{REPO_OWNER}/{REPO_NAME}/contents/{file_path}"
+        
+            payload = {
+                "message": f"Adicionando {uploaded_file.name} via Streamlit",
+                "content": image_base64,
+                "branch": BRANCH
+            }
+        
+            headers = {"Authorization": f"token {GITHUB_TOKEN}"}
+        
+            response = requests.put(url, json=payload, headers=headers)
+        
+            if response.status_code == 201:
+                st.success(f"Imagem Salva no GITHUB! 📤")
+                st.markdown(f"[🔗 Ver imagem no GitHub]({response.json()['content']['html_url']})")
+            else:
+                st.error(f"Erro ao enviar a imagem: {response.json()}")
             
         conn.update(worksheet="Questões", data=combined_data)
        
