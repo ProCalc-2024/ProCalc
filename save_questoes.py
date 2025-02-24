@@ -101,7 +101,7 @@ def inserir_ques():
         
     if st.button("Salvar"):
         # existe 
-        if "Imagem" in dict.columns and dict["Imagem"].isin([uploaded_file.name]).any():
+        if dict['Imagem'].isin([uploaded_file.name]).any():
             st.write(f"o nome da Figura '{valor}' já existe.")
         else: 
             if uploaded_file is not None:
