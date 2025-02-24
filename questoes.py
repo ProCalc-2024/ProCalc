@@ -14,7 +14,7 @@ local_css(r"styles_questao.css")
 
 def read_questao():
     conn = st.connection("gsheets", type=GSheetsConnection)
-    sheet = conn.read(worksheet="Questões")
+    sheet = conn.read(worksheet="questoes")
     dict = pd.DataFrame(sheet)
 
     col1, col2 = st.columns([1, 1])
