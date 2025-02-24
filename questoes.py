@@ -153,11 +153,11 @@ def read_questao():
                     
                     if resposta[i] == True:
                                 
-                        st.success(f'A resposta correta é {questao["Alternativa_A"]}', icon="✅")
+                        st.success(f'A resposta correta e {questao["Alternativa_A"]}', icon="✅")
                  
                     if resposta[i] == False:  
                 
-                        st.error(f'A resposta correta é {questao["Alternativa_A"]}', icon="🚨")
+                        st.error(f'A resposta correta e {questao["Alternativa_A"]}', icon="🚨")
     
     with tabs[numero+1]:
         if botao:
@@ -202,11 +202,11 @@ def read_questao():
                     
                     if resposta[i] == True:
                                 
-                        st.success(f'A resposta correta é {questao["Alternativa_A"]}', icon="✅")
+                        st.success(f'A resposta correta e {questao["Alternativa_A"]}', icon="✅")
                  
                     if resposta[i] == False:  
                 
-                        st.error(f'A resposta correta é {questao["Alternativa_A"]}', icon="🚨")
+                        st.error(f'A resposta correta e {questao["Alternativa_A"]}', icon="🚨")
                     res[i] = True
 
     with tabs[numero+1]:   
