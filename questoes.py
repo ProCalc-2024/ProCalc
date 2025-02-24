@@ -35,13 +35,13 @@ def read_questao():
     disabled3 = st.session_state["disabledtime"]
     
     # lista de matérias
-    lista = list(set(dict["Materia"]))
+    lista = list(set(dict["Matéria"]))
     
     with col1:       
         materia = st.selectbox("Selecione um assunto", lista,disabled=disabled3)    
 
     # lista de questões de acordo com a matéria escolhida
-    lista_ques = [linha for linha in dict.iloc if linha["Materia"] == materia]
+    lista_ques = [linha for linha in dict.iloc if linha["Matéria"] == materia]
 
     # Número de questões
     n = len(lista_ques)
@@ -153,11 +153,11 @@ def read_questao():
                     
                     if resposta[i] == True:
                                 
-                        st.success(f'A resposta correta e {questao["Alternativa_A"]}', icon="✅")
+                        st.success(f'A resposta correta é {questao["Alternativa_A"]}', icon="✅")
                  
                     if resposta[i] == False:  
                 
-                        st.error(f'A resposta correta e {questao["Alternativa_A"]}', icon="🚨")
+                        st.error(f'A resposta correta é {questao["Alternativa_A"]}', icon="🚨")
     
     with tabs[numero+1]:
         if botao:
@@ -202,11 +202,11 @@ def read_questao():
                     
                     if resposta[i] == True:
                                 
-                        st.success(f'A resposta correta e {questao["Alternativa_A"]}', icon="✅")
+                        st.success(f'A resposta correta é {questao["Alternativa_A"]}', icon="✅")
                  
                     if resposta[i] == False:  
                 
-                        st.error(f'A resposta correta e {questao["Alternativa_A"]}', icon="🚨")
+                        st.error(f'A resposta correta é {questao["Alternativa_A"]}', icon="🚨")
                     res[i] = True
 
     with tabs[numero+1]:   
