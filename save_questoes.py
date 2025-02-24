@@ -14,7 +14,7 @@ def inserir_ques():
     BRANCH = st.secrets["github"]["branch"]
     
     # Upload da imagem pelo usuário
-    uploaded_file = st.file_uploader("Insira uma imagem", type=["jpg", "png", "jpeg"])
+    uploaded_file = st.file_uploader("Insira uma imagem:", type=["jpg", "png", "jpeg"])
         
     conn = st.connection("gsheets", type=GSheetsConnection)
     sheet = conn.read(worksheet="Materias")
@@ -150,7 +150,7 @@ def inserir_assun():
 
     st.title("Novo Assunto")
     
-    assun = st.text_area("assunto", placeholder= "Digite aqui o enunciado da questão") 
+    assun = st.text_area("Assunto", placeholder= "Digite aqui o enunciado da questão") 
     
     new = pd.DataFrame({
         'Materia': [assun]
@@ -203,11 +203,11 @@ def editar_ques():
     
     descricao = st.text_input("Descrição", value=questao_atual["Descrição"])
     enunciado = st.text_area("Enunciado", value=questao_atual["Enunciado"])
-    letra_a = st.text_input("Resposta1", value=questao_atual["Alternativa_A"])
-    letra_b = st.text_input("Resposta2", value=questao_atual["Alternativa_B"])
-    letra_c = st.text_input("Resposta3", value=questao_atual["Alternativa_C"])
-    letra_d = st.text_input("Resposta4", value=questao_atual["Alternativa_D"])
-    letra_e = st.text_input("Resposta5", value=questao_atual["Alternativa_E"])
+    letra_a = st.text_input("Resposta 1", value=questao_atual["Alternativa_A"])
+    letra_b = st.text_input("Resposta 2", value=questao_atual["Alternativa_B"])
+    letra_c = st.text_input("Resposta 3", value=questao_atual["Alternativa_C"])
+    letra_d = st.text_input("Resposta 4", value=questao_atual["Alternativa_D"])
+    letra_e = st.text_input("Resposta 5", value=questao_atual["Alternativa_E"])
 
     
     if st.button("Salvar"):
