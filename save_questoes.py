@@ -27,10 +27,10 @@ def inserir_ques():
     lista =  [linha for linha in dict["Materia"]]
 
     with col2:
-        materia = st.selectbox("selecione uma matéria", lista)
+        materia = st.selectbox("Selecione uma matéria:", lista)
 
     with col1:
-        descricao = st.text_input("descrição")
+        descricao = st.text_input("Descrição:")
 
     enunciado = st.text_area("Enunciado", placeholder= "Digite aqui o enunciado da questão", key = "enunciado")
     letra_a = st.text_input("Resposta 1", placeholder= "Digite aqui a resposta correta", key = "letra_a") 
