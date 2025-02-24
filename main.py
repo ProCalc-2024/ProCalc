@@ -33,7 +33,7 @@ if st.session_state["pagina"] == "Cadastro":
 if st.session_state["pagina"] == "Log":
     tab_names = []
     # Cria uma lista de nomes para as questões
-    tab_names = ["Inicio", "Questionario", "Configurações"]
+    tab_names = ["Inicio", "Questionário", "Configurações"]
     if user["Identificação"] == "Administrador" or user["Identificação"] == "Moderador":   
             tab_names.append("Edição")
     # Cria as abas dinamicamente
