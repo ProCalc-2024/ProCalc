@@ -118,8 +118,8 @@ def read_questao():
             st.write(questao["Enunciado"])
             # Nome do arquivo 
             file_name = questao["Imagem"]
-                
-            if file_name:
+            st.write(file_name)    
+            if file_name != :
                 with st.expander("Visualizar imagem"):
     
                     file_path = f"imagens/{file_name}"
