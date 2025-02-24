@@ -16,17 +16,17 @@ def inserir_ques():
     lista =  [linha for linha in dict["Materia"]]
 
     with col2:
-        materia = st.selectbox("selecione uma materia", lista)
+        materia = st.selectbox("selecione uma matéria", lista)
 
     with col1:
         descricao = st.text_input("descrição")
 
-    enunciado = st.text_area("Enunciado", placeholder= "digite aqui o enunciado da questão", key = "enunciado")
-    letra_a = st.text_input("Resposta1", placeholder= "digite aqui a resposta correta", key = "letra_a") 
-    letra_b = st.text_input("Resposta2", placeholder= "digite aqui a resposta2", key = "letra_b")
-    letra_c = st.text_input("Resposta3", placeholder= "digite aqui a resposta3", key = "letra_c") 
-    letra_d = st.text_input("Resposta4", placeholder= "digite aqui a resposta4", key = "letra_d") 
-    letra_e = st.text_input("Resposta5", placeholder= "digite aqui a resposta5", key = "letra_e")
+    enunciado = st.text_area("Enunciado", placeholder= "Digite aqui o enunciado da questão", key = "enunciado")
+    letra_a = st.text_input("Resposta1", placeholder= "Digite aqui a resposta correta", key = "letra_a") 
+    letra_b = st.text_input("Resposta2", placeholder= "Digite aqui a resposta2", key = "letra_b")
+    letra_c = st.text_input("Resposta3", placeholder= "Digite aqui a resposta3", key = "letra_c") 
+    letra_d = st.text_input("Resposta4", placeholder= "Digite aqui a resposta4", key = "letra_d") 
+    letra_e = st.text_input("Resposta5", placeholder= "Digite aqui a resposta5", key = "letra_e")
 
     existing_data = conn.read(worksheet="Questões")
     novo = pd.DataFrame({
@@ -112,7 +112,7 @@ def inserir_assun():
 
     st.title("Novo Assunto")
     
-    assun = st.text_area("assunto", placeholder= "digite aqui o enunciado da questão") 
+    assun = st.text_area("assunto", placeholder= "Digite aqui o enunciado da questão") 
     
     new = pd.DataFrame({
         'Materia': [assun]
@@ -120,7 +120,7 @@ def inserir_assun():
     
     combined = pd.concat([existing, new], ignore_index=True) 
     
-    if st.button("visualizar questão"):
+    if st.button("Visualizar questão"):
         
         conn.update(worksheet="Materias", data=combined)
        
