@@ -51,7 +51,10 @@ def inserir_ques():
         'Alternativa_E': [letra_e]
     })
     
-    combined_data = pd.concat([existing_data, novo], ignore_index=True)
+    nameima = {"teste": "teste2"}
+    teste1 = novo.append(nameima)
+    st.write(teste1)
+    combined_data = pd.concat([existing_data, novo], ignore_index=True)  
     lista_ques = []
     with st.expander("Visualizar Questão"):
         
@@ -108,8 +111,9 @@ def inserir_ques():
             image_base64 = base64.b64encode(image_data).decode()  # Converte para Base64
             
             file_path = f"imagens/{uploaded_file.name}"  # Caminho no repositório
+            name_image = f"{uploaded_file.name}"
             url = f"https://api.github.com/repos/{REPO_OWNER}/{REPO_NAME}/contents/{file_path}"
-        
+            
             payload = {
                 "message": f"Adicionando {uploaded_file.name} via Streamlit",
                 "content": image_base64,
@@ -125,7 +129,9 @@ def inserir_ques():
                 st.markdown(f"[🔗 Ver imagem no GitHub]({response.json()['content']['html_url']})")
             else:
                 st.error(f"Erro ao enviar a imagem: {response.json()}")
-            
+        
+        
+        
         conn.update(worksheet="Questões", data=combined_data)
        
         conn.read(
