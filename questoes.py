@@ -121,7 +121,7 @@ def read_questao():
                 # Nome do arquivo (você pode definir dinamicamente)
                 file_name = questao["Imagem"]
                 
-                if file_name:
+                if file_name != None:
                     file_path = f"imagens/{file_name}"
                     url = f"https://api.github.com/repos/{REPO_OWNER}/{REPO_NAME}/contents/{file_path}"
                 
