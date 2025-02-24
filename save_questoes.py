@@ -101,7 +101,7 @@ def inserir_ques():
         
     if st.button("Salvar"):
         
-        if 'Imagem' in df.columns and df['Imagem'].isin([uploaded_file.name]).any():
+        if 'Imagem' in dict.columns and dict['Imagem'].isin([uploaded_file.name]).any():
             st.write(f"O valor '{valor}' já existe na coluna '{coluna}'.")
         else: 
             if uploaded_file is not None:
