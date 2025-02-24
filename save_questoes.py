@@ -33,11 +33,11 @@ def inserir_ques():
         descricao = st.text_input("descrição")
 
     enunciado = st.text_area("Enunciado", placeholder= "Digite aqui o enunciado da questão", key = "enunciado")
-    letra_a = st.text_input("Resposta1", placeholder= "Digite aqui a resposta correta", key = "letra_a") 
-    letra_b = st.text_input("Resposta2", placeholder= "Digite aqui a resposta2", key = "letra_b")
-    letra_c = st.text_input("Resposta3", placeholder= "Digite aqui a resposta3", key = "letra_c") 
-    letra_d = st.text_input("Resposta4", placeholder= "Digite aqui a resposta4", key = "letra_d") 
-    letra_e = st.text_input("Resposta5", placeholder= "Digite aqui a resposta5", key = "letra_e")
+    letra_a = st.text_input("Resposta 1", placeholder= "Digite aqui a resposta correta", key = "letra_a") 
+    letra_b = st.text_input("Resposta 2", placeholder= "Digite aqui a resposta 2", key = "letra_b")
+    letra_c = st.text_input("Resposta 3", placeholder= "Digite aqui a resposta 3", key = "letra_c") 
+    letra_d = st.text_input("Resposta 4", placeholder= "Digite aqui a resposta 4", key = "letra_d") 
+    letra_e = st.text_input("Resposta 5", placeholder= "Digite aqui a resposta 5", key = "letra_e")
 
     existing_data = conn.read(worksheet="Questões")
     novo = pd.DataFrame({
