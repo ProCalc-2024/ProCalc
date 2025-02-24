@@ -101,45 +101,48 @@ def inserir_ques():
         
     if st.button("Salvar"):
         
-        if uploaded_file is not None:
-        
-            image_data = uploaded_file.getvalue()  # Lê os bytes da imagem
-            image_base64 = base64.b64encode(image_data).decode()  # Converte para Base64
+        if 'Imagem' in df.columns and df['Imagem'].isin([uploaded_file.name]).any():
+            st.write(f"O valor '{valor}' já existe na coluna '{coluna}'.")
+        else: 
+            if uploaded_file is not None:
             
-            file_path = f"imagens/{uploaded_file.name}"  # Caminho no repositório
+                image_data = uploaded_file.getvalue()  # Lê os bytes da imagem
+                image_base64 = base64.b64encode(image_data).decode()  # Converte para Base64
+                
+                file_path = f"imagens/{uploaded_file.name}"  # Caminho no repositório
+                
+                novo['Imagem'] = [f"{uploaded_file.name}"]
+                
+                url = f"https://api.github.com/repos/{REPO_OWNER}/{REPO_NAME}/contents/{file_path}"
+                
+                payload = {
+                    "message": f"Adicionando {uploaded_file.name} via Streamlit",
+                    "content": image_base64,
+                    "branch": BRANCH
+                }
             
-            novo['Imagem'] = [f"{uploaded_file.name}"]
+                headers = {"Authorization": f"token {GITHUB_TOKEN}"}
             
-            url = f"https://api.github.com/repos/{REPO_OWNER}/{REPO_NAME}/contents/{file_path}"
+                response = requests.put(url, json=payload, headers=headers)
             
-            payload = {
-                "message": f"Adicionando {uploaded_file.name} via Streamlit",
-                "content": image_base64,
-                "branch": BRANCH
-            }
-        
-            headers = {"Authorization": f"token {GITHUB_TOKEN}"}
-        
-            response = requests.put(url, json=payload, headers=headers)
-        
-            if response.status_code == 201:
-                st.success(f"Imagem Salva no GITHUB! 📤")
-                st.markdown(f"[🔗 Ver imagem no GitHub]({response.json()['content']['html_url']})")
-            else:
-                st.error(f"Erro ao enviar a imagem: {response.json()}")
-        
-        combined_data = pd.concat([existing_data, novo], ignore_index=True)
-        
-        conn.update(worksheet="Questões", data=combined_data)
-       
-        conn.read(
-        worksheet="Questões",  # Nome da planilha
-        ttl="1s"                  # Cache de 1 segundo
-        )
-        
-        st.success(':green-background[Questão salva]', icon='✔️')
-        
-        st.rerun()
+                if response.status_code == 201:
+                    st.success(f"Imagem Salva no GITHUB! 📤")
+                    st.markdown(f"[🔗 Ver imagem no GitHub]({response.json()['content']['html_url']})")
+                else:
+                    st.error(f"Erro ao enviar a imagem: {response.json()}")
+            
+            combined_data = pd.concat([existing_data, novo], ignore_index=True)
+            
+            conn.update(worksheet="Questões", data=combined_data)
+           
+            conn.read(
+            worksheet="Questões",  # Nome da planilha
+            ttl="1s"                  # Cache de 1 segundo
+            )
+            
+            st.success(':green-background[Questão salva]', icon='✔️')
+            
+            st.rerun()
 
 def inserir_assun():    
     
