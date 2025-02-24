@@ -141,9 +141,9 @@ def inserir_ques():
             coluna = "Imagem"
             valor = uploaded_file.name
             # Verifica se a coluna existe no DataFrame
-            if coluna in df.columns:
+            if coluna in dict.columns:
                 # Converte a coluna para string (evita problemas com NaN)
-                df[coluna] = df[coluna].astype(str)
+                df[coluna] = dict[coluna].astype(str)
                 
                 # Verifica se o valor está presente
                 if valor in df[coluna].values:
