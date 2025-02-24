@@ -5,10 +5,10 @@ from streamlit_gsheets import GSheetsConnection
 import numpy as np
 def inserir_ques():   
     # Carregar configurações do secrets
-    GITHUB_TOKEN = st.secrets["GITHUB_TOKEN"]
-    REPO_OWNER = st.secrets["REPO_OWNER"]
-    REPO_NAME = st.secrets["REPO_NAME"]
-    BRANCH = st.secrets["BRANCH"]
+    GITHUB_TOKEN = st.secrets["github"]["token"]
+    REPO_OWNER = st.secrets["github"]["repo_owner"]
+    REPO_NAME = st.secrets["github"]["repo_name"]
+    BRANCH = st.secrets["github"]["branch"]
     
     # Upload da imagem pelo usuário
     uploaded_file = st.file_uploader("Escolha uma imagem...", type=["jpg", "png", "jpeg"])
