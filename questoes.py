@@ -116,23 +116,23 @@ def read_questao():
             questao = lista_ques[b1[i]]
             
             st.write(questao["Enunciado"])
-            
-            with st.expander("Visualizar imagem"):
-                # Nome do arquivo (você pode definir dinamicamente)
-                file_name = questao["Imagem"]
+            # Nome do arquivo 
+            file_name = questao["Imagem"]
                 
-                if file_name != None:
+            if file_name != None:
+                with st.expander("Visualizar imagem"):
+    
                     file_path = f"imagens/{file_name}"
                     url = f"https://api.github.com/repos/{REPO_OWNER}/{REPO_NAME}/contents/{file_path}"
-                
+                    
                     headers = {"Authorization": f"token {GITHUB_TOKEN}"}
                     response = requests.get(url, headers=headers)
-                
+                    
                     if response.status_code == 200:
                         file_data = response.json()
                         image_base64 = file_data["content"]  # Pega o conteúdo Base64
                         image_data = base64.b64decode(image_base64)  # Decodifica de Base64 para bytes
-                
+                    
                         # Exibir a imagem no Streamlit
                         st.image(image_data, caption="", use_column_width=True)
                     else:
