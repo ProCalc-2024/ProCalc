@@ -138,7 +138,7 @@ def inserir_ques():
             )
             
             st.success(':green-background[Questão salva]', icon='✔️')
-            coluna = "Imagem"
+            coluna = 'Imagem'
             valor = uploaded_file.name
             # Verifica se a coluna existe no DataFrame
             if coluna in dict.columns:
