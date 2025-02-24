@@ -120,4 +120,3 @@ mypy
 ruff
 seaborn
 cryptography
-base64
