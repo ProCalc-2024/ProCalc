@@ -195,7 +195,7 @@ def editar_ques():
             return
 
         questoes_list = questoes_filtradas["Enunciado"].tolist()
-        questao_selecionada = st.selectbox("Selecione a questão a editar", options=questoes_list)
+        questao_selecionada = st.selectbox("Selecione a questão a editar:", options=questoes_list)
 
     
     questao_atual = questoes_filtradas[questoes_filtradas["Enunciado"] == questao_selecionada].iloc[0]
