@@ -100,9 +100,9 @@ def inserir_ques():
         elif butao and (resposta is False):
             st.toast(':red-background[Resposta Errada]', icon="⚠️")
         
-    if st.button("Salvar"):   
+    if st.button("Salvar"):
+        
         if uploaded_file is not None:
-            st.image(uploaded_file, caption="Imagem carregada.", use_column_width=True)
         
             image_data = uploaded_file.getvalue()  # Lê os bytes da imagem
             image_base64 = base64.b64encode(image_data).decode()  # Converte para Base64
