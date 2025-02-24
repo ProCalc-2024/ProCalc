@@ -14,7 +14,7 @@ def inserir_ques():
     BRANCH = st.secrets["github"]["branch"]
     
     # Upload da imagem pelo usuário
-    uploaded_file = st.file_uploader("Escolha uma imagem...", type=["jpg", "png", "jpeg"])
+    uploaded_file = st.file_uploader("Insira uma imagem", type=["jpg", "png", "jpeg"])
         
     conn = st.connection("gsheets", type=GSheetsConnection)
     sheet = conn.read(worksheet="Materias")
