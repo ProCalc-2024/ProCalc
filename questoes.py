@@ -109,7 +109,7 @@ def read_questao():
             if opcoes_validas:
                 numero_aleatorio = np.random.choice(opcoes_validas)
            
-            #evitar.append(b1[i])
+            evitar.append(b1[i])
             
             embaralho = st.session_state[f"embaralho{i}{materia}"]
             # Escolha de questão aleatória
