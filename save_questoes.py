@@ -123,6 +123,7 @@ def inserir_ques():
             response = requests.put(url, json=payload, headers=headers)
             
             if response.status_code == 201:
+                combined_data = pd.concat([existing_data, novo], ignore_index=True)
                 conn.update(worksheet="Questões", data=combined_data)
            
                 conn.read(
