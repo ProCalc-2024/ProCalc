@@ -123,10 +123,23 @@ def inserir_ques():
             response = requests.put(url, json=payload, headers=headers)
             
             if response.status_code == 201:
+                conn.update(worksheet="Questões", data=combined_data)
+           
+                conn.read(
+                worksheet="Questões",  # Nome da planilha
+                ttl="1s"                  # Cache de 1 segundo
+                )
+                
+                st.success(':green-background[Questão salva]', icon='✔️')
+            
+                st.rerun()
+                
                 st.success(f"Imagem Salva no GITHUB! 📤")
             else:
                 #st.error(f"Erro ao enviar a imagem: {response.json()}")
                 st.error(f"A imagem já existe")
+        
+        
         else:
             combined_data = pd.concat([existing_data, novo], ignore_index=True)
             
