@@ -86,19 +86,7 @@ def inserir_ques():
         alternativa = st.radio("", options = opções, index=None)
             
         st.session_state["resposta"] = questao["Alternativa_A"]
-    
-        butao = st.button("Submeter", key = "button_save_questoes") 
-                
-        # salva a sequencia de questoes
 
-        resposta = alternativa == questao["Alternativa_A"]
-        
-        if butao and resposta:         
-            st.toast(':green-background[Resposta Certa]', icon='🎉')
-    
-        elif butao and (resposta is False):
-            st.toast(':red-background[Resposta Errada]', icon="⚠️")
-        
     if st.button("Salvar"):
 
         if uploaded_file is not None:
