@@ -173,53 +173,70 @@ def inserir_assun():
 def editar_ques():
     conn = st.connection("gsheets", type=GSheetsConnection)
     existing_data = conn.read(worksheet="Questões")
-    
+
     if existing_data.empty:
         st.warning("Nenhuma questão disponível para editar.")
         return
-    
-    
+
     materias_unicas = existing_data["Materia"].unique()
-    
-    
+
     col1, col2 = st.columns(2)
 
     with col1:
         materia = st.selectbox("Matéria", options=materias_unicas)
 
+    # Filtrando questões da matéria selecionada
+    questoes_filtradas = existing_data[existing_data["Materia"] == materia]
+
+    if questoes_filtradas.empty:
+        st.warning(f"Nenhuma questão disponível para a matéria '{materia}'.")
+        return
+
     with col2:
-        
-        questoes_filtradas = existing_data[existing_data["Materia"] == materia]
-        
-        
-        if questoes_filtradas.empty:
-            st.warning(f"Nenhuma questão disponível para a matéria '{materia}'.")
-            return
+        questao_selecionada = st.selectbox("Selecione a questão a editar:", options=questoes_filtradas["Enunciado"].tolist())
 
-        questoes_list = questoes_filtradas["Enunciado"].tolist()
-        questao_selecionada = st.selectbox("Selecione a questão a editar:", options=questoes_list)
+    # Obtendo índice da questão selecionada
+    index = questoes_filtradas.index[questoes_filtradas["Enunciado"] == questao_selecionada][0]
+    questao_atual = questoes_filtradas.loc[index]
 
-    
-    questao_atual = questoes_filtradas[questoes_filtradas["Enunciado"] == questao_selecionada].iloc[0]
-
-    
+    # Campos editáveis
     descricao = st.text_input("Descrição", value=questao_atual["Descrição"])
     enunciado = st.text_area("Enunciado", value=questao_atual["Enunciado"])
-    letra_a = st.text_input("Resposta 1", value=questao_atual["Alternativa_A"])
-    letra_b = st.text_input("Resposta 2", value=questao_atual["Alternativa_B"])
-    letra_c = st.text_input("Resposta 3", value=questao_atual["Alternativa_C"])
-    letra_d = st.text_input("Resposta 4", value=questao_atual["Alternativa_D"])
-    letra_e = st.text_input("Resposta 5", value=questao_atual["Alternativa_E"])
+    alternativas = {
+        "Alternativa_A": st.text_input("Resposta 1", value=questao_atual["Alternativa_A"]),
+        "Alternativa_B": st.text_input("Resposta 2", value=questao_atual["Alternativa_B"]),
+        "Alternativa_C": st.text_input("Resposta 3", value=questao_atual["Alternativa_C"]),
+        "Alternativa_D": st.text_input("Resposta 4", value=questao_atual["Alternativa_D"]),
+        "Alternativa_E": st.text_input("Resposta 5", value=questao_atual["Alternativa_E"]),
+    }
 
-    
+    # Visualização da questão antes de salvar
+    with st.expander("Visualizar questão"):
+        st.subheader("", divider='gray')
+
+        lista = list(alternativas.keys())
+        if "embaralho" not in st.session_state:
+            st.session_state["embaralho"] = np.random.choice(lista, 5, replace=False)
+        embaralho = st.session_state["embaralho"]
+
+        st.write("\n", enunciado)
+        st.subheader("", divider='gray')
+
+        opcoes = [alternativas[embaralho[i]] for i in range(5)]
+        alternativa = st.radio("", options=opcoes, index=None)
+
     if st.button("Salvar"):
-        
-        existing_data.loc[existing_data["Enunciado"] == questao_selecionada, ["Materia", "Descrição", "Enunciado", "Alternativa_A", "Alternativa_B", "Alternativa_C", "Alternativa_D", "Alternativa_E"]] = [
-            materia, descricao, enunciado, letra_a, letra_b, letra_c, letra_d, letra_e
-        ]
-        
-        conn.update(worksheet="Questões", data=existing_data)
-        st.success("Questão editada com sucesso!")
+        with st.spinner("Salvando..."):
+            # Atualizando apenas a linha específica
+            existing_data.loc[index, ["Materia", "Descrição", "Enunciado"]] = [materia, descricao, enunciado]
+            for key, value in alternativas.items():
+                existing_data.loc[index, key] = value
+
+            # Salvando na planilha
+            conn.update(worksheet="Questões", data=existing_data)
+
+            st.success("Questão editada com sucesso! ✅")
+            st.rerun()
 
 
 def deletar_ques():
