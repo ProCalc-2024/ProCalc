@@ -171,6 +171,9 @@ def inserir_assun():
         
               
 def editar_ques():
+    import base64
+    import requests
+
     conn = st.connection("gsheets", type=GSheetsConnection)
     existing_data = conn.read(worksheet="Questões")
 
@@ -185,7 +188,6 @@ def editar_ques():
     with col1:
         materia = st.selectbox("Matéria", options=materias_unicas)
 
-    # Filtrando questões da matéria selecionada
     questoes_filtradas = existing_data[existing_data["Materia"] == materia]
 
     if questoes_filtradas.empty:
@@ -195,11 +197,9 @@ def editar_ques():
     with col2:
         questao_selecionada = st.selectbox("Selecione a questão a editar:", options=questoes_filtradas["Enunciado"].tolist())
 
-    # Obtendo índice da questão selecionada
     index = questoes_filtradas.index[questoes_filtradas["Enunciado"] == questao_selecionada][0]
     questao_atual = questoes_filtradas.loc[index]
 
-    # Campos editáveis
     descricao = st.text_input("Descrição", value=questao_atual["Descrição"])
     enunciado = st.text_area("Enunciado", value=questao_atual["Enunciado"])
     alternativas = {
@@ -210,33 +210,46 @@ def editar_ques():
         "Alternativa_E": st.text_input("Resposta 5", value=questao_atual["Alternativa_E"]),
     }
 
-    # Visualização da questão antes de salvar
-    with st.expander("Visualizar questão"):
-        st.subheader("", divider='gray')
+    # Upload e edição de imagem
+    st.subheader("Imagem da Questão")
+    imagem_atual = questao_atual.get("Imagem", "")
 
-        lista = list(alternativas.keys())
-        if "embaralho" not in st.session_state:
-            st.session_state["embaralho"] = np.random.choice(lista, 5, replace=False)
-        embaralho = st.session_state["embaralho"]
-
-        st.write("\n", enunciado)
-        st.subheader("", divider='gray')
-
-        opcoes = [alternativas[embaralho[i]] for i in range(5)]
-        alternativa = st.radio("", options=opcoes, index=None)
+    if imagem_atual:
+        st.image(f"https://raw.githubusercontent.com/{st.secrets['github']['repo_owner']}/{st.secrets['github']['repo_name']}/main/imagens/{imagem_atual}", caption="Imagem Atual")
+    
+    uploaded_file = st.file_uploader("Atualizar imagem:", type=["jpg", "png", "jpeg"])
 
     if st.button("Salvar"):
         with st.spinner("Salvando..."):
-            # Atualizando apenas a linha específica
             existing_data.loc[index, ["Materia", "Descrição", "Enunciado"]] = [materia, descricao, enunciado]
             for key, value in alternativas.items():
                 existing_data.loc[index, key] = value
+            
+            if uploaded_file:
+                image_data = uploaded_file.getvalue()
+                image_base64 = base64.b64encode(image_data).decode()
+                file_path = f"imagens/{uploaded_file.name}"
+                
+                url = f"https://api.github.com/repos/{st.secrets['github']['repo_owner']}/{st.secrets['github']['repo_name']}/contents/{file_path}"
+                payload = {
+                    "message": f"Atualizando {uploaded_file.name} via Streamlit",
+                    "content": image_base64,
+                    "branch": st.secrets['github']['branch']
+                }
+                headers = {"Authorization": f"token {st.secrets['github']['token']}"}
+                
+                response = requests.put(url, json=payload, headers=headers)
+                
+                if response.status_code == 201:
+                    existing_data.loc[index, "Imagem"] = uploaded_file.name
+                    st.success("Imagem atualizada com sucesso! 📤")
+                else:
+                    st.error("Erro ao atualizar a imagem.")
 
-            # Salvando na planilha
             conn.update(worksheet="Questões", data=existing_data)
-
             st.success("Questão editada com sucesso! ✅")
             st.rerun()
+
 
 
 def deletar_ques():
