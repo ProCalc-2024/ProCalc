@@ -12,6 +12,7 @@ from streamlit_option_menu import option_menu
 from git import Repo
 import requests
 import testea
+import pag_inicial
 
 
 def local_css(file_name):
