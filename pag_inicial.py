@@ -19,7 +19,7 @@ def ensino():
   query_params = st.query_params
   if "run" in query_params:
       st.session_state.clicked = True
-      st.experimental_rerun()
+      st.rerun()
   
   # Exibir vídeo se foi clicado
   if st.session_state.clicked:
