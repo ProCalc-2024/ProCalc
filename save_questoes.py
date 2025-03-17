@@ -136,6 +136,10 @@ def inserir_ques():
         st.write("")
         st.write(questao["Enunciado"])
 
+        
+        if uploaded_file is not None:
+            st.subheader('', divider = 'gray')
+            st.image(uploaded_file, caption="Imagem carregada", use_column_width=True)
         st.subheader('', divider = 'gray')
         
         opções = [questao[embaralho[0]], questao[embaralho[1]], questao[embaralho[2]], questao[embaralho[3]], questao[embaralho[4]]]    
