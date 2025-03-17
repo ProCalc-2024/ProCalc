@@ -44,6 +44,9 @@ if st.session_state["pagina"] == "Log":
         #with tabs[0]:        
         # Exibir a imagem no Streamlit
         # st.image("grafico.png", caption='Imagem do Google Drive')
+        with tabs[0]:
+                pag_inicial.ensino()
+            
         if user["Identificação"] == "Administrador" or user["Identificação"] == "Moderador":      
                 with tabs[3]:
                     co1, co2 = st.columns([1, 1])
