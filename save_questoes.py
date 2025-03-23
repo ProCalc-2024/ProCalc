@@ -208,7 +208,7 @@ def editar_ques():
     index = questoes_filtradas.index[questoes_filtradas["Descrição"] == questao_selecionada][0]
     questao_atual = questoes_filtradas.loc[index]
 
-    # Armazenar os dados da questão selecionada em st.session_state, se ainda não estiver lá
+    # Verificar se a questão atual foi editada e armazenar no session_state
     if "questao_atual" not in st.session_state or st.session_state["questao_atual"]["index"] != index:
         st.session_state["questao_atual"] = {
             "index": index,
@@ -224,6 +224,7 @@ def editar_ques():
             "imagem": questao_atual.get("Imagem", ""),
         }
 
+    # Atualizando os campos no Streamlit para refletir o estado atual
     descricao = st.text_input("Descrição", value=st.session_state["questao_atual"]["descricao"])
     enunciado = st.text_area("Enunciado", value=st.session_state["questao_atual"]["enunciado"])
     alternativas = {
@@ -259,7 +260,7 @@ def editar_ques():
     
     if st.button("Salvar"):
         with st.spinner("Salvando..."):
-            # Atualizando os dados da questão no session_state
+            # Atualizando os dados no session_state
             st.session_state["questao_atual"]["descricao"] = descricao
             st.session_state["questao_atual"]["enunciado"] = enunciado
             st.session_state["questao_atual"]["alternativas"] = alternativas
