@@ -258,6 +258,7 @@ def editar_ques():
     # 🚀 Salvar alterações
     if st.button("Salvar"):
         with st.spinner("Salvando..."):
+            # Atualiza os dados na planilha
             existing_data.loc[index, ["Materia", "Descrição", "Enunciado"]] = [materia, descricao, enunciado]
             for key, value in alternativas.items():
                 existing_data.loc[index, key] = value
@@ -287,16 +288,22 @@ def editar_ques():
             # 🔄 Atualizar os dados na planilha
             conn.update(worksheet="Questões", data=existing_data)
 
-            # ✅ Exibir mensagem antes de atualizar a tela
+            # ✅ Exibir mensagem de sucesso sem resetar a tela
             st.success("Questão editada com sucesso! ✅")
-            
+
             # ⏳ Espera um pouco para o usuário ver a mensagem
             time.sleep(1.5)
 
-            # 🚀 Recarregar os dados sem perder as modificações
-            existing_data = carregar_dados()  # Recarregar dados mais recentes da planilha
-            st.session_state["questao_atual"] = questao_selecionada  # Manter seleção da questão
-            st.experimental_rerun()  # Atualizar a interface sem perder o estado
+            # Recarrega os dados diretamente da planilha, mas sem reiniciar a interface
+            existing_data = carregar_dados()
+            questao_atual = existing_data.loc[index]
+
+            # Atualiza os campos com os valores mais recentes após edição
+            st.text_input("Descrição", value=questao_atual["Descrição"])
+            st.text_area("Enunciado", value=questao_atual["Enunciado"])
+
+            for key in alternativas:
+                st.text_input(key, value=questao_atual[key])
 
 
 
