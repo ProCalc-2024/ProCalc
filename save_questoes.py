@@ -185,11 +185,12 @@ def editar_ques():
 
     conn = st.connection("gsheets", type=GSheetsConnection)
 
-    # 🔄 Sempre carregar os dados mais recentes
+    # 🔄 Carregar dados mais recentes da planilha
     def carregar_dados():
         return conn.read(worksheet="Questões")
 
-    existing_data = carregar_dados()  # Carregar dados no início
+    # Verifica se há dados
+    existing_data = carregar_dados()
 
     if existing_data.empty:
         st.warning("Nenhuma questão disponível para editar.")
@@ -211,12 +212,16 @@ def editar_ques():
     with col2:
         questao_selecionada = st.selectbox("Selecione a questão a editar:", options=questoes_filtradas["Descrição"].tolist())
 
-    # 🔄 RECARREGAR OS DADOS PARA GARANTIR QUE PEGAMOS A VERSÃO MAIS RECENTE
-    existing_data = carregar_dados()
+    # 🚀 Recarregar os dados sempre que a questão selecionada mudar
+    if "questao_atual" not in st.session_state or st.session_state["questao_atual"] != questao_selecionada:
+        st.session_state["questao_atual"] = questao_selecionada
+        existing_data = carregar_dados()  # Recarregar a planilha para garantir que temos a versão mais recente
 
+    # Obtém o índice correto da questão selecionada
     index = existing_data[existing_data["Descrição"] == questao_selecionada].index[0]
     questao_atual = existing_data.loc[index]
 
+    # Campos de edição
     descricao = st.text_input("Descrição", value=questao_atual["Descrição"])
     enunciado = st.text_area("Enunciado", value=questao_atual["Enunciado"])
     alternativas = {
@@ -236,18 +241,33 @@ def editar_ques():
 
     uploaded_file = st.file_uploader("Atualizar imagem:", type=["jpg", "png", "jpeg"])
 
+    # 🔍 Visualizar questão antes de salvar
+    with st.expander("Visualizar questão"):
+        st.subheader("", divider="gray")
+        st.write(enunciado)
+
+        lista = ["Alternativa_A", "Alternativa_B", "Alternativa_C", "Alternativa_D", "Alternativa_E"]
+
+        if "embaralho" not in st.session_state:
+            st.session_state["embaralho"] = np.random.choice(lista, 5, replace=False)
+
+        embaralho = st.session_state["embaralho"]
+        opcoes = [alternativas[embaralho[i]] for i in range(5)]
+        alternativa_selecionada = st.radio("", options=opcoes, index=None)
+
+    # 🚀 Salvar alterações
     if st.button("Salvar"):
         with st.spinner("Salvando..."):
             existing_data.loc[index, ["Materia", "Descrição", "Enunciado"]] = [materia, descricao, enunciado]
             for key, value in alternativas.items():
                 existing_data.loc[index, key] = value
-            
+
             # 📸 Upload da imagem para o GitHub
             if uploaded_file:
                 image_data = uploaded_file.getvalue()
                 image_base64 = base64.b64encode(image_data).decode()
                 file_path = f"imagens/{uploaded_file.name}"
-                
+
                 url = f"https://api.github.com/repos/{st.secrets['github']['repo_owner']}/{st.secrets['github']['repo_name']}/contents/{file_path}"
                 payload = {
                     "message": f"Atualizando {uploaded_file.name} via Streamlit",
@@ -255,25 +275,27 @@ def editar_ques():
                     "branch": st.secrets['github']['branch']
                 }
                 headers = {"Authorization": f"token {st.secrets['github']['token']}"}
-                
+
                 response = requests.put(url, json=payload, headers=headers)
-                
+
                 if response.status_code == 201:
                     existing_data.loc[index, "Imagem"] = uploaded_file.name
                     st.success("Imagem atualizada com sucesso! 📤")
                 else:
                     st.error("Erro ao atualizar a imagem.")
 
-            # 🔄 Salva as edições na planilha do Google Sheets
+            # 🔄 Atualizar os dados na planilha
             conn.update(worksheet="Questões", data=existing_data)
 
-            # ⏳ Aguarda a sincronização antes de recarregar a página
+            # ⏳ Espera um pouco antes de atualizar a tela
             time.sleep(2)
 
             st.success("Questão editada com sucesso! ✅")
 
-            # 🚀 Força o recarregamento dos dados para refletir as mudanças
+            # 🚀 Recarregar os dados e forçar atualização da interface
+            st.session_state["questao_atual"] = None  # Resetar seleção para carregar valores novos
             st.rerun()
+
 
 
 
