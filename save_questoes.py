@@ -181,10 +181,15 @@ def editar_ques():
     import base64
     import requests
     import numpy as np
-    import time  # Adicionado para garantir tempo de sincronização
+    import time
 
     conn = st.connection("gsheets", type=GSheetsConnection)
-    existing_data = conn.read(worksheet="Questões")  # 🔄 Sempre carregar os dados mais recentes
+
+    # 🔄 Sempre carregar os dados mais recentes
+    def carregar_dados():
+        return conn.read(worksheet="Questões")
+
+    existing_data = carregar_dados()  # Carregar dados no início
 
     if existing_data.empty:
         st.warning("Nenhuma questão disponível para editar.")
@@ -206,7 +211,9 @@ def editar_ques():
     with col2:
         questao_selecionada = st.selectbox("Selecione a questão a editar:", options=questoes_filtradas["Descrição"].tolist())
 
-    # 🔄 Pega o índice correto da questão selecionada
+    # 🔄 RECARREGAR OS DADOS PARA GARANTIR QUE PEGAMOS A VERSÃO MAIS RECENTE
+    existing_data = carregar_dados()
+
     index = existing_data[existing_data["Descrição"] == questao_selecionada].index[0]
     questao_atual = existing_data.loc[index]
 
@@ -231,7 +238,6 @@ def editar_ques():
 
     if st.button("Salvar"):
         with st.spinner("Salvando..."):
-            # 🔄 Atualiza o DataFrame localmente antes de salvar
             existing_data.loc[index, ["Materia", "Descrição", "Enunciado"]] = [materia, descricao, enunciado]
             for key, value in alternativas.items():
                 existing_data.loc[index, key] = value
@@ -262,7 +268,7 @@ def editar_ques():
             conn.update(worksheet="Questões", data=existing_data)
 
             # ⏳ Aguarda a sincronização antes de recarregar a página
-            time.sleep(2)  # Dá tempo do Google Sheets salvar antes de atualizar
+            time.sleep(2)
 
             st.success("Questão editada com sucesso! ✅")
 
