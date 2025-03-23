@@ -183,7 +183,7 @@ def editar_ques():
     import numpy as np
 
     conn = st.connection("gsheets", type=GSheetsConnection)
-    existing_data = conn.read(worksheet="Questões")
+    existing_data = conn.read(worksheet="Questões")  # 🔄 Sempre carregar os dados mais recentes
 
     if existing_data.empty:
         st.warning("Nenhuma questão disponível para editar.")
@@ -208,6 +208,7 @@ def editar_ques():
     index = questoes_filtradas.index[questoes_filtradas["Descrição"] == questao_selecionada][0]
     questao_atual = questoes_filtradas.loc[index]
 
+    # 🔄 Certifique-se de carregar os dados sempre do DataFrame atualizado
     descricao = st.text_input("Descrição", value=questao_atual["Descrição"])
     enunciado = st.text_area("Enunciado", value=questao_atual["Enunciado"])
     alternativas = {
@@ -218,16 +219,16 @@ def editar_ques():
         "Alternativa_E": st.text_input("Resposta 5", value=questao_atual["Alternativa_E"]),
     }
 
-    # Upload e edição de imagem
+    # 📸 Upload e edição de imagem
     st.subheader("Imagem da Questão")
     imagem_atual = questao_atual.get("Imagem", "")
 
     if imagem_atual:
         st.image(f"https://raw.githubusercontent.com/{st.secrets['github']['repo_owner']}/{st.secrets['github']['repo_name']}/main/imagens/{imagem_atual}", caption="Imagem Atual")
-    
+
     uploaded_file = st.file_uploader("Atualizar imagem:", type=["jpg", "png", "jpeg"])
 
-    # Visualizar questão antes de salvar
+    # 👀 Visualizar questão antes de salvar
     with st.expander("Visualizar questão"):
         st.subheader('', divider='gray')
         st.write(enunciado)
@@ -240,13 +241,16 @@ def editar_ques():
         embaralho = st.session_state["embaralho"]
         opcoes = [alternativas[embaralho[i]] for i in range(5)]
         alternativa_selecionada = st.radio("", options=opcoes, index=None)
-    
+
+    # 📝 Botão para salvar alterações
     if st.button("Salvar"):
         with st.spinner("Salvando..."):
+            # 🔄 Atualiza o DataFrame localmente
             existing_data.loc[index, ["Materia", "Descrição", "Enunciado"]] = [materia, descricao, enunciado]
             for key, value in alternativas.items():
                 existing_data.loc[index, key] = value
             
+            # 📸 Upload da imagem para o GitHub
             if uploaded_file:
                 image_data = uploaded_file.getvalue()
                 image_base64 = base64.b64encode(image_data).decode()
@@ -268,9 +272,14 @@ def editar_ques():
                 else:
                     st.error("Erro ao atualizar a imagem.")
 
+            # 🔄 Salva as edições na planilha do Google Sheets
             conn.update(worksheet="Questões", data=existing_data)
+
             st.success("Questão editada com sucesso! ✅")
+
+            # 🚀 Recarrega a interface para refletir os dados atualizados
             st.rerun()
+
 
 
 
