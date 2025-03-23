@@ -208,19 +208,35 @@ def editar_ques():
     index = questoes_filtradas.index[questoes_filtradas["Descrição"] == questao_selecionada][0]
     questao_atual = questoes_filtradas.loc[index]
 
-    descricao = st.text_input("Descrição", value=questao_atual["Descrição"])
-    enunciado = st.text_area("Enunciado", value=questao_atual["Enunciado"])
+    # Armazenar os dados da questão selecionada em st.session_state, se ainda não estiver lá
+    if "questao_atual" not in st.session_state or st.session_state["questao_atual"]["index"] != index:
+        st.session_state["questao_atual"] = {
+            "index": index,
+            "descricao": questao_atual["Descrição"],
+            "enunciado": questao_atual["Enunciado"],
+            "alternativas": {
+                "Alternativa_A": questao_atual["Alternativa_A"],
+                "Alternativa_B": questao_atual["Alternativa_B"],
+                "Alternativa_C": questao_atual["Alternativa_C"],
+                "Alternativa_D": questao_atual["Alternativa_D"],
+                "Alternativa_E": questao_atual["Alternativa_E"],
+            },
+            "imagem": questao_atual.get("Imagem", ""),
+        }
+
+    descricao = st.text_input("Descrição", value=st.session_state["questao_atual"]["descricao"])
+    enunciado = st.text_area("Enunciado", value=st.session_state["questao_atual"]["enunciado"])
     alternativas = {
-        "Alternativa_A": st.text_input("Resposta 1", value=questao_atual["Alternativa_A"]),
-        "Alternativa_B": st.text_input("Resposta 2", value=questao_atual["Alternativa_B"]),
-        "Alternativa_C": st.text_input("Resposta 3", value=questao_atual["Alternativa_C"]),
-        "Alternativa_D": st.text_input("Resposta 4", value=questao_atual["Alternativa_D"]),
-        "Alternativa_E": st.text_input("Resposta 5", value=questao_atual["Alternativa_E"]),
+        "Alternativa_A": st.text_input("Resposta 1", value=st.session_state["questao_atual"]["alternativas"]["Alternativa_A"]),
+        "Alternativa_B": st.text_input("Resposta 2", value=st.session_state["questao_atual"]["alternativas"]["Alternativa_B"]),
+        "Alternativa_C": st.text_input("Resposta 3", value=st.session_state["questao_atual"]["alternativas"]["Alternativa_C"]),
+        "Alternativa_D": st.text_input("Resposta 4", value=st.session_state["questao_atual"]["alternativas"]["Alternativa_D"]),
+        "Alternativa_E": st.text_input("Resposta 5", value=st.session_state["questao_atual"]["alternativas"]["Alternativa_E"]),
     }
 
     # Upload e edição de imagem
     st.subheader("Imagem da Questão")
-    imagem_atual = questao_atual.get("Imagem", "")
+    imagem_atual = st.session_state["questao_atual"]["imagem"]
 
     if imagem_atual:
         st.image(f"https://raw.githubusercontent.com/{st.secrets['github']['repo_owner']}/{st.secrets['github']['repo_name']}/main/imagens/{imagem_atual}", caption="Imagem Atual")
@@ -243,9 +259,10 @@ def editar_ques():
     
     if st.button("Salvar"):
         with st.spinner("Salvando..."):
-            existing_data.loc[index, ["Materia", "Descrição", "Enunciado"]] = [materia, descricao, enunciado]
-            for key, value in alternativas.items():
-                existing_data.loc[index, key] = value
+            # Atualizando os dados da questão no session_state
+            st.session_state["questao_atual"]["descricao"] = descricao
+            st.session_state["questao_atual"]["enunciado"] = enunciado
+            st.session_state["questao_atual"]["alternativas"] = alternativas
             
             if uploaded_file:
                 image_data = uploaded_file.getvalue()
@@ -263,11 +280,16 @@ def editar_ques():
                 response = requests.put(url, json=payload, headers=headers)
                 
                 if response.status_code == 201:
-                    existing_data.loc[index, "Imagem"] = uploaded_file.name
+                    st.session_state["questao_atual"]["imagem"] = uploaded_file.name
                     st.success("Imagem atualizada com sucesso! 📤")
                 else:
                     st.error("Erro ao atualizar a imagem.")
-
+            
+            # Atualiza os dados na planilha
+            existing_data.loc[index, ["Materia", "Descrição", "Enunciado"]] = [materia, descricao, enunciado]
+            for key, value in alternativas.items():
+                existing_data.loc[index, key] = value
+            
             conn.update(worksheet="Questões", data=existing_data)
             st.success("Questão editada com sucesso! ✅")
             st.rerun()
