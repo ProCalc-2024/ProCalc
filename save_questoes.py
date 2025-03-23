@@ -203,8 +203,7 @@ def editar_ques():
         return
 
     with col2:
-    questao_selecionada = st.selectbox("Selecione a questão a editar:", options=questoes_filtradas["Enunciado"].tolist())
-
+        questao_selecionada = st.selectbox("Selecione a questão a editar:", options=questoes_filtradas["Enunciado"].tolist())
 
     index = questoes_filtradas.index[questoes_filtradas["Enunciado"] == questao_selecionada][0]
     questao_atual = questoes_filtradas.loc[index]
@@ -316,6 +315,11 @@ def deletar_ques():
         # Atualiza a planilha com o dataframe sem a questão excluída
         conn.update(worksheet="Questões", data=dict)
 
+        # Atualiza cache para refletir a exclusão
+        conn.read(worksheet="Questões", ttl="1s")
+
+        st.toast(':green-background[Questão deletada com sucesso]', icon='✔️')
+        st.rerun()
         # Atualiza cache para refletir a exclusão
         conn.read(worksheet="Questões", ttl="1s")
 
