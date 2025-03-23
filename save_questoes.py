@@ -208,10 +208,11 @@ def editar_ques():
     index = questoes_filtradas.index[questoes_filtradas["Descrição"] == questao_selecionada][0]
     questao_atual = questoes_filtradas.loc[index]
 
-    # Verificar se a questão atual foi editada e armazenar no session_state
-    if "questao_atual" not in st.session_state or st.session_state["questao_atual"]["index"] != index:
-        st.session_state["questao_atual"] = {
-            "index": index,
+    # Verificar se a questão foi editada antes e armazenar no session_state
+    questao_key = f"questao_{index}"  # Identificador único para cada questão
+
+    if questao_key not in st.session_state:
+        st.session_state[questao_key] = {
             "descricao": questao_atual["Descrição"],
             "enunciado": questao_atual["Enunciado"],
             "alternativas": {
@@ -224,20 +225,20 @@ def editar_ques():
             "imagem": questao_atual.get("Imagem", ""),
         }
 
-    # Atualizando os campos no Streamlit para refletir o estado atual
-    descricao = st.text_input("Descrição", value=st.session_state["questao_atual"]["descricao"])
-    enunciado = st.text_area("Enunciado", value=st.session_state["questao_atual"]["enunciado"])
+    # Atualizar campos com valores do session_state
+    descricao = st.text_input("Descrição", value=st.session_state[questao_key]["descricao"])
+    enunciado = st.text_area("Enunciado", value=st.session_state[questao_key]["enunciado"])
     alternativas = {
-        "Alternativa_A": st.text_input("Resposta 1", value=st.session_state["questao_atual"]["alternativas"]["Alternativa_A"]),
-        "Alternativa_B": st.text_input("Resposta 2", value=st.session_state["questao_atual"]["alternativas"]["Alternativa_B"]),
-        "Alternativa_C": st.text_input("Resposta 3", value=st.session_state["questao_atual"]["alternativas"]["Alternativa_C"]),
-        "Alternativa_D": st.text_input("Resposta 4", value=st.session_state["questao_atual"]["alternativas"]["Alternativa_D"]),
-        "Alternativa_E": st.text_input("Resposta 5", value=st.session_state["questao_atual"]["alternativas"]["Alternativa_E"]),
+        "Alternativa_A": st.text_input("Resposta 1", value=st.session_state[questao_key]["alternativas"]["Alternativa_A"]),
+        "Alternativa_B": st.text_input("Resposta 2", value=st.session_state[questao_key]["alternativas"]["Alternativa_B"]),
+        "Alternativa_C": st.text_input("Resposta 3", value=st.session_state[questao_key]["alternativas"]["Alternativa_C"]),
+        "Alternativa_D": st.text_input("Resposta 4", value=st.session_state[questao_key]["alternativas"]["Alternativa_D"]),
+        "Alternativa_E": st.text_input("Resposta 5", value=st.session_state[questao_key]["alternativas"]["Alternativa_E"]),
     }
 
     # Upload e edição de imagem
     st.subheader("Imagem da Questão")
-    imagem_atual = st.session_state["questao_atual"]["imagem"]
+    imagem_atual = st.session_state[questao_key]["imagem"]
 
     if imagem_atual:
         st.image(f"https://raw.githubusercontent.com/{st.secrets['github']['repo_owner']}/{st.secrets['github']['repo_name']}/main/imagens/{imagem_atual}", caption="Imagem Atual")
@@ -260,10 +261,10 @@ def editar_ques():
     
     if st.button("Salvar"):
         with st.spinner("Salvando..."):
-            # Atualizando os dados no session_state
-            st.session_state["questao_atual"]["descricao"] = descricao
-            st.session_state["questao_atual"]["enunciado"] = enunciado
-            st.session_state["questao_atual"]["alternativas"] = alternativas
+            # Atualizando as edições no session_state
+            st.session_state[questao_key]["descricao"] = descricao
+            st.session_state[questao_key]["enunciado"] = enunciado
+            st.session_state[questao_key]["alternativas"] = alternativas
             
             if uploaded_file:
                 image_data = uploaded_file.getvalue()
@@ -281,7 +282,7 @@ def editar_ques():
                 response = requests.put(url, json=payload, headers=headers)
                 
                 if response.status_code == 201:
-                    st.session_state["questao_atual"]["imagem"] = uploaded_file.name
+                    st.session_state[questao_key]["imagem"] = uploaded_file.name
                     st.success("Imagem atualizada com sucesso! 📤")
                 else:
                     st.error("Erro ao atualizar a imagem.")
@@ -294,6 +295,7 @@ def editar_ques():
             conn.update(worksheet="Questões", data=existing_data)
             st.success("Questão editada com sucesso! ✅")
             st.rerun()
+
 
 
 
