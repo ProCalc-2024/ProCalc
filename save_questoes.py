@@ -181,16 +181,9 @@ def editar_ques():
     import base64
     import requests
     import numpy as np
-    import time
 
     conn = st.connection("gsheets", type=GSheetsConnection)
-
-    # 🔄 Carregar dados mais recentes da planilha
-    def carregar_dados():
-        return conn.read(worksheet="Questões")
-
-    # Verifica se há dados
-    existing_data = carregar_dados()
+    existing_data = conn.read(worksheet="Questões")
 
     if existing_data.empty:
         st.warning("Nenhuma questão disponível para editar.")
@@ -212,63 +205,53 @@ def editar_ques():
     with col2:
         questao_selecionada = st.selectbox("Selecione a questão a editar:", options=questoes_filtradas["Descrição"].tolist())
 
-    # 🚀 Recarregar os dados sempre que a questão selecionada mudar
-    if "questao_atual" not in st.session_state or st.session_state["questao_atual"] != questao_selecionada:
-        st.session_state["questao_atual"] = questao_selecionada
-        existing_data = carregar_dados()  # Recarregar a planilha para garantir que temos a versão mais recente
+    index = questoes_filtradas.index[questoes_filtradas["Descrição"] == questao_selecionada][0]
+    questao_atual = questoes_filtradas.loc[index]
 
-    # Obtém o índice correto da questão selecionada
-    index = existing_data[existing_data["Descrição"] == questao_selecionada].index[0]
-    questao_atual = existing_data.loc[index]
-
-    # Campos de edição com ID único
-    descricao = st.text_input("Descrição", value=questao_atual["Descrição"], key=f"descricao_{index}")
-    enunciado = st.text_area("Enunciado", value=questao_atual["Enunciado"], key=f"enunciado_{index}")
+    descricao = st.text_input("Descrição", value=questao_atual["Descrição"])
+    enunciado = st.text_area("Enunciado", value=questao_atual["Enunciado"])
     alternativas = {
-        "Alternativa_A": st.text_input("Resposta 1", value=questao_atual["Alternativa_A"], key=f"alternativa_A_{index}"),
-        "Alternativa_B": st.text_input("Resposta 2", value=questao_atual["Alternativa_B"], key=f"alternativa_B_{index}"),
-        "Alternativa_C": st.text_input("Resposta 3", value=questao_atual["Alternativa_C"], key=f"alternativa_C_{index}"),
-        "Alternativa_D": st.text_input("Resposta 4", value=questao_atual["Alternativa_D"], key=f"alternativa_D_{index}"),
-        "Alternativa_E": st.text_input("Resposta 5", value=questao_atual["Alternativa_E"], key=f"alternativa_E_{index}"),
+        "Alternativa_A": st.text_input("Resposta 1", value=questao_atual["Alternativa_A"]),
+        "Alternativa_B": st.text_input("Resposta 2", value=questao_atual["Alternativa_B"]),
+        "Alternativa_C": st.text_input("Resposta 3", value=questao_atual["Alternativa_C"]),
+        "Alternativa_D": st.text_input("Resposta 4", value=questao_atual["Alternativa_D"]),
+        "Alternativa_E": st.text_input("Resposta 5", value=questao_atual["Alternativa_E"]),
     }
 
-    # 📸 Upload e edição de imagem
+    # Upload e edição de imagem
     st.subheader("Imagem da Questão")
     imagem_atual = questao_atual.get("Imagem", "")
 
     if imagem_atual:
         st.image(f"https://raw.githubusercontent.com/{st.secrets['github']['repo_owner']}/{st.secrets['github']['repo_name']}/main/imagens/{imagem_atual}", caption="Imagem Atual")
-
+    
     uploaded_file = st.file_uploader("Atualizar imagem:", type=["jpg", "png", "jpeg"])
 
-    # 🔍 Visualizar questão antes de salvar
+    # Visualizar questão antes de salvar
     with st.expander("Visualizar questão"):
-        st.subheader("", divider="gray")
+        st.subheader('', divider='gray')
         st.write(enunciado)
-
+        
         lista = ["Alternativa_A", "Alternativa_B", "Alternativa_C", "Alternativa_D", "Alternativa_E"]
-
+        
         if "embaralho" not in st.session_state:
             st.session_state["embaralho"] = np.random.choice(lista, 5, replace=False)
-
+        
         embaralho = st.session_state["embaralho"]
         opcoes = [alternativas[embaralho[i]] for i in range(5)]
         alternativa_selecionada = st.radio("", options=opcoes, index=None)
-
-    # 🚀 Salvar alterações
+    
     if st.button("Salvar"):
         with st.spinner("Salvando..."):
-            # Atualiza os dados na planilha
             existing_data.loc[index, ["Materia", "Descrição", "Enunciado"]] = [materia, descricao, enunciado]
             for key, value in alternativas.items():
                 existing_data.loc[index, key] = value
-
-            # 📸 Upload da imagem para o GitHub
+            
             if uploaded_file:
                 image_data = uploaded_file.getvalue()
                 image_base64 = base64.b64encode(image_data).decode()
                 file_path = f"imagens/{uploaded_file.name}"
-
+                
                 url = f"https://api.github.com/repos/{st.secrets['github']['repo_owner']}/{st.secrets['github']['repo_name']}/contents/{file_path}"
                 payload = {
                     "message": f"Atualizando {uploaded_file.name} via Streamlit",
@@ -276,34 +259,19 @@ def editar_ques():
                     "branch": st.secrets['github']['branch']
                 }
                 headers = {"Authorization": f"token {st.secrets['github']['token']}"}
-
+                
                 response = requests.put(url, json=payload, headers=headers)
-
+                
                 if response.status_code == 201:
                     existing_data.loc[index, "Imagem"] = uploaded_file.name
                     st.success("Imagem atualizada com sucesso! 📤")
                 else:
                     st.error("Erro ao atualizar a imagem.")
 
-            # 🔄 Atualizar os dados na planilha
             conn.update(worksheet="Questões", data=existing_data)
-
-            # ✅ Exibir mensagem de sucesso sem resetar a tela
             st.success("Questão editada com sucesso! ✅")
+            st.rerun()
 
-            # ⏳ Espera um pouco para o usuário ver a mensagem
-            time.sleep(1.5)
-
-            # Recarrega os dados diretamente da planilha, mas sem reiniciar a interface
-            existing_data = carregar_dados()
-            questao_atual = existing_data.loc[index]
-
-            # Atualiza os campos com os valores mais recentes após edição
-            st.text_input("Descrição", value=questao_atual["Descrição"], key=f"descricao_{index}")
-            st.text_area("Enunciado", value=questao_atual["Enunciado"], key=f"enunciado_{index}")
-
-            for key in alternativas:
-                st.text_input(key, value=questao_atual[key], key=f"{key}_{index}")
 
 
 def deletar_ques():
