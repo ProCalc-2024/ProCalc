@@ -221,15 +221,15 @@ def editar_ques():
     index = existing_data[existing_data["Descrição"] == questao_selecionada].index[0]
     questao_atual = existing_data.loc[index]
 
-    # Campos de edição
-    descricao = st.text_input("Descrição", value=questao_atual["Descrição"])
-    enunciado = st.text_area("Enunciado", value=questao_atual["Enunciado"])
+    # Campos de edição com ID único
+    descricao = st.text_input("Descrição", value=questao_atual["Descrição"], key=f"descricao_{index}")
+    enunciado = st.text_area("Enunciado", value=questao_atual["Enunciado"], key=f"enunciado_{index}")
     alternativas = {
-        "Alternativa_A": st.text_input("Resposta 1", value=questao_atual["Alternativa_A"]),
-        "Alternativa_B": st.text_input("Resposta 2", value=questao_atual["Alternativa_B"]),
-        "Alternativa_C": st.text_input("Resposta 3", value=questao_atual["Alternativa_C"]),
-        "Alternativa_D": st.text_input("Resposta 4", value=questao_atual["Alternativa_D"]),
-        "Alternativa_E": st.text_input("Resposta 5", value=questao_atual["Alternativa_E"]),
+        "Alternativa_A": st.text_input("Resposta 1", value=questao_atual["Alternativa_A"], key=f"alternativa_A_{index}"),
+        "Alternativa_B": st.text_input("Resposta 2", value=questao_atual["Alternativa_B"], key=f"alternativa_B_{index}"),
+        "Alternativa_C": st.text_input("Resposta 3", value=questao_atual["Alternativa_C"], key=f"alternativa_C_{index}"),
+        "Alternativa_D": st.text_input("Resposta 4", value=questao_atual["Alternativa_D"], key=f"alternativa_D_{index}"),
+        "Alternativa_E": st.text_input("Resposta 5", value=questao_atual["Alternativa_E"], key=f"alternativa_E_{index}"),
     }
 
     # 📸 Upload e edição de imagem
@@ -299,12 +299,11 @@ def editar_ques():
             questao_atual = existing_data.loc[index]
 
             # Atualiza os campos com os valores mais recentes após edição
-            st.text_input("Descrição", value=questao_atual["Descrição"])
-            st.text_area("Enunciado", value=questao_atual["Enunciado"])
+            st.text_input("Descrição", value=questao_atual["Descrição"], key=f"descricao_{index}")
+            st.text_area("Enunciado", value=questao_atual["Enunciado"], key=f"enunciado_{index}")
 
             for key in alternativas:
-                st.text_input(key, value=questao_atual[key])
-
+                st.text_input(key, value=questao_atual[key], key=f"{key}_{index}")
 
 
 def deletar_ques():
