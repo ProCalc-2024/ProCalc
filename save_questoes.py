@@ -203,7 +203,7 @@ def editar_ques():
         return
 
     with col2:
-        questao_selecionada = st.selectbox("Selecione a questão a editar:", options=questoes_filtradas["Descrição"].tolist())
+        questao_selecionada = st.selectbox("Selecione a questão a editar:", options=questoes_filtradas["Enunciado"].tolist())
 
     index = questoes_filtradas.index[questoes_filtradas["Enunciado"] == questao_selecionada][0]
     questao_atual = questoes_filtradas.loc[index]
