@@ -293,9 +293,10 @@ def editar_ques():
             # ⏳ Espera um pouco para o usuário ver a mensagem
             time.sleep(1.5)
 
-            # 🚀 Recarregar os dados e forçar atualização da interface
-            st.session_state["questao_atual"] = None  # Resetar seleção para carregar valores novos
-            st.rerun()
+            # 🚀 Recarregar os dados sem perder as modificações
+            existing_data = carregar_dados()  # Recarregar dados mais recentes da planilha
+            st.session_state["questao_atual"] = questao_selecionada  # Manter seleção da questão
+            st.experimental_rerun()  # Atualizar a interface sem perder o estado
 
 
 
