@@ -287,16 +287,15 @@ def editar_ques():
             # 🔄 Atualizar os dados na planilha
             conn.update(worksheet="Questões", data=existing_data)
 
-            # ⏳ Espera um pouco antes de atualizar a tela
-            time.sleep(2)
-
+            # ✅ Exibir mensagem antes de atualizar a tela
             st.success("Questão editada com sucesso! ✅")
+            
+            # ⏳ Espera um pouco para o usuário ver a mensagem
+            time.sleep(1.5)
 
             # 🚀 Recarregar os dados e forçar atualização da interface
             st.session_state["questao_atual"] = None  # Resetar seleção para carregar valores novos
             st.rerun()
-
-
 
 
 
