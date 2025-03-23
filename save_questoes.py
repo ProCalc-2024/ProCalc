@@ -202,7 +202,7 @@ def editar_ques():
         st.warning(f"Nenhuma questão disponível para a matéria '{materia}'.")
         return
 
-with col2:
+    with col2:
     questao_selecionada = st.selectbox("Selecione a questão a editar:", options=questoes_filtradas["Descrição"].tolist())
 
 
