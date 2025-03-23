@@ -181,6 +181,7 @@ def editar_ques():
     import base64
     import requests
     import numpy as np
+    import time  # Adicionado para garantir tempo de sincronização
 
     conn = st.connection("gsheets", type=GSheetsConnection)
     existing_data = conn.read(worksheet="Questões")  # 🔄 Sempre carregar os dados mais recentes
@@ -205,10 +206,10 @@ def editar_ques():
     with col2:
         questao_selecionada = st.selectbox("Selecione a questão a editar:", options=questoes_filtradas["Descrição"].tolist())
 
-    index = questoes_filtradas.index[questoes_filtradas["Descrição"] == questao_selecionada][0]
-    questao_atual = questoes_filtradas.loc[index]
+    # 🔄 Pega o índice correto da questão selecionada
+    index = existing_data[existing_data["Descrição"] == questao_selecionada].index[0]
+    questao_atual = existing_data.loc[index]
 
-    # 🔄 Certifique-se de carregar os dados sempre do DataFrame atualizado
     descricao = st.text_input("Descrição", value=questao_atual["Descrição"])
     enunciado = st.text_area("Enunciado", value=questao_atual["Enunciado"])
     alternativas = {
@@ -228,24 +229,9 @@ def editar_ques():
 
     uploaded_file = st.file_uploader("Atualizar imagem:", type=["jpg", "png", "jpeg"])
 
-    # 👀 Visualizar questão antes de salvar
-    with st.expander("Visualizar questão"):
-        st.subheader('', divider='gray')
-        st.write(enunciado)
-        
-        lista = ["Alternativa_A", "Alternativa_B", "Alternativa_C", "Alternativa_D", "Alternativa_E"]
-        
-        if "embaralho" not in st.session_state:
-            st.session_state["embaralho"] = np.random.choice(lista, 5, replace=False)
-        
-        embaralho = st.session_state["embaralho"]
-        opcoes = [alternativas[embaralho[i]] for i in range(5)]
-        alternativa_selecionada = st.radio("", options=opcoes, index=None)
-
-    # 📝 Botão para salvar alterações
     if st.button("Salvar"):
         with st.spinner("Salvando..."):
-            # 🔄 Atualiza o DataFrame localmente
+            # 🔄 Atualiza o DataFrame localmente antes de salvar
             existing_data.loc[index, ["Materia", "Descrição", "Enunciado"]] = [materia, descricao, enunciado]
             for key, value in alternativas.items():
                 existing_data.loc[index, key] = value
@@ -275,11 +261,13 @@ def editar_ques():
             # 🔄 Salva as edições na planilha do Google Sheets
             conn.update(worksheet="Questões", data=existing_data)
 
+            # ⏳ Aguarda a sincronização antes de recarregar a página
+            time.sleep(2)  # Dá tempo do Google Sheets salvar antes de atualizar
+
             st.success("Questão editada com sucesso! ✅")
 
-            # 🚀 Recarrega a interface para refletir os dados atualizados
+            # 🚀 Força o recarregamento dos dados para refletir as mudanças
             st.rerun()
-
 
 
 
