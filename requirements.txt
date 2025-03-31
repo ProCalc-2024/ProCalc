@@ -118,7 +118,5 @@ gsheetsdb==0.1.11
 pytest
 mypy
 ruff
-seaborn
 cryptography
-json
 extra-streamlit-components
