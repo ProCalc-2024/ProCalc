@@ -14,14 +14,16 @@ def ensino():
   # Simulando um banco de dados de usuários
   
   # Inicializa o gerenciador de cookies
-
-
-  cookie_manager = CookieManager()
   
-  # Verificar se o usuário já está logado (cookie existe)
+  # Inicializa o CookieManager uma vez por sessão
+  if 'cookie_manager' not in st.session_state:
+      st.session_state.cookie_manager = CookieManager()
+  cookie_manager = st.session_state.cookie_manager
+  
+  # Verifica o cookie ao carregar a página
   if 'user_logged_in' not in st.session_state:
-      user_cookie = cookie_manager.get(cookie='user_auth')
-      if user_cookie is not None:
+      user_cookie = cookie_manager.get('user_auth')
+      if user_cookie:
           st.session_state.user_logged_in = True
           st.session_state.username = user_cookie
       else:
@@ -29,23 +31,28 @@ def ensino():
   
   # Página de login
   if not st.session_state.user_logged_in:
+      st.title("Login")
       username = st.text_input("Usuário")
       password = st.text_input("Senha", type="password")
       
-      if st.button("Login"):
+      if st.button("Entrar"):
           if username == "admin" and password == "123":  # Simulação de autenticação
+              cookie_manager.set(
+                  'user_auth', 
+                  username, 
+                  max_age=86400,
+                  path="/"
+              )
               st.session_state.user_logged_in = True
               st.session_state.username = username
-              cookie_manager.set('user_auth', username, max_age=86400)  # Cookie válido por 1 dia
-              st.rerun()
+              st.rerun()  # Recarrega para aplicar o cookie
           else:
               st.error("Credenciais inválidas")
   else:
-      st.success(f"Bem-vindo, {st.session_state.username}!")
-      if st.button("Logout"):
+      st.title(f"Bem-vindo, {st.session_state.username}!")
+      if st.button("Sair"):
           cookie_manager.delete('user_auth')
           st.session_state.clear()
           st.rerun()
-
-        
+          
 
