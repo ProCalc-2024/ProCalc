@@ -23,7 +23,7 @@ def ensino():
   cookie_manager = st.session_state.cookie_manager
   
   # Verifica se já está logado via cookie
-  if 'user_logged_in' not in st.session_state:
+  if cookie_manager.get("user_auth"):
       user_cookie = cookie_manager.get("user_auth")
       if user_cookie:
           st.session_state.user_logged_in = True
