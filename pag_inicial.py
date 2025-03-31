@@ -22,14 +22,13 @@ def ensino():
       st.session_state.cookie_manager = CookieManager(key="cookie_mgr")
   cookie_manager = st.session_state.cookie_manager
   
-  # Verifica se já está logado via cookie
-  if cookie_manager.get("user_auth"):
-      user_cookie = cookie_manager.get("user_auth")
-      if user_cookie:
-          st.session_state.user_logged_in = True
-          st.session_state.username = user_cookie
-      else:
-          st.session_state.user_logged_in = False
+
+  user_cookie = cookie_manager.get("user_auth")
+  if user_cookie:
+      st.session_state.user_logged_in = True
+      st.session_state.username = user_cookie
+  else:
+      st.session_state.user_logged_in = False
   
   # Página de Login
   if not st.session_state.user_logged_in:
