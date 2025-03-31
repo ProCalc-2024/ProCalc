@@ -24,6 +24,7 @@ def ensino():
   
 
   user_cookie = cookie_manager.get("user_auth")
+  st.write(user_cookie)
   if user_cookie:
       st.session_state.user_logged_in = True
       st.session_state.username = user_cookie
