@@ -120,4 +120,5 @@ mypy
 ruff
 seaborn
 cryptography
-streamlit_cookies_manager
+json
+extra-streamlit-components
