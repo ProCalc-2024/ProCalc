@@ -1,5 +1,5 @@
 import streamlit as st
-from streamlit_js_eval import get_local_storage, set_local_storage, clear_local_storage
+import streamlit_cookies_manager
 
 def ensino():
 
@@ -12,14 +12,19 @@ def ensino():
   #st.video(video_url)
 
   # Simulando um banco de dados de usuários
+  
+  # Inicializa o gerenciador de cookies
+  cookies = streamlit_cookies_manager.CookieManager()
+  
+  # Simulação de um banco de usuários
   USERS = {"leandro": "1234", "admin": "senha"}
   
-  # Checar se já existe um token de login salvo
-  token = get_local_storage("login_token")
-  
-  if token and "logged_in" not in st.session_state:
-      st.session_state.logged_in = True
-      st.session_state.username = token
+  # Verifica se já há um cookie de login
+  if cookies.ready():
+      login_cookie = cookies.get("login_token")
+      if login_cookie:
+          st.session_state.logged_in = True
+          st.session_state.username = login_cookie
   
   # Se não estiver autenticado, exibir tela de login
   if "logged_in" not in st.session_state or not st.session_state.logged_in:
@@ -31,7 +36,7 @@ def ensino():
           if username in USERS and USERS[username] == password:
               st.session_state.logged_in = True
               st.session_state.username = username
-              set_local_storage("login_token", username)  # Salva no navegador
+              cookies.set("login_token", username, expires_at="2025-12-31T23:59:59Z")  # Cookie expira no futuro
               st.experimental_rerun()
           else:
               st.error("Usuário ou senha incorretos!")
@@ -41,8 +46,9 @@ def ensino():
       st.success(f"Bem-vindo, {st.session_state.username}!")
   
       if st.button("Sair"):
-          clear_local_storage("login_token")  # Remove do navegador
+          cookies.delete("login_token")  # Remove o cookie
           st.session_state.logged_in = False
           st.experimental_rerun()
+
         
 
