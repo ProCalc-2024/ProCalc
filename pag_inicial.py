@@ -1,5 +1,5 @@
 import streamlit as st
-import streamlit_cookies_manager
+from extra_streamlit_components import CookieManager
 
 def ensino():
 
@@ -14,41 +14,38 @@ def ensino():
   # Simulando um banco de dados de usuários
   
   # Inicializa o gerenciador de cookies
-  cookies = streamlit_cookies_manager.CookieManager()
+
+
+  cookie_manager = CookieManager()
   
-  # Simulação de um banco de usuários
-  USERS = {"leandro": "1234", "admin": "senha"}
+  # Verificar se o usuário já está logado (cookie existe)
+  if 'user_logged_in' not in st.session_state:
+      user_cookie = cookie_manager.get(cookie='user_auth')
+      if user_cookie is not None:
+          st.session_state.user_logged_in = True
+          st.session_state.username = user_cookie
+      else:
+          st.session_state.user_logged_in = False
   
-  # Verifica se já há um cookie de login
-  if cookies.ready():
-      login_cookie = cookies.get("login_token")
-      if login_cookie:
-          st.session_state.logged_in = True
-          st.session_state.username = login_cookie
-  
-  # Se não estiver autenticado, exibir tela de login
-  if "logged_in" not in st.session_state or not st.session_state.logged_in:
-      st.title("Login")
+  # Página de login
+  if not st.session_state.user_logged_in:
       username = st.text_input("Usuário")
       password = st.text_input("Senha", type="password")
-  
-      if st.button("Entrar"):
-          if username in USERS and USERS[username] == password:
-              st.session_state.logged_in = True
+      
+      if st.button("Login"):
+          if username == "admin" and password == "123":  # Simulação de autenticação
+              st.session_state.user_logged_in = True
               st.session_state.username = username
-              cookies.set("login_token", username, expires_at="2025-12-31T23:59:59Z")  # Cookie expira no futuro
-              st.experimental_rerun()
+              cookie_manager.set('user_auth', username, max_age=86400)  # Cookie válido por 1 dia
+              st.rerun()
           else:
-              st.error("Usuário ou senha incorretos!")
-  
-  # Se estiver autenticado, mostrar conteúdo
-  if st.session_state.get("logged_in", False):
+              st.error("Credenciais inválidas")
+  else:
       st.success(f"Bem-vindo, {st.session_state.username}!")
-  
-      if st.button("Sair"):
-          cookies.delete("login_token")  # Remove o cookie
-          st.session_state.logged_in = False
-          st.experimental_rerun()
+      if st.button("Logout"):
+          cookie_manager.delete('user_auth')
+          st.session_state.clear()
+          st.rerun()
 
         
 
