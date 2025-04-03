@@ -213,7 +213,8 @@ def editar_ques():
     # Criar identificador único para session_state
     questao_key = f"questao_{index}"
 
-    if questao_key not in st.session_state:
+    # Se a questão foi modificada e salva anteriormente, usar os valores mais recentes
+    if questao_key not in st.session_state or st.session_state.get("ultima_questao") != questao_key:
         st.session_state[questao_key] = {
             "descricao": questao_atual["Descrição"],
             "enunciado": questao_atual["Enunciado"],
@@ -227,6 +228,8 @@ def editar_ques():
             "imagem": questao_atual.get("Imagem", ""),
             "nova_imagem": None  # Para armazenar imagem nova antes do salvamento
         }
+    
+    st.session_state["ultima_questao"] = questao_key  # Salvar última questão editada
 
     # Atualizar campos com valores do session_state
     descricao = st.text_input("Descrição", value=st.session_state[questao_key]["descricao"])
@@ -261,34 +264,44 @@ def editar_ques():
     # Botão para remover imagem
     if imagem_atual or nova_imagem:
         if st.button("Remover Imagem"):
+            # Remover do GitHub
+            if imagem_atual:
+                url_delete = f"https://api.github.com/repos/{st.secrets['github']['repo_owner']}/{st.secrets['github']['repo_name']}/contents/imagens/{imagem_atual}"
+                headers = {"Authorization": f"token {st.secrets['github']['token']}"}
+                response_delete = requests.get(url_delete, headers=headers)
+                if response_delete.status_code == 200:
+                    sha = response_delete.json()["sha"]
+                    payload_delete = {
+                        "message": f"Removendo {imagem_atual} via Streamlit",
+                        "sha": sha,
+                        "branch": st.secrets['github']['branch']
+                    }
+                    requests.delete(url_delete, json=payload_delete, headers=headers)
+
             st.session_state[questao_key]["imagem"] = ""
             st.session_state[questao_key]["nova_imagem"] = None
             st.success("Imagem removida")
 
-    # Visualizar questão antes de salvar
-    with st.expander("Visualizar questão"):
-        st.subheader('', divider='gray')
-        st.write(enunciado)
-        
-        lista = ["Alternativa_A", "Alternativa_B", "Alternativa_C", "Alternativa_D", "Alternativa_E"]
-        embaralho = np.random.choice(lista, 5, replace=False)
-        opcoes = [alternativas[embaralho[i]] for i in range(5)]
-        alternativa_selecionada = st.radio("", options=opcoes, index=None)
-    
+    # Salvar alterações
     if st.button("Salvar"):
         with st.spinner("Salvando..."):
-            # Atualizando os valores editados no session_state
+            # Atualizar session_state antes de gravar
             st.session_state[questao_key]["descricao"] = descricao
             st.session_state[questao_key]["enunciado"] = enunciado
             st.session_state[questao_key]["alternativas"] = alternativas
-            
-            # Se houver uma nova imagem, salvar no GitHub
+
+            # Atualiza os dados na planilha
+            existing_data.loc[index, ["Materia", "Descrição", "Enunciado"]] = [materia, descricao, enunciado]
+            for key, value in alternativas.items():
+                existing_data.loc[index, key] = value
+
+            # Upload da nova imagem
             if st.session_state[questao_key]["nova_imagem"]:
                 uploaded_file = st.session_state[questao_key]["nova_imagem"]
                 image_data = uploaded_file.getvalue()
                 image_base64 = base64.b64encode(image_data).decode()
                 file_path = f"imagens/{uploaded_file.name}"
-                
+
                 url = f"https://api.github.com/repos/{st.secrets['github']['repo_owner']}/{st.secrets['github']['repo_name']}/contents/{file_path}"
                 payload = {
                     "message": f"Atualizando {uploaded_file.name} via Streamlit",
@@ -296,27 +309,17 @@ def editar_ques():
                     "branch": st.secrets['github']['branch']
                 }
                 headers = {"Authorization": f"token {st.secrets['github']['token']}"}
-                
+
                 response = requests.put(url, json=payload, headers=headers)
-                
+
                 if response.status_code == 201:
                     st.session_state[questao_key]["imagem"] = uploaded_file.name
+                    existing_data.loc[index, "Imagem"] = uploaded_file.name
                     st.success("Imagem atualizada com sucesso! 📤")
-                else:
-                    st.error("Erro ao atualizar a imagem.")
 
-            # Atualiza os dados na planilha
-            existing_data.loc[index, ["Materia", "Descrição", "Enunciado"]] = [materia, descricao, enunciado]
-            for key, value in alternativas.items():
-                existing_data.loc[index, key] = value
-
-            # Atualizar imagem no banco de dados
-            existing_data.loc[index, "Imagem"] = st.session_state[questao_key]["imagem"]
-            
             conn.update(worksheet="Questões", data=existing_data)
             st.success("Questão editada com sucesso! ✅")
             st.rerun()
-
 
 
 
