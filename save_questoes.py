@@ -177,124 +177,94 @@ def inserir_assun():
         )
         
               
-def editar_ques():
-    import base64
-    import requests
-    import numpy as np
+import streamlit as st
+import pandas as pd
+import requests
+import base64
 
+def editar_ques():
+    # Carregar configurações do GitHub
+    GITHUB_TOKEN = st.secrets["github"]["token"]
+    REPO_OWNER = st.secrets["github"]["repo_owner"]
+    REPO_NAME = st.secrets["github"]["repo_name"]
+    BRANCH = st.secrets["github"]["branch"]
+
+    # Conectar ao Google Sheets
     conn = st.connection("gsheets", type=GSheetsConnection)
     existing_data = conn.read(worksheet="Questões")
+    df = pd.DataFrame(existing_data)
 
-    if existing_data.empty:
-        st.warning("Nenhuma questão disponível para editar.")
+    if df.empty:
+        st.warning("Nenhuma questão disponível para edição.")
         return
 
-    materias_unicas = existing_data["Materia"].unique()
+    # Selecionar a questão para editar
+    questao_escolhida = st.selectbox("Selecione a questão para editar:", df["Enunciado"].tolist())
 
-    col1, col2 = st.columns(2)
+    # Obter dados da questão selecionada
+    questao = df[df["Enunciado"] == questao_escolhida].iloc[0]
 
-    with col1:
-        materia = st.selectbox("Matéria", options=materias_unicas)
+    # Inputs para edição
+    descricao = st.text_input("Descrição:", value=questao["Descrição"])
+    enunciado = st.text_area("Enunciado:", value=questao["Enunciado"])
+    letra_a = st.text_input("Resposta 1 (Correta):", value=questao["Alternativa_A"])
+    letra_b = st.text_input("Resposta 2:", value=questao["Alternativa_B"])
+    letra_c = st.text_input("Resposta 3:", value=questao["Alternativa_C"])
+    letra_d = st.text_input("Resposta 4:", value=questao["Alternativa_D"])
+    letra_e = st.text_input("Resposta 5:", value=questao["Alternativa_E"])
 
-    questoes_filtradas = existing_data[existing_data["Materia"] == materia]
-
-    if questoes_filtradas.empty:
-        st.warning(f"Nenhuma questão disponível para a matéria '{materia}'.")
-        return
-
-    with col2:
-        questao_selecionada = st.selectbox("Selecione a questão a editar:", options=questoes_filtradas["Descrição"].tolist())
-
-    index = questoes_filtradas.index[questoes_filtradas["Descrição"] == questao_selecionada][0]
-    questao_atual = questoes_filtradas.loc[index]
-
-    # Verificar se a questão foi editada antes e armazenar no session_state
-    questao_key = f"questao_{index}"  # Identificador único para cada questão
-
-    if questao_key not in st.session_state:
-        st.session_state[questao_key] = {
-            "descricao": questao_atual["Descrição"],
-            "enunciado": questao_atual["Enunciado"],
-            "alternativas": {
-                "Alternativa_A": questao_atual["Alternativa_A"],
-                "Alternativa_B": questao_atual["Alternativa_B"],
-                "Alternativa_C": questao_atual["Alternativa_C"],
-                "Alternativa_D": questao_atual["Alternativa_D"],
-                "Alternativa_E": questao_atual["Alternativa_E"],
-            },
-            "imagem": questao_atual.get("Imagem", ""),
-        }
-
-    # Atualizar campos com valores do session_state
-    descricao = st.text_input("Descrição", value=st.session_state[questao_key]["descricao"])
-    enunciado = st.text_area("Enunciado", value=st.session_state[questao_key]["enunciado"])
-    alternativas = {
-        "Alternativa_A": st.text_input("Resposta 1", value=st.session_state[questao_key]["alternativas"]["Alternativa_A"]),
-        "Alternativa_B": st.text_input("Resposta 2", value=st.session_state[questao_key]["alternativas"]["Alternativa_B"]),
-        "Alternativa_C": st.text_input("Resposta 3", value=st.session_state[questao_key]["alternativas"]["Alternativa_C"]),
-        "Alternativa_D": st.text_input("Resposta 4", value=st.session_state[questao_key]["alternativas"]["Alternativa_D"]),
-        "Alternativa_E": st.text_input("Resposta 5", value=st.session_state[questao_key]["alternativas"]["Alternativa_E"]),
-    }
-
-    # Upload e edição de imagem
-    st.subheader("Imagem da Questão")
-    imagem_atual = st.session_state[questao_key]["imagem"]
+    # Gerenciar imagem
+    imagem_atual = questao.get("Imagem", "")
 
     if imagem_atual:
-        st.image(f"https://raw.githubusercontent.com/{st.secrets['github']['repo_owner']}/{st.secrets['github']['repo_name']}/main/imagens/{imagem_atual}", caption="Imagem Atual")
-    
+        st.image(f"https://raw.githubusercontent.com/{REPO_OWNER}/{REPO_NAME}/{BRANCH}/imagens/{imagem_atual}", caption="Imagem Atual")
+        if st.button("Excluir Imagem"):
+            df.loc[df["Enunciado"] == questao_escolhida, "Imagem"] = ""
+            conn.update(worksheet="Questões", data=df)
+            st.success("Imagem excluída!")
+            st.rerun()
+    else:
+        st.write("📷 **Sem imagem**")
+
     uploaded_file = st.file_uploader("Atualizar imagem:", type=["jpg", "png", "jpeg"])
 
-    # Visualizar questão antes de salvar
+    # Botão para salvar alterações
+    if st.button("Salvar Alterações"):
+        # Atualizar os dados
+        df.loc[df["Enunciado"] == questao_escolhida, ["Descrição", "Enunciado", "Alternativa_A", "Alternativa_B", "Alternativa_C", "Alternativa_D", "Alternativa_E"]] = [
+            descricao, enunciado, letra_a, letra_b, letra_c, letra_d, letra_e
+        ]
+
+        # Se houver uma nova imagem, fazer o upload para o GitHub
+        if uploaded_file is not None:
+            image_data = uploaded_file.getvalue()
+            image_base64 = base64.b64encode(image_data).decode()
+            file_path = f"imagens/{uploaded_file.name}"
+
+            url = f"https://api.github.com/repos/{REPO_OWNER}/{REPO_NAME}/contents/{file_path}"
+            payload = {
+                "message": f"Atualizando {uploaded_file.name} via Streamlit",
+                "content": image_base64,
+                "branch": BRANCH
+            }
+            headers = {"Authorization": f"token {GITHUB_TOKEN}"}
+            response = requests.put(url, json=payload, headers=headers)
+
+            if response.status_code == 201:
+                df.loc[df["Enunciado"] == questao_escolhida, "Imagem"] = uploaded_file.name
+            else:
+                st.error("Erro ao enviar a imagem. O nome do arquivo pode já existir.")
+
+        conn.update(worksheet="Questões", data=df)
+        st.success("Questão editada com sucesso!")
+        st.rerun()
+
+    # Visualizar questão editada
     with st.expander("Visualizar questão"):
-        st.subheader('', divider='gray')
-        st.write(enunciado)
-        
-        lista = ["Alternativa_A", "Alternativa_B", "Alternativa_C", "Alternativa_D", "Alternativa_E"]
-        
-        if "embaralho" not in st.session_state:
-            st.session_state["embaralho"] = np.random.choice(lista, 5, replace=False)
-        
-        embaralho = st.session_state["embaralho"]
-        opcoes = [alternativas[embaralho[i]] for i in range(5)]
-        alternativa_selecionada = st.radio("", options=opcoes, index=None)
-    
-    if st.button("Salvar"):
-        with st.spinner("Salvando..."):
-            # Atualizando as edições no session_state
-            st.session_state[questao_key]["descricao"] = descricao
-            st.session_state[questao_key]["enunciado"] = enunciado
-            st.session_state[questao_key]["alternativas"] = alternativas
-            
-            if uploaded_file:
-                image_data = uploaded_file.getvalue()
-                image_base64 = base64.b64encode(image_data).decode()
-                file_path = f"imagens/{uploaded_file.name}"
-                
-                url = f"https://api.github.com/repos/{st.secrets['github']['repo_owner']}/{st.secrets['github']['repo_name']}/contents/{file_path}"
-                payload = {
-                    "message": f"Atualizando {uploaded_file.name} via Streamlit",
-                    "content": image_base64,
-                    "branch": st.secrets['github']['branch']
-                }
-                headers = {"Authorization": f"token {st.secrets['github']['token']}"}
-                
-                response = requests.put(url, json=payload, headers=headers)
-                
-                if response.status_code == 201:
-                    st.session_state[questao_key]["imagem"] = uploaded_file.name
-                    st.success("Imagem atualizada com sucesso! 📤")
-                else:
-                    st.error("Erro ao atualizar a imagem.")
-            
-            # Atualiza os dados na planilha
-            existing_data.loc[index, ["Materia", "Descrição", "Enunciado"]] = [materia, descricao, enunciado]
-            for key, value in alternativas.items():
-                existing_data.loc[index, key] = value
-            
-            conn.update(worksheet="Questões", data=existing_data)
-            st.success("Questão editada com sucesso! ✅")
-            st.rerun()
+        st.write(f"**Enunciado:** {enunciado}")
+        alternativas = [letra_a, letra_b, letra_c, letra_d, letra_e]
+        st.radio("Escolha uma alternativa:", alternativas, index=None)
+
 
 
 
