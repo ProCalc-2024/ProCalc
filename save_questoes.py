@@ -179,7 +179,6 @@ def inserir_assun():
               
 import streamlit as st
 import pandas as pd
-import numpy as np
 import base64
 import requests
 
@@ -192,7 +191,6 @@ def editar_ques():
         return
 
     materias_unicas = existing_data["Materia"].unique()
-
     col1, col2 = st.columns(2)
 
     with col1:
@@ -209,12 +207,10 @@ def editar_ques():
 
     index = questoes_filtradas.index[questoes_filtradas["Descrição"] == questao_selecionada][0]
     questao_atual = questoes_filtradas.loc[index]
-
-    # Criar identificador único para session_state
     questao_key = f"questao_{index}"
 
-    # Se a questão foi modificada e salva anteriormente, usar os valores mais recentes
-    if questao_key not in st.session_state or st.session_state.get("ultima_questao") != questao_key:
+    # Se a questão for carregada pela primeira vez, salvar valores no session_state
+    if questao_key not in st.session_state:
         st.session_state[questao_key] = {
             "descricao": questao_atual["Descrição"],
             "enunciado": questao_atual["Enunciado"],
@@ -226,12 +222,11 @@ def editar_ques():
                 "Alternativa_E": questao_atual["Alternativa_E"],
             },
             "imagem": questao_atual.get("Imagem", ""),
-            "nova_imagem": None  # Para armazenar imagem nova antes do salvamento
+            "nova_imagem": None,  # Para armazenar nova imagem antes de salvar
         }
-    
-    st.session_state["ultima_questao"] = questao_key  # Salvar última questão editada
 
-    # Atualizar campos com valores do session_state
+    st.session_state["ultima_questao"] = questao_key
+
     descricao = st.text_input("Descrição", value=st.session_state[questao_key]["descricao"])
     enunciado = st.text_area("Enunciado", value=st.session_state[questao_key]["enunciado"])
     alternativas = {
@@ -242,9 +237,8 @@ def editar_ques():
         "Alternativa_E": st.text_input("Resposta 5", value=st.session_state[questao_key]["alternativas"]["Alternativa_E"]),
     }
 
-    # Exibição da imagem
+    # Exibir a imagem
     st.subheader("Imagem da Questão")
-    
     imagem_atual = st.session_state[questao_key]["imagem"]
     nova_imagem = st.session_state[questao_key]["nova_imagem"]
 
@@ -257,14 +251,12 @@ def editar_ques():
 
     # Upload de nova imagem
     uploaded_file = st.file_uploader("Atualizar imagem:", type=["jpg", "png", "jpeg"])
-
     if uploaded_file:
         st.session_state[questao_key]["nova_imagem"] = uploaded_file
 
-    # Botão para remover imagem
+    # Remover imagem
     if imagem_atual or nova_imagem:
         if st.button("Remover Imagem"):
-            # Remover do GitHub
             if imagem_atual:
                 url_delete = f"https://api.github.com/repos/{st.secrets['github']['repo_owner']}/{st.secrets['github']['repo_name']}/contents/imagens/{imagem_atual}"
                 headers = {"Authorization": f"token {st.secrets['github']['token']}"}
@@ -285,7 +277,6 @@ def editar_ques():
     # Salvar alterações
     if st.button("Salvar"):
         with st.spinner("Salvando..."):
-            # Atualizar session_state antes de gravar
             st.session_state[questao_key]["descricao"] = descricao
             st.session_state[questao_key]["enunciado"] = enunciado
             st.session_state[questao_key]["alternativas"] = alternativas
@@ -315,11 +306,12 @@ def editar_ques():
                 if response.status_code == 201:
                     st.session_state[questao_key]["imagem"] = uploaded_file.name
                     existing_data.loc[index, "Imagem"] = uploaded_file.name
-                    st.success("Imagem atualizada com sucesso! 📤")
+                    st.success("Imagem atualizada! 📤")
 
             conn.update(worksheet="Questões", data=existing_data)
             st.success("Questão editada com sucesso! ✅")
             st.rerun()
+
 
 
 
