@@ -177,20 +177,20 @@ def inserir_assun():
         )
         
               
-import streamlit as st
-import pandas as pd
-import base64
-import requests
-
 def editar_ques():
+    import base64
+    import requests
+    import numpy as np
+
     conn = st.connection("gsheets", type=GSheetsConnection)
     existing_data = conn.read(worksheet="Questões")
 
     if existing_data.empty:
-        st.warning("Nenhuma questão disponível para edição.")
+        st.warning("Nenhuma questão disponível para editar.")
         return
 
     materias_unicas = existing_data["Materia"].unique()
+
     col1, col2 = st.columns(2)
 
     with col1:
@@ -207,10 +207,14 @@ def editar_ques():
 
     index = questoes_filtradas.index[questoes_filtradas["Descrição"] == questao_selecionada][0]
     questao_atual = questoes_filtradas.loc[index]
+
     questao_key = f"questao_{index}"
 
-    # Se a questão for carregada pela primeira vez, salvar valores no session_state
-    if questao_key not in st.session_state:
+    # Força recarregamento dos dados atualizados após refresh
+    if "force_reload" not in st.session_state:
+        st.session_state.force_reload = True
+
+    if st.session_state.force_reload or questao_key not in st.session_state:
         st.session_state[questao_key] = {
             "descricao": questao_atual["Descrição"],
             "enunciado": questao_atual["Enunciado"],
@@ -222,10 +226,10 @@ def editar_ques():
                 "Alternativa_E": questao_atual["Alternativa_E"],
             },
             "imagem": questao_atual.get("Imagem", ""),
-            "nova_imagem": None,  # Para armazenar nova imagem antes de salvar
+            "nova_imagem": None,
         }
 
-    st.session_state["ultima_questao"] = questao_key
+    st.session_state.force_reload = False
 
     descricao = st.text_input("Descrição", value=st.session_state[questao_key]["descricao"])
     enunciado = st.text_area("Enunciado", value=st.session_state[questao_key]["enunciado"])
@@ -237,79 +241,81 @@ def editar_ques():
         "Alternativa_E": st.text_input("Resposta 5", value=st.session_state[questao_key]["alternativas"]["Alternativa_E"]),
     }
 
-    # Exibir a imagem
     st.subheader("Imagem da Questão")
     imagem_atual = st.session_state[questao_key]["imagem"]
-    nova_imagem = st.session_state[questao_key]["nova_imagem"]
 
-    if nova_imagem:
-        st.image(nova_imagem, caption="Nova Imagem (Prévia)")
-    elif imagem_atual:
-        st.image(f"https://raw.githubusercontent.com/{st.secrets['github']['repo_owner']}/{st.secrets['github']['repo_name']}/main/imagens/{imagem_atual}", caption="Imagem Atual")
+    if imagem_atual:
+        st.image(
+            f"https://raw.githubusercontent.com/{st.secrets['github']['repo_owner']}/{st.secrets['github']['repo_name']}/main/imagens/{imagem_atual}",
+            caption="Imagem Atual"
+        )
+        if st.button("Excluir imagem"):
+            st.session_state[questao_key]["imagem"] = ""
+            st.success("Imagem marcada para exclusão.")
     else:
-        st.warning("Questão sem imagem")
+        st.info("Questão sem imagem.")
 
-    # Upload de nova imagem
     uploaded_file = st.file_uploader("Atualizar imagem:", type=["jpg", "png", "jpeg"])
+
     if uploaded_file:
         st.session_state[questao_key]["nova_imagem"] = uploaded_file
+        st.image(uploaded_file, caption="Nova imagem")
 
-    # Remover imagem
-    if imagem_atual or nova_imagem:
-        if st.button("Remover Imagem"):
-            if imagem_atual:
-                url_delete = f"https://api.github.com/repos/{st.secrets['github']['repo_owner']}/{st.secrets['github']['repo_name']}/contents/imagens/{imagem_atual}"
-                headers = {"Authorization": f"token {st.secrets['github']['token']}"}
-                response_delete = requests.get(url_delete, headers=headers)
-                if response_delete.status_code == 200:
-                    sha = response_delete.json()["sha"]
-                    payload_delete = {
-                        "message": f"Removendo {imagem_atual} via Streamlit",
-                        "sha": sha,
-                        "branch": st.secrets['github']['branch']
-                    }
-                    requests.delete(url_delete, json=payload_delete, headers=headers)
+    with st.expander("Visualizar questão"):
+        st.subheader('', divider='gray')
+        st.write(enunciado)
 
-            st.session_state[questao_key]["imagem"] = ""
-            st.session_state[questao_key]["nova_imagem"] = None
-            st.success("Imagem removida")
+        lista = ["Alternativa_A", "Alternativa_B", "Alternativa_C", "Alternativa_D", "Alternativa_E"]
 
-    # Salvar alterações
+        if "embaralho" not in st.session_state:
+            st.session_state["embaralho"] = np.random.choice(lista, 5, replace=False)
+
+        embaralho = st.session_state["embaralho"]
+        opcoes = [alternativas[embaralho[i]] for i in range(5)]
+        st.radio("", options=opcoes, index=None)
+
     if st.button("Salvar"):
         with st.spinner("Salvando..."):
             st.session_state[questao_key]["descricao"] = descricao
             st.session_state[questao_key]["enunciado"] = enunciado
             st.session_state[questao_key]["alternativas"] = alternativas
 
-            # Atualiza os dados na planilha
-            existing_data.loc[index, ["Materia", "Descrição", "Enunciado"]] = [materia, descricao, enunciado]
-            for key, value in alternativas.items():
-                existing_data.loc[index, key] = value
+            # Lida com imagem
+            nova_imagem = st.session_state[questao_key].get("nova_imagem")
+            imagem_final = st.session_state[questao_key]["imagem"]
 
-            # Upload da nova imagem
-            if st.session_state[questao_key]["nova_imagem"]:
-                uploaded_file = st.session_state[questao_key]["nova_imagem"]
-                image_data = uploaded_file.getvalue()
+            if nova_imagem:
+                image_data = nova_imagem.getvalue()
                 image_base64 = base64.b64encode(image_data).decode()
-                file_path = f"imagens/{uploaded_file.name}"
+                file_path = f"imagens/{nova_imagem.name}"
 
                 url = f"https://api.github.com/repos/{st.secrets['github']['repo_owner']}/{st.secrets['github']['repo_name']}/contents/{file_path}"
                 payload = {
-                    "message": f"Atualizando {uploaded_file.name} via Streamlit",
+                    "message": f"Atualizando {nova_imagem.name} via Streamlit",
                     "content": image_base64,
                     "branch": st.secrets['github']['branch']
                 }
                 headers = {"Authorization": f"token {st.secrets['github']['token']}"}
 
                 response = requests.put(url, json=payload, headers=headers)
-
                 if response.status_code == 201:
-                    st.session_state[questao_key]["imagem"] = uploaded_file.name
-                    existing_data.loc[index, "Imagem"] = uploaded_file.name
-                    st.success("Imagem atualizada! 📤")
+                    imagem_final = nova_imagem.name
+                    st.success("Imagem atualizada com sucesso! 📤")
+                else:
+                    st.error("Erro ao atualizar a imagem.")
+
+            # Atualiza a planilha com novos dados
+            existing_data.loc[index, ["Materia", "Descrição", "Enunciado"]] = [materia, descricao, enunciado]
+            for key, value in alternativas.items():
+                existing_data.loc[index, key] = value
+
+            existing_data.loc[index, "Imagem"] = imagem_final
 
             conn.update(worksheet="Questões", data=existing_data)
             st.success("Questão editada com sucesso! ✅")
+
+            # Força o recarregamento real dos dados atualizados após refresh
+            st.session_state.force_reload = True
             st.rerun()
 
 
