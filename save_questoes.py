@@ -238,10 +238,13 @@ def editar_ques():
     imagem_atual = st.session_state[questao_key]["imagem"]
 
     if imagem_atual and imagem_atual.strip() != "":
-        st.image(
-            f"https://raw.githubusercontent.com/{st.secrets['github']['repo_owner']}/{st.secrets['github']['repo_name']}/main/imagens/{imagem_atual}",
-            caption="Imagem atual"
-        )
+        try:
+            st.image(
+                f"https://raw.githubusercontent.com/{st.secrets['github']['repo_owner']}/{st.secrets['github']['repo_name']}/main/imagens/{imagem_atual}",
+                caption="Imagem atual"
+            )
+        except:
+            st.info("Questão sem imagem 📭")
     else:
         st.info("Questão sem imagem 📭")
 
@@ -313,7 +316,6 @@ def editar_ques():
             conn.update(worksheet="Questões", data=existing_data)
             st.success("Questão editada com sucesso! ✅")
             st.rerun()
-
 
 def deletar_ques():
     # Conexão com o Google Sheets
