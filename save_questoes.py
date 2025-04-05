@@ -183,7 +183,7 @@ def editar_ques():
     import numpy as np
 
     conn = st.connection("gsheets", type=GSheetsConnection)
-    existing_data = conn.read(worksheet="Questões", ttl=0)  # Sempre buscar os dados mais recentes
+    existing_data = conn.read(worksheet="Questões", ttl=0)
 
     if existing_data.empty:
         st.warning("Nenhuma questão disponível para editar.")
@@ -208,66 +208,72 @@ def editar_ques():
     index = questoes_filtradas.index[questoes_filtradas["Descrição"] == questao_selecionada][0]
     questao_atual = questoes_filtradas.loc[index]
 
-    descricao = st.text_input("Descrição", value=questao_atual["Descrição"])
-    enunciado = st.text_area("Enunciado", value=questao_atual["Enunciado"])
+    descricao = st.text_input("Descrição", value=questao_atual["Descrição"], key=f"descricao_{index}")
+    enunciado = st.text_area("Enunciado", value=questao_atual["Enunciado"], key=f"enunciado_{index}")
+
     alternativas = {
-        "Alternativa_A": st.text_input("Resposta 1", value=questao_atual["Alternativa_A"]),
-        "Alternativa_B": st.text_input("Resposta 2", value=questao_atual["Alternativa_B"]),
-        "Alternativa_C": st.text_input("Resposta 3", value=questao_atual["Alternativa_C"]),
-        "Alternativa_D": st.text_input("Resposta 4", value=questao_atual["Alternativa_D"]),
-        "Alternativa_E": st.text_input("Resposta 5", value=questao_atual["Alternativa_E"]),
+        "Alternativa_A": st.text_input("Resposta 1", value=questao_atual["Alternativa_A"], key=f"a_{index}"),
+        "Alternativa_B": st.text_input("Resposta 2", value=questao_atual["Alternativa_B"], key=f"b_{index}"),
+        "Alternativa_C": st.text_input("Resposta 3", value=questao_atual["Alternativa_C"], key=f"c_{index}"),
+        "Alternativa_D": st.text_input("Resposta 4", value=questao_atual["Alternativa_D"], key=f"d_{index}"),
+        "Alternativa_E": st.text_input("Resposta 5", value=questao_atual["Alternativa_E"], key=f"e_{index}")
     }
 
     st.subheader("Imagem da Questão")
     imagem_atual = questao_atual.get("Imagem", "")
-    imagem_excluida = False
 
     if imagem_atual:
-        st.image(
-            f"https://raw.githubusercontent.com/{st.secrets['github']['repo_owner']}/{st.secrets['github']['repo_name']}/main/imagens/{imagem_atual}",
-            caption="Imagem Atual"
-        )
-        if st.button("Excluir imagem"):
+        st.image(f"https://raw.githubusercontent.com/{st.secrets['github']['repo_owner']}/{st.secrets['github']['repo_name']}/main/imagens/{imagem_atual}", caption="Imagem Atual")
+        if st.button("Apagar imagem"):
             url = f"https://api.github.com/repos/{st.secrets['github']['repo_owner']}/{st.secrets['github']['repo_name']}/contents/imagens/{imagem_atual}"
-            headers = {"Authorization": f"token {st.secrets['github']['token']}"}
-            response = requests.get(url, headers=headers)
-            if response.status_code == 200:
-                sha = response.json()['sha']
+            get_response = requests.get(url, headers={"Authorization": f"token {st.secrets['github']['token']}"})
+            if get_response.status_code == 200:
+                sha = get_response.json()["sha"]
                 delete_payload = {
                     "message": f"Removendo {imagem_atual} via Streamlit",
                     "sha": sha,
                     "branch": st.secrets['github']['branch']
                 }
-                delete_response = requests.delete(url, headers=headers, json=delete_payload)
-                if delete_response.status_code == 200:
-                    imagem_atual = ""
-                    imagem_excluida = True
-                    st.success("Imagem excluída com sucesso!")
+                del_response = requests.delete(url, json=delete_payload, headers={"Authorization": f"token {st.secrets['github']['token']}"})
+                if del_response.status_code == 200:
+                    st.success("Imagem apagada com sucesso!")
+                    existing_data.at[index, "Imagem"] = ""
+                    conn.update(worksheet="Questões", data=existing_data)
+                    st.rerun()
                 else:
-                    st.error("Erro ao excluir a imagem do GitHub.")
+                    st.error("Erro ao apagar a imagem no GitHub.")
             else:
-                st.warning("Imagem não encontrada para exclusão.")
+                st.warning("Imagem já não está presente no GitHub.")
     else:
-        st.info("Questão sem imagem.")
+        st.info("Questão sem imagem")
 
     uploaded_file = st.file_uploader("Atualizar imagem:", type=["jpg", "png", "jpeg"])
 
     with st.expander("Visualizar questão"):
         st.subheader('', divider='gray')
         st.write(enunciado)
+
         lista = ["Alternativa_A", "Alternativa_B", "Alternativa_C", "Alternativa_D", "Alternativa_E"]
+
         if "embaralho" not in st.session_state:
             st.session_state["embaralho"] = np.random.choice(lista, 5, replace=False)
+
         embaralho = st.session_state["embaralho"]
         opcoes = [alternativas[embaralho[i]] for i in range(5)]
         st.radio("", options=opcoes, index=None)
 
     if st.button("Salvar alterações"):
         with st.spinner("Salvando..."):
+            existing_data.at[index, "Descrição"] = descricao
+            existing_data.at[index, "Enunciado"] = enunciado
+            for alt_key in alternativas:
+                existing_data.at[index, alt_key] = alternativas[alt_key]
+
             if uploaded_file:
                 image_data = uploaded_file.getvalue()
                 image_base64 = base64.b64encode(image_data).decode()
                 file_path = f"imagens/{uploaded_file.name}"
+
                 url = f"https://api.github.com/repos/{st.secrets['github']['repo_owner']}/{st.secrets['github']['repo_name']}/contents/{file_path}"
                 payload = {
                     "message": f"Atualizando {uploaded_file.name} via Streamlit",
@@ -275,22 +281,14 @@ def editar_ques():
                     "branch": st.secrets['github']['branch']
                 }
                 headers = {"Authorization": f"token {st.secrets['github']['token']}"}
+
                 response = requests.put(url, json=payload, headers=headers)
+
                 if response.status_code == 201:
-                    imagem_atual = uploaded_file.name
+                    existing_data.at[index, "Imagem"] = uploaded_file.name
                     st.success("Imagem atualizada com sucesso! 📤")
                 else:
                     st.error("Erro ao atualizar a imagem.")
-            elif imagem_excluida:
-                imagem_atual = ""
-
-            # Atualiza os dados no DataFrame e envia para planilha
-            existing_data.loc[index, "Materia"] = materia
-            existing_data.loc[index, "Descrição"] = descricao
-            existing_data.loc[index, "Enunciado"] = enunciado
-            for key, value in alternativas.items():
-                existing_data.loc[index, key] = value
-            existing_data.loc[index, "Imagem"] = imagem_atual
 
             conn.update(worksheet="Questões", data=existing_data)
             st.success("Questão editada com sucesso! ✅")
