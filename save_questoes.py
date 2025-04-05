@@ -183,7 +183,7 @@ def editar_ques():
     import numpy as np
 
     conn = st.connection("gsheets", type=GSheetsConnection)
-    existing_data = conn.read(worksheet="Questões")
+    existing_data = conn.read(worksheet="Questões", ttl=0)  # Sempre buscar os dados mais recentes
 
     if existing_data.empty:
         st.warning("Nenhuma questão disponível para editar.")
@@ -208,41 +208,19 @@ def editar_ques():
     index = questoes_filtradas.index[questoes_filtradas["Descrição"] == questao_selecionada][0]
     questao_atual = questoes_filtradas.loc[index]
 
-    questao_key = f"questao_{index}"
-
-    # Força recarregamento dos dados atualizados após refresh
-    if "force_reload" not in st.session_state:
-        st.session_state.force_reload = True
-
-    if st.session_state.force_reload or questao_key not in st.session_state:
-        st.session_state[questao_key] = {
-            "descricao": questao_atual["Descrição"],
-            "enunciado": questao_atual["Enunciado"],
-            "alternativas": {
-                "Alternativa_A": questao_atual["Alternativa_A"],
-                "Alternativa_B": questao_atual["Alternativa_B"],
-                "Alternativa_C": questao_atual["Alternativa_C"],
-                "Alternativa_D": questao_atual["Alternativa_D"],
-                "Alternativa_E": questao_atual["Alternativa_E"],
-            },
-            "imagem": questao_atual.get("Imagem", ""),
-            "nova_imagem": None,
-        }
-
-    st.session_state.force_reload = False
-
-    descricao = st.text_input("Descrição", value=st.session_state[questao_key]["descricao"])
-    enunciado = st.text_area("Enunciado", value=st.session_state[questao_key]["enunciado"])
+    descricao = st.text_input("Descrição", value=questao_atual["Descrição"])
+    enunciado = st.text_area("Enunciado", value=questao_atual["Enunciado"])
     alternativas = {
-        "Alternativa_A": st.text_input("Resposta 1", value=st.session_state[questao_key]["alternativas"]["Alternativa_A"]),
-        "Alternativa_B": st.text_input("Resposta 2", value=st.session_state[questao_key]["alternativas"]["Alternativa_B"]),
-        "Alternativa_C": st.text_input("Resposta 3", value=st.session_state[questao_key]["alternativas"]["Alternativa_C"]),
-        "Alternativa_D": st.text_input("Resposta 4", value=st.session_state[questao_key]["alternativas"]["Alternativa_D"]),
-        "Alternativa_E": st.text_input("Resposta 5", value=st.session_state[questao_key]["alternativas"]["Alternativa_E"]),
+        "Alternativa_A": st.text_input("Resposta 1", value=questao_atual["Alternativa_A"]),
+        "Alternativa_B": st.text_input("Resposta 2", value=questao_atual["Alternativa_B"]),
+        "Alternativa_C": st.text_input("Resposta 3", value=questao_atual["Alternativa_C"]),
+        "Alternativa_D": st.text_input("Resposta 4", value=questao_atual["Alternativa_D"]),
+        "Alternativa_E": st.text_input("Resposta 5", value=questao_atual["Alternativa_E"]),
     }
 
     st.subheader("Imagem da Questão")
-    imagem_atual = st.session_state[questao_key]["imagem"]
+    imagem_atual = questao_atual.get("Imagem", "")
+    imagem_excluida = False
 
     if imagem_atual:
         st.image(
@@ -250,76 +228,73 @@ def editar_ques():
             caption="Imagem Atual"
         )
         if st.button("Excluir imagem"):
-            st.session_state[questao_key]["imagem"] = ""
-            st.success("Imagem marcada para exclusão.")
+            url = f"https://api.github.com/repos/{st.secrets['github']['repo_owner']}/{st.secrets['github']['repo_name']}/contents/imagens/{imagem_atual}"
+            headers = {"Authorization": f"token {st.secrets['github']['token']}"}
+            response = requests.get(url, headers=headers)
+            if response.status_code == 200:
+                sha = response.json()['sha']
+                delete_payload = {
+                    "message": f"Removendo {imagem_atual} via Streamlit",
+                    "sha": sha,
+                    "branch": st.secrets['github']['branch']
+                }
+                delete_response = requests.delete(url, headers=headers, json=delete_payload)
+                if delete_response.status_code == 200:
+                    imagem_atual = ""
+                    imagem_excluida = True
+                    st.success("Imagem excluída com sucesso!")
+                else:
+                    st.error("Erro ao excluir a imagem do GitHub.")
+            else:
+                st.warning("Imagem não encontrada para exclusão.")
     else:
         st.info("Questão sem imagem.")
 
     uploaded_file = st.file_uploader("Atualizar imagem:", type=["jpg", "png", "jpeg"])
 
-    if uploaded_file:
-        st.session_state[questao_key]["nova_imagem"] = uploaded_file
-        st.image(uploaded_file, caption="Nova imagem")
-
     with st.expander("Visualizar questão"):
         st.subheader('', divider='gray')
         st.write(enunciado)
-
         lista = ["Alternativa_A", "Alternativa_B", "Alternativa_C", "Alternativa_D", "Alternativa_E"]
-
         if "embaralho" not in st.session_state:
             st.session_state["embaralho"] = np.random.choice(lista, 5, replace=False)
-
         embaralho = st.session_state["embaralho"]
         opcoes = [alternativas[embaralho[i]] for i in range(5)]
         st.radio("", options=opcoes, index=None)
 
-    if st.button("Salvar"):
+    if st.button("Salvar alterações"):
         with st.spinner("Salvando..."):
-            st.session_state[questao_key]["descricao"] = descricao
-            st.session_state[questao_key]["enunciado"] = enunciado
-            st.session_state[questao_key]["alternativas"] = alternativas
-
-            # Lida com imagem
-            nova_imagem = st.session_state[questao_key].get("nova_imagem")
-            imagem_final = st.session_state[questao_key]["imagem"]
-
-            if nova_imagem:
-                image_data = nova_imagem.getvalue()
+            if uploaded_file:
+                image_data = uploaded_file.getvalue()
                 image_base64 = base64.b64encode(image_data).decode()
-                file_path = f"imagens/{nova_imagem.name}"
-
+                file_path = f"imagens/{uploaded_file.name}"
                 url = f"https://api.github.com/repos/{st.secrets['github']['repo_owner']}/{st.secrets['github']['repo_name']}/contents/{file_path}"
                 payload = {
-                    "message": f"Atualizando {nova_imagem.name} via Streamlit",
+                    "message": f"Atualizando {uploaded_file.name} via Streamlit",
                     "content": image_base64,
                     "branch": st.secrets['github']['branch']
                 }
                 headers = {"Authorization": f"token {st.secrets['github']['token']}"}
-
                 response = requests.put(url, json=payload, headers=headers)
                 if response.status_code == 201:
-                    imagem_final = nova_imagem.name
+                    imagem_atual = uploaded_file.name
                     st.success("Imagem atualizada com sucesso! 📤")
                 else:
                     st.error("Erro ao atualizar a imagem.")
+            elif imagem_excluida:
+                imagem_atual = ""
 
-            # Atualiza a planilha com novos dados
-            existing_data.loc[index, ["Materia", "Descrição", "Enunciado"]] = [materia, descricao, enunciado]
+            # Atualiza os dados no DataFrame e envia para planilha
+            existing_data.loc[index, "Materia"] = materia
+            existing_data.loc[index, "Descrição"] = descricao
+            existing_data.loc[index, "Enunciado"] = enunciado
             for key, value in alternativas.items():
                 existing_data.loc[index, key] = value
-
-            existing_data.loc[index, "Imagem"] = imagem_final
+            existing_data.loc[index, "Imagem"] = imagem_atual
 
             conn.update(worksheet="Questões", data=existing_data)
             st.success("Questão editada com sucesso! ✅")
-
-            # Força o recarregamento real dos dados atualizados após refresh
-            st.session_state.force_reload = True
             st.rerun()
-
-
-
 
 def deletar_ques():
     # Conexão com o Google Sheets
