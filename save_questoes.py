@@ -183,14 +183,13 @@ def editar_ques():
     import numpy as np
 
     conn = st.connection("gsheets", type=GSheetsConnection)
-    existing_data = conn.read(worksheet="Questões", ttl=0)  # Sempre buscar os dados mais recentes
+    existing_data = conn.read(worksheet="Questões")
 
     if existing_data.empty:
         st.warning("Nenhuma questão disponível para editar.")
         return
 
     materias_unicas = existing_data["Materia"].unique()
-
     col1, col2 = st.columns(2)
 
     with col1:
@@ -207,46 +206,68 @@ def editar_ques():
 
     index = questoes_filtradas.index[questoes_filtradas["Descrição"] == questao_selecionada][0]
     questao_atual = questoes_filtradas.loc[index]
+    global_index = questao_atual.name
 
-    descricao = st.text_input("Descrição", value=questao_atual["Descrição"])
-    enunciado = st.text_area("Enunciado", value=questao_atual["Enunciado"])
+    questao_key = f"questao_{global_index}"
+
+    if questao_key not in st.session_state:
+        st.session_state[questao_key] = {
+            "descricao": questao_atual["Descrição"],
+            "enunciado": questao_atual["Enunciado"],
+            "alternativas": {
+                "Alternativa_A": questao_atual["Alternativa_A"],
+                "Alternativa_B": questao_atual["Alternativa_B"],
+                "Alternativa_C": questao_atual["Alternativa_C"],
+                "Alternativa_D": questao_atual["Alternativa_D"],
+                "Alternativa_E": questao_atual["Alternativa_E"],
+            },
+            "imagem": questao_atual.get("Imagem", ""),
+        }
+
+    descricao = st.text_input("Descrição", value=st.session_state[questao_key]["descricao"])
+    enunciado = st.text_area("Enunciado", value=st.session_state[questao_key]["enunciado"])
     alternativas = {
-        "Alternativa_A": st.text_input("Resposta 1", value=questao_atual["Alternativa_A"]),
-        "Alternativa_B": st.text_input("Resposta 2", value=questao_atual["Alternativa_B"]),
-        "Alternativa_C": st.text_input("Resposta 3", value=questao_atual["Alternativa_C"]),
-        "Alternativa_D": st.text_input("Resposta 4", value=questao_atual["Alternativa_D"]),
-        "Alternativa_E": st.text_input("Resposta 5", value=questao_atual["Alternativa_E"]),
+        "Alternativa_A": st.text_input("Resposta 1", value=st.session_state[questao_key]["alternativas"]["Alternativa_A"]),
+        "Alternativa_B": st.text_input("Resposta 2", value=st.session_state[questao_key]["alternativas"]["Alternativa_B"]),
+        "Alternativa_C": st.text_input("Resposta 3", value=st.session_state[questao_key]["alternativas"]["Alternativa_C"]),
+        "Alternativa_D": st.text_input("Resposta 4", value=st.session_state[questao_key]["alternativas"]["Alternativa_D"]),
+        "Alternativa_E": st.text_input("Resposta 5", value=st.session_state[questao_key]["alternativas"]["Alternativa_E"]),
     }
 
     st.subheader("Imagem da Questão")
-    imagem_atual = questao_atual.get("Imagem", "")
-    imagem_excluida = False
+    imagem_atual = st.session_state[questao_key]["imagem"]
+
+    imagem_container = st.container()
 
     if imagem_atual:
-        st.image(
-            f"https://raw.githubusercontent.com/{st.secrets['github']['repo_owner']}/{st.secrets['github']['repo_name']}/main/imagens/{imagem_atual}",
-            caption="Imagem Atual"
-        )
-        if st.button("Excluir imagem"):
-            url = f"https://api.github.com/repos/{st.secrets['github']['repo_owner']}/{st.secrets['github']['repo_name']}/contents/imagens/{imagem_atual}"
-            headers = {"Authorization": f"token {st.secrets['github']['token']}"}
-            response = requests.get(url, headers=headers)
-            if response.status_code == 200:
-                sha = response.json()['sha']
-                delete_payload = {
-                    "message": f"Removendo {imagem_atual} via Streamlit",
-                    "sha": sha,
-                    "branch": st.secrets['github']['branch']
-                }
-                delete_response = requests.delete(url, headers=headers, json=delete_payload)
-                if delete_response.status_code == 200:
-                    imagem_atual = ""
-                    imagem_excluida = True
-                    st.success("Imagem excluída com sucesso!")
+        with imagem_container:
+            st.image(
+                f"https://raw.githubusercontent.com/{st.secrets['github']['repo_owner']}/{st.secrets['github']['repo_name']}/main/imagens/{imagem_atual}",
+                caption="Imagem Atual"
+            )
+            if st.button("Apagar imagem"):
+                file_path = f"imagens/{imagem_atual}"
+                url = f"https://api.github.com/repos/{st.secrets['github']['repo_owner']}/{st.secrets['github']['repo_name']}/contents/{file_path}"
+                headers = {"Authorization": f"token {st.secrets['github']['token']}"}
+
+                response = requests.get(url, headers=headers)
+                if response.status_code == 200:
+                    sha = response.json()["sha"]
+                    delete_payload = {
+                        "message": f"Removendo {imagem_atual} via Streamlit",
+                        "sha": sha,
+                        "branch": st.secrets['github']['branch']
+                    }
+                    delete_response = requests.delete(url, headers=headers, json=delete_payload)
+                    if delete_response.status_code == 200:
+                        st.session_state[questao_key]["imagem"] = ""
+                        existing_data.loc[global_index, "Imagem"] = ""
+                        conn.update(worksheet="Questões", data=existing_data)
+                        st.success("Imagem apagada com sucesso!")
+                    else:
+                        st.error("Erro ao apagar a imagem do GitHub.")
                 else:
-                    st.error("Erro ao excluir a imagem do GitHub.")
-            else:
-                st.warning("Imagem não encontrada para exclusão.")
+                    st.error("Imagem não encontrada no GitHub.")
     else:
         st.info("Questão sem imagem.")
 
@@ -255,15 +276,22 @@ def editar_ques():
     with st.expander("Visualizar questão"):
         st.subheader('', divider='gray')
         st.write(enunciado)
+
         lista = ["Alternativa_A", "Alternativa_B", "Alternativa_C", "Alternativa_D", "Alternativa_E"]
+
         if "embaralho" not in st.session_state:
             st.session_state["embaralho"] = np.random.choice(lista, 5, replace=False)
+
         embaralho = st.session_state["embaralho"]
         opcoes = [alternativas[embaralho[i]] for i in range(5)]
         st.radio("", options=opcoes, index=None)
 
-    if st.button("Salvar alterações"):
+    if st.button("Salvar"):
         with st.spinner("Salvando..."):
+            st.session_state[questao_key]["descricao"] = descricao
+            st.session_state[questao_key]["enunciado"] = enunciado
+            st.session_state[questao_key]["alternativas"] = alternativas
+
             if uploaded_file:
                 image_data = uploaded_file.getvalue()
                 image_base64 = base64.b64encode(image_data).decode()
@@ -275,26 +303,22 @@ def editar_ques():
                     "branch": st.secrets['github']['branch']
                 }
                 headers = {"Authorization": f"token {st.secrets['github']['token']}"}
+
                 response = requests.put(url, json=payload, headers=headers)
+
                 if response.status_code == 201:
-                    imagem_atual = uploaded_file.name
-                    st.success("Imagem atualizada com sucesso! 📤")
+                    st.session_state[questao_key]["imagem"] = uploaded_file.name
+                    existing_data.loc[global_index, "Imagem"] = uploaded_file.name
+                    st.success("Imagem atualizada com sucesso! 📄")
                 else:
                     st.error("Erro ao atualizar a imagem.")
-            elif imagem_excluida:
-                imagem_atual = ""
 
-            # Atualiza os dados no DataFrame e envia para planilha
-            existing_data.loc[index, "Materia"] = materia
-            existing_data.loc[index, "Descrição"] = descricao
-            existing_data.loc[index, "Enunciado"] = enunciado
+            existing_data.loc[global_index, ["Materia", "Descrição", "Enunciado"]] = [materia, descricao, enunciado]
             for key, value in alternativas.items():
-                existing_data.loc[index, key] = value
-            existing_data.loc[index, "Imagem"] = imagem_atual
+                existing_data.loc[global_index, key] = value
 
             conn.update(worksheet="Questões", data=existing_data)
             st.success("Questão editada com sucesso! ✅")
-            st.rerun()
 
 
 def deletar_ques():
