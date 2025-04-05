@@ -235,9 +235,9 @@ def editar_ques():
     }
 
     st.subheader("Imagem da Questão")
-    imagem_atual = st.session_state[questao_key]["imagem"]
+    imagem_atual = st.session_state[questao_key].get("imagem", "")
 
-    if imagem_atual and imagem_atual.strip() != "":
+    if imagem_atual.strip() != "":
         try:
             st.image(
                 f"https://raw.githubusercontent.com/{st.secrets['github']['repo_owner']}/{st.secrets['github']['repo_name']}/main/imagens/{imagem_atual}",
@@ -250,7 +250,7 @@ def editar_ques():
 
     uploaded_file = st.file_uploader("Atualizar imagem:", type=["jpg", "png", "jpeg"])
 
-    if imagem_atual and imagem_atual.strip() != "":
+    if imagem_atual.strip() != "":
         if st.button("Apagar imagem"):
             with st.spinner("Apagando imagem..."):
                 url = f"https://api.github.com/repos/{st.secrets['github']['repo_owner']}/{st.secrets['github']['repo_name']}/contents/imagens/{imagem_atual}"
@@ -316,6 +316,7 @@ def editar_ques():
             conn.update(worksheet="Questões", data=existing_data)
             st.success("Questão editada com sucesso! ✅")
             st.rerun()
+
 
 def deletar_ques():
     # Conexão com o Google Sheets
