@@ -296,6 +296,7 @@ def editar_ques():
             st.success("Questão editada com sucesso! ✅")
             st.rerun()
 
+
 def deletar_ques():
     # Conexão com o Google Sheets
     conn = st.connection("gsheets", type=GSheetsConnection)
