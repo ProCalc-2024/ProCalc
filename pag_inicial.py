@@ -19,4 +19,3 @@ def ensino():
 
   # Inicializa o CookieManager UMA VEZ (evita recriação)
   # 1. Inicializa o CookieManager (SEMPRE no topo do script)
-  
