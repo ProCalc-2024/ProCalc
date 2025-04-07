@@ -120,4 +120,3 @@ mypy
 ruff
 cryptography
 extra-streamlit-components
-streamlit-browser-cookie
