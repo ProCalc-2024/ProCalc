@@ -18,20 +18,21 @@ def ensino():
   # Inicializa o CookieManager uma vez por sessão
 
   # Inicializa o CookieManager UMA VEZ (evita recriação)
+  # 1. Inicializa o CookieManager (SEMPRE no topo do script)
   if 'cookie_manager' not in st.session_state:
-      st.session_state.cookie_manager = CookieManager(key="cookie_mgr")
+      st.session_state.cookie_manager = CookieManager()
   cookie_manager = st.session_state.cookie_manager
   
-
-  user_cookie = cookie_manager.get("user_auth")
-  st.write(user_cookie)
-  if user_cookie:
-      st.session_state.user_logged_in = True
-      st.session_state.username = user_cookie
-  else:
-      st.session_state.user_logged_in = False
+  # 2. Verifica o cookie apenas na primeira execução
+  if 'user_logged_in' not in st.session_state:
+      user_cookie = cookie_manager.get('user_auth')
+      if user_cookie:
+          st.session_state.user_logged_in = True
+          st.session_state.username = user_cookie
+      else:
+          st.session_state.user_logged_in = False
   
-  # Página de Login
+  # 3. Interface de login/logout
   if not st.session_state.user_logged_in:
       st.title("Login")
       username = st.text_input("Usuário")
@@ -39,23 +40,23 @@ def ensino():
   
       if st.button("Entrar"):
           if username == "admin" and password == "123":  # Simulação
-              # SALVA O COOKIE (com path e max_age)
+              # Salva o cookie (com path="/")
               cookie_manager.set(
-                  "user_auth",
+                  'user_auth',
                   username,
-                  max_age=86400,  # 1 dia
+                  max_age=86400,
                   path="/"
               )
               st.session_state.user_logged_in = True
               st.session_state.username = username
-              st.experimental_rerun()  # Recarrega para aplicar o cookie
+              st.rerun()  # Recarrega para aplicar o cookie
           else:
               st.error("Credenciais inválidas")
   else:
-      st.success(f"Bem-vindo, {st.session_state.username}!")
+      st.title(f"Bem-vindo, {st.session_state.username}!")
       if st.button("Sair"):
-          cookie_manager.delete("user_auth")
+          cookie_manager.delete('user_auth')
           st.session_state.clear()
-          st.experimental_rerun()
+          st.rerun()
           
 
