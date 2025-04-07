@@ -9,7 +9,7 @@ def ensino():
   # Exibir como link clicável (com miniatura do YouTube)
   #st.markdown(f'[![Assista no YouTube](http://img.youtube.com/vi/d075cooe68s/0.jpg)]({video_url})')
 
-  st.Write("video_url")
+  st.write("video_url")
 
   # Simulando um banco de dados de usuários
   
