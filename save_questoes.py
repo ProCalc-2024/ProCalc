@@ -12,16 +12,16 @@ def inserir_ques():
     REPO_OWNER = st.secrets["github"]["repo_owner"]
     REPO_NAME = st.secrets["github"]["repo_name"]
     BRANCH = st.secrets["github"]["branch"]
-    
+
     # Upload da imagem pelo usuário
     uploaded_file = st.file_uploader("Insira uma imagem:", type=["jpg", "png", "jpeg"])
-        
+
     conn = st.connection("gsheets", type=GSheetsConnection)
-    sheet = conn.read(worksheet="Materias", ttl=0)
+    sheet = conn.read(worksheet="Materias")
     dict = pd.DataFrame(sheet)
     # adicionar uma nova pergunta
     result = {}
-    
+
     col1, col2 = st.columns([1, 1])
 
     lista =  [linha for linha in dict["Materia"]]
@@ -39,7 +39,7 @@ def inserir_ques():
     letra_d = st.text_input("Resposta 4", placeholder= "Digite aqui a resposta 4", key = "letra_d") 
     letra_e = st.text_input("Resposta 5", placeholder= "Digite aqui a resposta 5", key = "letra_e")
 
-    existing_data = conn.read(worksheet="Questões", ttl=0)
+    existing_data = conn.read(worksheet="Questões")
     novo = pd.DataFrame({
         'Materia': [materia],
         'Descrição': [descricao],
@@ -50,132 +50,133 @@ def inserir_ques():
         'Alternativa_D': [letra_d],
         'Alternativa_E': [letra_e]
     })
-      
+
     lista_ques = []
-    
+
     if st.button("Salvar"):
 
         if uploaded_file is not None:
-            
+
             image_data = uploaded_file.getvalue()  # Lê os bytes da imagem
             image_base64 = base64.b64encode(image_data).decode()  # Converte para Base64
-                
+
             file_path = f"imagens/{uploaded_file.name}"  # Caminho no repositório
-                
+
             novo['Imagem'] = [f"{uploaded_file.name}"]
-                
+
             url = f"https://api.github.com/repos/{REPO_OWNER}/{REPO_NAME}/contents/{file_path}"
-                
+
             payload = {
                 "message": f"Adicionando {uploaded_file.name} via Streamlit",
                 "content": image_base64,
                 "branch": BRANCH
             }
-            
+
             headers = {"Authorization": f"token {GITHUB_TOKEN}"}
-            
+
             response = requests.put(url, json=payload, headers=headers)
-            
+
             if response.status_code == 201:
                 combined_data = pd.concat([existing_data, novo], ignore_index=True)
                 conn.update(worksheet="Questões", data=combined_data)
-           
+
                 conn.read(
                 worksheet="Questões",  # Nome da planilha
-                ttl=0                  # Cache de 1 segundo
+                ttl="10m"                  # Cache de 1 segundo
                 )
-                
+
                 st.success(':green-background[Questão salva]', icon='✔️')
-            
+
                 st.rerun()
-                
+
                 st.success(f"Imagem Salva no GITHUB! 📤")
             else:
                 #st.error(f"Erro ao enviar a imagem: {response.json()}")
                 st.error(f"A imagem já existe")
-        
-        
+
+
         else:
             combined_data = pd.concat([existing_data, novo], ignore_index=True)
-            
+
             conn.update(worksheet="Questões", data=combined_data)
-           
+
             conn.read(
-            worksheet="Questões" 
+            worksheet="Questões",  # Nome da planilha
+            ttl="1s"                  # Cache de 1 segundo
             )
-            
+
             st.success(':green-background[Questão salva]', icon='✔️')
-        
+
             st.rerun()
-            
+
     with st.expander("Visualizar questão"):
-        
+
         st.subheader('', divider = 'gray')
-    
+
         # embaralha as alternativas independente da questão 
         lista = ["Alternativa_A","Alternativa_B","Alternativa_C","Alternativa_D","Alternativa_E"]
-        
+
         if "embaralho" not in st.session_state:
-            
+
             st.session_state["embaralho"] = np.random.choice(lista, 5, replace = False)
-    
+
         if "ques" not in st.session_state:
             st.session_state["save"] = {}
             st.session_state["numero"] = 0
-             
+
         embaralho = st.session_state["embaralho"]
-        
+
         # escolha de questão aleatoria
         for linha in novo.iloc: 
             lista_ques.append(linha)
-    
+
         #comando da questão  
         questao = lista_ques[0]
-        
+
         st.write("")
         st.write(questao["Enunciado"])
 
-        
+
         if uploaded_file is not None:
             st.subheader('', divider = 'gray')
             st.image(uploaded_file, caption="Imagem carregada", use_column_width=True)
         st.subheader('', divider = 'gray')
-        
+
         opções = [questao[embaralho[0]], questao[embaralho[1]], questao[embaralho[2]], questao[embaralho[3]], questao[embaralho[4]]]    
-        
+
         alternativa = st.radio("", options = opções, index=None)
-            
+
         st.session_state["resposta"] = questao["Alternativa_A"]
 
-    
+
 
 def inserir_assun():    
-    
+
     conn = st.connection("gsheets", type=GSheetsConnection)
     existing = conn.read(worksheet="Materias")
     # adicionar uma nova pergunta
     result = {}
 
     st.title("Novo Assunto")
-    
+
     assun = st.text_area("Assunto:", placeholder= "Digite aqui o novo assunto") 
-    
+
     new = pd.DataFrame({
         'Materia': [assun]
      })
-    
+
     combined = pd.concat([existing, new], ignore_index=True) 
-    
+
     if st.button("Visualizar questão"):
-        
+
         conn.update(worksheet="Materias", data=combined)
-       
+
         conn.read(
         worksheet="Materias",  # Nome da planilha
-        ttl=0                  # Cache de 10 minutos
+        ttl="10m"                  # Cache de 10 minutos
         )
-        
-              
+
+
 def editar_ques():
     import base64
     import requests
@@ -210,6 +211,21 @@ def editar_ques():
     descricao = st.text_input("Descrição", value=questao_atual["Descrição"], key=f"descricao_{index}")
     enunciado = st.text_area("Enunciado", value=questao_atual["Enunciado"], key=f"enunciado_{index}")
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     alternativas = {
         "Alternativa_A": st.text_input("Resposta 1", value=questao_atual["Alternativa_A"], key=f"a_{index}"),
         "Alternativa_B": st.text_input("Resposta 2", value=questao_atual["Alternativa_B"], key=f"b_{index}"),
@@ -221,8 +237,20 @@ def editar_ques():
     st.subheader("Imagem da Questão")
     imagem_atual = questao_atual.get("Imagem", "")
 
+
+
+
+
+
+
+
+
+
+
+
     if imagem_atual:
         st.image(f"https://raw.githubusercontent.com/{st.secrets['github']['repo_owner']}/{st.secrets['github']['repo_name']}/main/imagens/{imagem_atual}", caption="Imagem Atual")
+
         if st.button("Apagar imagem"):
             url = f"https://api.github.com/repos/{st.secrets['github']['repo_owner']}/{st.secrets['github']['repo_name']}/contents/imagens/{imagem_atual}"
             get_response = requests.get(url, headers={"Authorization": f"token {st.secrets['github']['token']}"})
@@ -250,12 +278,7 @@ def editar_ques():
 
     with st.expander("Visualizar questão"):
         st.subheader('', divider='gray')
-        st.write(enunciado)
-
-        lista = ["Alternativa_A", "Alternativa_B", "Alternativa_C", "Alternativa_D", "Alternativa_E"]
-
-        if "embaralho" not in st.session_state:
-            st.session_state["embaralho"] = np.random.choice(lista, 5, replace=False)
+@@ -279,13 +260,14 @@
 
         embaralho = st.session_state["embaralho"]
         opcoes = [alternativas[embaralho[i]] for i in range(5)]
@@ -270,24 +293,20 @@ def editar_ques():
 
             if uploaded_file:
                 image_data = uploaded_file.getvalue()
-                image_base64 = base64.b64encode(image_data).decode()
-                file_path = f"imagens/{uploaded_file.name}"
-
-                url = f"https://api.github.com/repos/{st.secrets['github']['repo_owner']}/{st.secrets['github']['repo_name']}/contents/{file_path}"
-                payload = {
-                    "message": f"Atualizando {uploaded_file.name} via Streamlit",
-                    "content": image_base64,
-                    "branch": st.secrets['github']['branch']
-                }
-                headers = {"Authorization": f"token {st.secrets['github']['token']}"}
+@@ -302,69 +284,66 @@
 
                 response = requests.put(url, json=payload, headers=headers)
 
                 if response.status_code == 201:
                     existing_data.at[index, "Imagem"] = uploaded_file.name
+
                     st.success("Imagem atualizada com sucesso! 📤")
                 else:
                     st.error("Erro ao atualizar a imagem.")
+
+
+
+
 
             conn.update(worksheet="Questões", data=existing_data)
             st.success("Questão editada com sucesso! ✅")
@@ -337,12 +356,12 @@ def deletar_ques():
         conn.update(worksheet="Questões", data=dict)
 
         # Atualiza cache para refletir a exclusão
-        conn.read(worksheet="Questões", ttl=0)
+        conn.read(worksheet="Questões", ttl="1s")
 
         st.toast(':green-background[Questão deletada com sucesso]', icon='✔️')
         st.rerun()
         # Atualiza cache para refletir a exclusão
-        conn.read(worksheet="Questões", ttl=0)
+        conn.read(worksheet="Questões", ttl="1s")
 
         st.toast(':green-background[Questão deletada com sucesso]', icon='✔️')
         st.rerun()
