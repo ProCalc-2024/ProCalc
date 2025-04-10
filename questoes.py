@@ -41,12 +41,17 @@ def read_questao():
 
     disabled3 = st.session_state["disabledtime"]
 
-    lista = list(set(dict["Materia"]))
+    lista = list(set(dict["Materia"]))lista = list(set(dict["Materia"]))
+    lista.sort()
+    lista.insert(0, "Todas")  # Adiciona a opção "Todas" no topo
 
     with col1:
         materia = st.selectbox("Selecione um assunto", lista, disabled=disabled3)
 
-    lista_ques = [linha for linha in dict.iloc if linha["Materia"] == materia]
+    if materia == "Todas":
+        lista_ques = [linha for linha in dict.iloc]
+    else:
+        lista_ques = [linha for linha in dict.iloc if linha["Materia"] == materia]
     n = len(lista_ques)
 
     with col1:
