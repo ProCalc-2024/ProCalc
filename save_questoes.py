@@ -16,7 +16,7 @@ def inserir_ques():
     # Upload da imagem pelo usuário
     uploaded_file = st.file_uploader("Insira uma imagem:", type=["jpg", "png", "jpeg"])
         
-    conn = st.connection("gsheets", type=GSheetsConnection, ttl="1s")
+    conn = st.connection("gsheets", type=GSheetsConnection)
     sheet = conn.read(worksheet="Materias")
     dict = pd.DataFrame(sheet)
     # adicionar uma nova pergunta
@@ -39,7 +39,7 @@ def inserir_ques():
     letra_d = st.text_input("Resposta 4", placeholder= "Digite aqui a resposta 4", key = "letra_d") 
     letra_e = st.text_input("Resposta 5", placeholder= "Digite aqui a resposta 5", key = "letra_e")
 
-    existing_data = conn.read(worksheet="Questões", ttl="0")
+    existing_data = conn.read(worksheet="Questões", ttl=0)
     novo = pd.DataFrame({
         'Materia': [materia],
         'Descrição': [descricao],
@@ -82,7 +82,7 @@ def inserir_ques():
            
                 conn.read(
                 worksheet="Questões",  # Nome da planilha
-                ttl="0"                  # Cache de 1 segundo
+                ttl=0                  # Cache de 1 segundo
                 )
                 
                 st.success(':green-background[Questão salva]', icon='✔️')
@@ -172,7 +172,7 @@ def inserir_assun():
        
         conn.read(
         worksheet="Materias",  # Nome da planilha
-        ttl="0"                  # Cache de 10 minutos
+        ttl=0                  # Cache de 10 minutos
         )
         
               
@@ -337,12 +337,12 @@ def deletar_ques():
         conn.update(worksheet="Questões", data=dict)
 
         # Atualiza cache para refletir a exclusão
-        conn.read(worksheet="Questões", ttl="0")
+        conn.read(worksheet="Questões", ttl=0)
 
         st.toast(':green-background[Questão deletada com sucesso]', icon='✔️')
         st.rerun()
         # Atualiza cache para refletir a exclusão
-        conn.read(worksheet="Questões", ttl="0")
+        conn.read(worksheet="Questões", ttl=0)
 
         st.toast(':green-background[Questão deletada com sucesso]', icon='✔️')
         st.rerun()
