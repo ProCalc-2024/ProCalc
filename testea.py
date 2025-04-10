@@ -17,7 +17,7 @@ def cadastrar_usuario():
     cipher = Fernet(chave)
     # Conexão com o Google Sheets
     conn = st.connection("gsheets", type=GSheetsConnection)
-    sheet = conn.read(worksheet="Usuários")
+    sheet = conn.read(worksheet="Usuários", ttl=0)
     df = pd.DataFrame(sheet)
 
     st.subheader("Cadastro de Usuário")
