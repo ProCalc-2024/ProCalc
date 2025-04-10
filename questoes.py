@@ -15,7 +15,8 @@ def local_css(file_name):
 local_css(r"styles_questao.css")
 
 def read_questao():
-    # Carregar configurações do secrets para o github
+    # Carregar configurações do secrets para o githu
+    
     GITHUB_TOKEN = st.secrets["github"]["token"]
     REPO_OWNER = st.secrets["github"]["repo_owner"]
     REPO_NAME = st.secrets["github"]["repo_name"]
