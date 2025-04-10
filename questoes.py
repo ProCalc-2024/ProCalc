@@ -41,7 +41,7 @@ def read_questao():
 
     disabled3 = st.session_state["disabledtime"]
 
-    lista = list(set(dict["Materia"]))lista = list(set(dict["Materia"]))
+    lista = list(set(dict["Materia"]))
     lista.sort()
     lista.insert(0, "Todas")  # Adiciona a opção "Todas" no topo
 
