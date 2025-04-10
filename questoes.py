@@ -21,8 +21,8 @@ def read_questao():
     REPO_NAME = st.secrets["github"]["repo_name"]
     BRANCH = st.secrets["github"]["branch"]
     
-    conn = st.connection("gsheets", type=GSheetsConnection, ttl="0")
-    sheet = conn.read(worksheet="Questões")
+    conn = st.connection("gsheets", type=GSheetsConnection)
+    sheet = conn.read(worksheet="Questões", ttl=0)
     dict = pd.DataFrame(sheet)
 
     col1, col2 = st.columns([1, 1])
