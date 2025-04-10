@@ -82,7 +82,7 @@ def inserir_ques():
 
                 conn.read(
                 worksheet="Questões",  # Nome da planilha
-                ttl="10m"                  # Cache de 1 segundo
+                ttl="1s"                  # Cache de 1 segundo
                 )
 
                 st.success(':green-background[Questão salva]', icon='✔️')
