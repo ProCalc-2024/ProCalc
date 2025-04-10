@@ -16,8 +16,8 @@ def inserir_ques():
     # Upload da imagem pelo usuário
     uploaded_file = st.file_uploader("Insira uma imagem:", type=["jpg", "png", "jpeg"])
         
-    conn = st.connection("gsheets", type=GSheetsConnection)
-    sheet = conn.read(worksheet="Materias", ttl=1)
+    conn = st.connection("gsheets", type=GSheetsConnection, ttl="1s")
+    sheet = conn.read(worksheet="Materias")
     dict = pd.DataFrame(sheet)
     # adicionar uma nova pergunta
     result = {}
