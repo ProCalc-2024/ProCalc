@@ -58,7 +58,7 @@ if st.session_state["pagina"] == "Log":
                     match option:
                         case "Adicionar Questões":
                             save_questoes.inserir_ques()
-                        case "Adicionar Materias":
+                        case "Adicionar Matérias":
                             save_questoes.inserir_assun()
                         case "Editar Questões":
                             save_questoes.editar_ques()  # Chama a função para editar questões
