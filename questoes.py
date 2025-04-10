@@ -46,7 +46,7 @@ def read_questao():
     lista.insert(0, "Todas")  # Adiciona a opção "Todas" no topo
 
     with col1:
-        materia = st.selectbox("Selecione um assunto", lista, disabled=disabled3)
+        materia = st.selectbox("Selecione um assunto:", lista, disabled=disabled3)
 
     if materia == "Todas":
         lista_ques = [linha for linha in dict.iloc]
