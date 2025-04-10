@@ -202,8 +202,8 @@ def read_questao():
                 pass
 
     with col2:
-        min_question = st.slider("Tempo de resolução do formulario minutos:", 0, 59, 0, disabled=disabled3)
-        hor_question = st.slider("Tempo de resolução do formulario horas:", 0, 6, 0, disabled=disabled3)
+        min_question = st.slider("Tempo de resolução do formulário minutos:", 0, 59, 0, disabled=disabled3)
+        hor_question = st.slider("Tempo de resolução do formulário horas:", 0, 6, 0, disabled=disabled3)
         total_time = hor_question * 60 * 60 + min_question * 60
 
         if not disabled3:
