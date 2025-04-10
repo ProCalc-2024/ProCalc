@@ -82,7 +82,7 @@ def inserir_ques():
            
                 conn.read(
                 worksheet="Questões",  # Nome da planilha
-                ttl="10m"                  # Cache de 1 segundo
+                ttl="0"                  # Cache de 1 segundo
                 )
                 
                 st.success(':green-background[Questão salva]', icon='✔️')
@@ -102,7 +102,7 @@ def inserir_ques():
            
             conn.read(
             worksheet="Questões",  # Nome da planilha
-            ttl="1s"                  # Cache de 1 segundo
+            ttl="0"                  # Cache de 1 segundo
             )
             
             st.success(':green-background[Questão salva]', icon='✔️')
@@ -173,7 +173,7 @@ def inserir_assun():
        
         conn.read(
         worksheet="Materias",  # Nome da planilha
-        ttl="10m"                  # Cache de 10 minutos
+        ttl="0"                  # Cache de 10 minutos
         )
         
               
@@ -338,12 +338,12 @@ def deletar_ques():
         conn.update(worksheet="Questões", data=dict)
 
         # Atualiza cache para refletir a exclusão
-        conn.read(worksheet="Questões", ttl="1s")
+        conn.read(worksheet="Questões", ttl="0")
 
         st.toast(':green-background[Questão deletada com sucesso]', icon='✔️')
         st.rerun()
         # Atualiza cache para refletir a exclusão
-        conn.read(worksheet="Questões", ttl="1s")
+        conn.read(worksheet="Questões", ttl="0")
 
         st.toast(':green-background[Questão deletada com sucesso]', icon='✔️')
         st.rerun()
