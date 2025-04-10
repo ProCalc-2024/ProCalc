@@ -244,7 +244,7 @@ def read_questao():
             st.write("⏳ Tempo finalizado")
 
         if st.session_state["disabled"] in [True, False]:
-            if st.button("Iniciar questionario", on_click=new_questionario):
+            if st.button("Iniciar questionário", on_click=new_questionario):
                 pass
 
         
