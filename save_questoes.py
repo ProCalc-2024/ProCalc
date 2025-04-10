@@ -39,7 +39,7 @@ def inserir_ques():
     letra_d = st.text_input("Resposta 4", placeholder= "Digite aqui a resposta 4", key = "letra_d") 
     letra_e = st.text_input("Resposta 5", placeholder= "Digite aqui a resposta 5", key = "letra_e")
 
-    existing_data = conn.read(worksheet="Questões")
+    existing_data = conn.read(worksheet="Questões", ttl="0")
     novo = pd.DataFrame({
         'Materia': [materia],
         'Descrição': [descricao],
