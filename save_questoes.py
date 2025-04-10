@@ -210,22 +210,6 @@ def editar_ques():
 
     descricao = st.text_input("Descrição", value=questao_atual["Descrição"], key=f"descricao_{index}")
     enunciado = st.text_area("Enunciado", value=questao_atual["Enunciado"], key=f"enunciado_{index}")
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
     alternativas = {
         "Alternativa_A": st.text_input("Resposta 1", value=questao_atual["Alternativa_A"], key=f"a_{index}"),
         "Alternativa_B": st.text_input("Resposta 2", value=questao_atual["Alternativa_B"], key=f"b_{index}"),
@@ -236,17 +220,6 @@ def editar_ques():
 
     st.subheader("Imagem da Questão")
     imagem_atual = questao_atual.get("Imagem", "")
-
-
-
-
-
-
-
-
-
-
-
 
     if imagem_atual:
         st.image(f"https://raw.githubusercontent.com/{st.secrets['github']['repo_owner']}/{st.secrets['github']['repo_name']}/main/imagens/{imagem_atual}", caption="Imagem Atual")
@@ -278,8 +251,6 @@ def editar_ques():
 
     with st.expander("Visualizar questão"):
         st.subheader('', divider='gray')
-@@ -279,13 +260,14 @@
-
         embaralho = st.session_state["embaralho"]
         opcoes = [alternativas[embaralho[i]] for i in range(5)]
         st.radio("", options=opcoes, index=None)
@@ -293,7 +264,6 @@ def editar_ques():
 
             if uploaded_file:
                 image_data = uploaded_file.getvalue()
-@@ -302,69 +284,66 @@
 
                 response = requests.put(url, json=payload, headers=headers)
 
@@ -304,16 +274,9 @@ def editar_ques():
                 else:
                     st.error("Erro ao atualizar a imagem.")
 
-
-
-
-
             conn.update(worksheet="Questões", data=existing_data)
             st.success("Questão editada com sucesso! ✅")
             st.rerun()
-
-
-
 
 def deletar_ques():
     # Conexão com o Google Sheets
