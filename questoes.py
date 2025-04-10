@@ -22,7 +22,7 @@ def read_questao():
     BRANCH = st.secrets["github"]["branch"]
     
     conn = st.connection("gsheets", type=GSheetsConnection)
-    sheet = conn.read(worksheet="Questões", ttl=0)
+    sheet = conn.read(worksheet="Questões")
     dict = pd.DataFrame(sheet)
 
     col1, col2 = st.columns([1, 1])
