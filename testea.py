@@ -103,7 +103,7 @@ def login_usuario():
         gmail_link = f"https://mail.google.com/mail/?view=cm&fs=1&to={destinatario}&su={subject_encoded}&body={body_encoded}"
         
         # Exibir o link clicável com o texto apropriado
-        st.markdown(f"Caso tenha esquecido sua senha, por gentileza, entre em contato através do e-mail: [Recuperação de Senha]({gmail_link})")
+        st.warning(f"Caso tenha esquecido sua senha, por gentileza, entre em contato através do e-mail: [Recuperação de Senha]({gmail_link})")
 
         
             
