@@ -90,20 +90,20 @@ def login_usuario():
         st.session_state["pagina"] = "Cadastro"
 
         st.rerun()
-    if st.button("Recuperar senha"):
-        destinatario = "procalc14@gmail.com"
-        subject = "Recuperação de Senha"
-        body = "Olá,\n\nGostaria de solicitar a recuperação de senha para o e-mail associado à conta.\n\nAtenciosamente."
+    
+    destinatario = "procalc14@gmail.com"
+    subject = "Recuperação de Senha"
+    body = "Olá,\n\nGostaria de solicitar a recuperação de senha para o e-mail associado à conta.\n\nAtenciosamente."
         
-        # Codificar o assunto e corpo para garantir que os espaços e caracteres especiais sejam escapados
-        subject_encoded = urllib.parse.quote(subject)
-        body_encoded = urllib.parse.quote(body)
+    # Codificar o assunto e corpo para garantir que os espaços e caracteres especiais sejam escapados
+    subject_encoded = urllib.parse.quote(subject)
+    body_encoded = urllib.parse.quote(body)
         
-        # Gerar link para abrir o Gmail com o e-mail, assunto e corpo preenchidos
-        gmail_link = f"https://mail.google.com/mail/?view=cm&fs=1&to={destinatario}&su={subject_encoded}&body={body_encoded}"
+    # Gerar link para abrir o Gmail com o e-mail, assunto e corpo preenchidos
+    gmail_link = f"https://mail.google.com/mail/?view=cm&fs=1&to={destinatario}&su={subject_encoded}&body={body_encoded}"
         
-        # Exibir o link clicável com o texto apropriado
-        st.warning(f"Caso tenha esquecido sua senha, por gentileza, entre em contato através do e-mail: [Recuperação de Senha]({gmail_link})")
+    # Exibir o link clicável com o texto apropriado
+    st.info(f"Caso tenha esquecido sua senha, por gentileza, entre em contato através do e-mail: [Recuperação de Senha]({gmail_link})")
 
         
             
