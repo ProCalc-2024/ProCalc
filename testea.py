@@ -90,7 +90,6 @@ def login_usuario():
 
         st.rerun()
     if st.button("Recuperar senha"):
-        
         destinatario = "procalc14@gmail.com"
         subject = "Recuperação de Senha"
         body = "Olá,\n\nGostaria de solicitar a recuperação de senha para o e-mail associado à conta.\n\nAtenciosamente."
@@ -98,7 +97,9 @@ def login_usuario():
         # Gerar link para abrir o Gmail com o e-mail, assunto e corpo preenchidos
         gmail_link = f"https://mail.google.com/mail/?view=cm&fs=1&to={destinatario}&su={subject}&body={body}"
         
-        st.warning(f"Caso tenha esquecido sua senha, por gentileza, entre em contato através do e-mail: [Recuperação de Senha]({gmail_link})")
+        # Exibir o link clicável com o texto apropriado
+        st.markdown(f"Caso tenha esquecido sua senha, por gentileza, entre em contato através do e-mail: [Recuperação de Senha]({gmail_link})")
+
         
             
         
