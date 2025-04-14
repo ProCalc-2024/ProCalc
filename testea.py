@@ -5,6 +5,7 @@ from streamlit_gsheets import GSheetsConnection
 import numpy as np
 from cryptography.fernet import Fernet
 import time
+import urllib.parse
 
 def main():
     #Sistema de Login e Cadastro
@@ -94,8 +95,12 @@ def login_usuario():
         subject = "Recuperação de Senha"
         body = "Olá,\n\nGostaria de solicitar a recuperação de senha para o e-mail associado à conta.\n\nAtenciosamente."
         
+        # Codificar o assunto e corpo para garantir que os espaços e caracteres especiais sejam escapados
+        subject_encoded = urllib.parse.quote(subject)
+        body_encoded = urllib.parse.quote(body)
+        
         # Gerar link para abrir o Gmail com o e-mail, assunto e corpo preenchidos
-        gmail_link = f"https://mail.google.com/mail/?view=cm&fs=1&to={destinatario}&su={subject}&body={body}"
+        gmail_link = f"https://mail.google.com/mail/?view=cm&fs=1&to={destinatario}&su={subject_encoded}&body={body_encoded}"
         
         # Exibir o link clicável com o texto apropriado
         st.markdown(f"Caso tenha esquecido sua senha, por gentileza, entre em contato através do e-mail: [Recuperação de Senha]({gmail_link})")
