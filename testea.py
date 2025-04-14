@@ -89,5 +89,11 @@ def login_usuario():
         st.session_state["pagina"] = "Cadastro"
 
         st.rerun()
+    if st.button("Recuperar senha"):
+        
+        email = "procalc14@gmail.com"
+        gmail_link = f"https://mail.google.com/mail/?view=cm&fs=1&to={email}"
+        
+        st.warning(f'Caso tenha esquecido sua senha, por gentileza, entre em contato através do e-mail: [procalc14@gmail.com]({gmail_link})', icon="⚠️")
          
         
