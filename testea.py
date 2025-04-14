@@ -84,8 +84,6 @@ def login_usuario():
         else:
             st.error("E-mail não encontrado.")
     
-    st.write("Ainda não tem uma conta?")
-    
     if st.button("Cadastre-se"):
         st.session_state["pagina"] = "Cadastro"
 
