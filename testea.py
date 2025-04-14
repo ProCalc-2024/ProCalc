@@ -98,6 +98,7 @@ def login_usuario():
         # Gerar link para abrir o Gmail com o e-mail, assunto e corpo preenchidos
         gmail_link = f"https://mail.google.com/mail/?view=cm&fs=1&to={destinatario}&su={subject}&body={body}"
         
-        st.warning(f'Caso tenha esquecido sua senha, por gentileza, entre em contato através do e-mail: [Recuperação de Senha]({gmail_link})')
-                 
+        st.warning(f"Caso tenha esquecido sua senha, por gentileza, entre em contato através do e-mail: [Recuperação de Senha]({gmail_link})")
+        
+            
         
