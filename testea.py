@@ -102,7 +102,40 @@ def login_usuario():
         
     # Exibir o link clicável com o texto apropriado
     st.info(f"Caso tenha esquecido sua senha, por gentileza, entre em contato através do e-mail: [Recuperação de Senha]({gmail_link})")
-
+   
         
-            
+def aulas():
+    
+    # Conexão com Google Sheets
+    conn = st.connection("gsheets", type=GSheetsConnection)
+    sheet = conn.read(worksheet="Videos", ttl=0)
+    df = pd.DataFrame(sheet)
+    
+    # Se quiser remover linhas com valores faltando
+    df.dropna(subset=["Link", "Descricao", "Materia"], inplace=True)
+    
+    # Adiciona opção "Todas"
+    materias = ["Todas"] + sorted(df["Materia"].unique().tolist())
+    
+    materia = st.selectbox("Selecione um assunto:", materias)
+    
+    # Filtra conforme a seleção
+    if materia == "Todas":
+        lista_videos = df
+    else:
+        lista_videos = df[df["Materia"] == materia]
+    
+    # Exibe os vídeos no estilo YouTube
+    st.markdown("## Vídeos")
+    for _, row in lista_videos.iterrows():
+        st.markdown(f"**{row['Descricao']}**")
+        st.video(row["Link"])
+        st.markdown("---")
         
+    
+        
+    
+    
+    
+    
+    
