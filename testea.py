@@ -106,31 +106,22 @@ def login_usuario():
         
 def aulas():
     
-    # Conexão com Google Sheets
     conn = st.connection("gsheets", type=GSheetsConnection)
     sheet = conn.read(worksheet="Videos", ttl=0)
     df = pd.DataFrame(sheet)
+
+    materias_unicas = df["Materia"].unique()
+    lista =  [linha for linha in df["Materia"]]
     
-    # Se quiser remover linhas com valores faltando
-    df.dropna(subset=["Link", "Descricao", "Materia"], inplace=True)
+    materia = st.selectbox("Selecione um assunto:", lista)
     
-    # Adiciona opção "Todas"
-    materias = ["Todas"] + sorted(df["Materia"].unique().tolist())
-    
-    materia = st.selectbox("Selecione um assunto:", materias)
-    
-    # Filtra conforme a seleção
     if materia == "Todas":
-        lista_videos = df
+        lista_ques = [linha for linha in df.iloc]
     else:
-        lista_videos = df[df["Materia"] == materia]
+        lista_ques = [linha for linha in df.iloc if linha["Materia"] == materia]
+    st.write(lista_ques)
+    n = len(lista_ques)
     
-    # Exibe os vídeos no estilo YouTube
-    st.markdown("## Vídeos")
-    for _, row in lista_videos.iterrows():
-        st.markdown(f"**{row['Descricao']}**")
-        st.video(row["Link"])
-        st.markdown("---")
         
     
         
