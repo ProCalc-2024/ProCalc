@@ -66,7 +66,7 @@ if st.session_state["pagina"] == "Log":
                             save_questoes.deletar_ques()
                             pass
         with tabs[1]:
-            st.write("skskksd")    
+            testea.aulas()    
             
         with tabs[2]:
              
