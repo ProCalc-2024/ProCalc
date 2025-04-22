@@ -109,11 +109,11 @@ def aulas():
     conn = st.connection("gsheets", type=GSheetsConnection)
     sheet = conn.read(worksheet="Videos", ttl=0)
     df = pd.DataFrame(sheet)
-
+    
     materias_unicas = df["Materia"].unique()
     lista =  [linha for linha in df["Materia"]]
     
-    materia = st.selectbox("Selecione um assunto:", lista, index="Todas")
+    materia = st.selectbox("Selecione um assunto:", lista)
     
     if materia == "Todas":
         lista_ques = [linha for linha in df.iloc]
