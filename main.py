@@ -33,7 +33,7 @@ if st.session_state["pagina"] == "Cadastro":
 if st.session_state["pagina"] == "Log":
     tab_names = []
     # Cria uma lista de nomes para as questões
-    tab_names = ["Inicio", "Questionário", "Configurações"]
+    tab_names = ["Inicio", "Aulas", "Questionário", "Configurações"]
     if user["Identificação"] == "Administrador" or user["Identificação"] == "Moderador":   
             tab_names.append("Edição")
     # Cria as abas dinamicamente
@@ -47,7 +47,7 @@ if st.session_state["pagina"] == "Log":
                 pag_inicial.ensino()
             
         if user["Identificação"] == "Administrador" or user["Identificação"] == "Moderador":      
-                with tabs[3]:
+                with tabs[4]:
                     co1, co2 = st.columns([1, 1])
         
                     with co1:
@@ -66,10 +66,13 @@ if st.session_state["pagina"] == "Log":
                             save_questoes.deletar_ques()
                             pass
         with tabs[1]:
+            st.write("skskksd")    
+            
+        with tabs[2]:
              
             questoes.read_questao()
 
-        with tabs[2]:
+        with tabs[3]:
             if st.button("logout"):
                     st.session_state["usuario"] = []
                     st.session_state["pagina"] = "Login"
