@@ -113,14 +113,14 @@ def aulas():
     materias_unicas = df["Materia"].unique()
     
     lista = list(set(df["Materia"]))
-    n = len(lista)
+    
     lista.sort()
     lista.insert(0, "Todas")
     
     #lista =  [linha for linha in df["Materia"]]
     
     materia = st.selectbox("Selecione um assunto:", lista)
-    
+    n = len(lista)
     if materia == "Todas":
         lista_ques = [linha for linha in df.iloc]
     else:
