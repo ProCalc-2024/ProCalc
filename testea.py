@@ -120,7 +120,8 @@ def aulas():
     #lista =  [linha for linha in df["Materia"]]
     
     materia = st.selectbox("Selecione um assunto:", lista)
-    n = len(lista)
+    n = len(lista)-1
+    
     if materia == "Todas":
         lista_ques = [linha for linha in df.iloc]
     else:
