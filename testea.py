@@ -113,6 +113,7 @@ def aulas():
     materias_unicas = df["Materia"].unique()
     
     lista = list(set(df["Materia"]))
+    n = len(lista)
     lista.sort()
     lista.insert(0, "Todas")
     
@@ -124,7 +125,7 @@ def aulas():
         lista_ques = [linha for linha in df.iloc]
     else:
         lista_ques = [linha for linha in df.iloc if linha["Materia"] == materia]
-    st.write(lista_ques)
+    st.write(n)
     n = len(lista_ques)
     
         
