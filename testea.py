@@ -111,15 +111,15 @@ def aulas():
     sheet = conn.read(worksheet="Videos", ttl=0)
     df = pd.DataFrame(sheet)
     
-    # Tratamento inicial
+    # Organiza as matérias
     materias = df["Materia"].dropna().unique().tolist()
     materias.sort()
     materias.insert(0, "Todas")
     
-    # Filtro de matéria
+    # Selectbox de filtro
     materia_selecionada = st.selectbox("Selecione um assunto:", materias)
     
-    # Filtrando os dados
+    # Filtra os dados com base na seleção
     if materia_selecionada == "Todas":
         materias_dict = {
             mat: df[df["Materia"] == mat].to_dict(orient="records")
@@ -130,15 +130,14 @@ def aulas():
             materia_selecionada: df[df["Materia"] == materia_selecionada].to_dict(orient="records")
         }
     
-    # Exibindo os cards estilo YouTube
+    # Exibe estilo card com miniatura clicável
     for materia, videos in materias_dict.items():
         if not videos:
             continue
     
         with st.container():
-            st.markdown(f"{materia}")
+            st.markdown(f"### 🎓 {materia}")
             
-            # Definindo quantidade de colunas por linha
             max_por_linha = 3
             linhas = [videos[i:i + max_por_linha] for i in range(0, len(videos), max_por_linha)]
     
@@ -146,15 +145,15 @@ def aulas():
                 cols = st.columns(len(linha))
                 for col, video in zip(cols, linha):
                     with col:
-                        st.image("https://img.youtube.com/vi/" + video["Link"].split("v=")[-1] + "/0.jpg", use_column_width=True)
-                        st.markdown(f"**{video.get('Titulo', 'Sem título')}**")
-                        st.caption(video.get("Materia", ""))
-                        st.link_button("📺 Assistir", video["Link"])
-
-    
-        
-    
-    
-    
-    
-    
+                        link = video.get("Link", "")
+                        titulo = video.get("Titulo", "Sem título")
+                        if "v=" in link:
+                            video_id = link.split("v=")[-1].split("&")[0]
+                            thumbnail_url = f"http://img.youtube.com/vi/{video_id}/0.jpg"
+                            st.markdown(
+                                f"[![{titulo}]({thumbnail_url})]({link})",
+                                unsafe_allow_html=True
+                            )
+                            st.markdown(f"**{titulo}**")
+                        else:
+                            st.warning("Link do vídeo inválido")
