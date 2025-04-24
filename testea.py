@@ -106,42 +106,42 @@ def login_usuario():
         
 def aulas():
     
+    # Conexão com o Google Sheets
     conn = st.connection("gsheets", type=GSheetsConnection)
     sheet = conn.read(worksheet="Videos", ttl=0)
     df = pd.DataFrame(sheet)
     
-    materias_unicas = df["Materia"].unique()
+    # Organiza as matérias
+    materias = df["Materia"].dropna().unique().tolist()
+    materias.sort()
+    materias.insert(0, "Todas")
     
-    lista = list(set(df["Materia"]))
+    # Selectbox de filtro
+    materia_selecionada = st.selectbox("Selecione um assunto:", materias)
     
-    lista.sort()
-    lista.insert(0, "Todas")
-    
-    #lista =  [linha for linha in df["Materia"]]
-    
-    materia = st.selectbox("Selecione um assunto:", lista)
-    
-    n_container = len(lista)-1
-    
-    if materia == "Todas":
-        lista_ques = [linha for linha in df.iloc]
+    # Filtra os dados com base na seleção
+    if materia_selecionada == "Todas":
+        materias_dict = {
+            mat: df[df["Materia"] == mat].to_dict(orient="records")
+            for mat in df["Materia"].unique()
+        }
     else:
-        lista_ques = [linha for linha in df.iloc if linha["Materia"] == materia]
+        materias_dict = {
+            materia_selecionada: df[df["Materia"] == materia_selecionada].to_dict(orient="records")
+        }
     
-    st.write(lista_ques)
-    n_coluna = len(lista_ques)
-
-    for i in range(n_container):
+    # Renderiza os containers e colunas dinamicamente
+    for materia, videos in materias_dict.items():
         with st.container():
-            st.subheader(f"Container {i+1}")
+            st.subheader(f"Matéria: {materia}")
             
-            # Cria as colunas dinamicamente
-            colunas = st.columns(n_coluna)
+            colunas = st.columns(len(videos))
     
-            for j in range(n_coluna):
-                with colunas[j]:
-                    st.write(f"Container {i+1} - Coluna {j+1}")
-                    st.button(f"Botão C{i+1} - Col{j+1}", key=f"btn_{i}_{j}")  
+            for i, video in enumerate(videos):
+                with colunas[i]:
+                    st.write(f"📚 **{video.get('Titulo', 'Sem título')}**")
+                    st.caption(f"🔖 {video.get('Materia', '')}")
+                    st.button("Assistir", key=f"{materia}_{i}")
     
         
     
