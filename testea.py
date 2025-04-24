@@ -130,23 +130,20 @@ def aulas():
     
     n = len(lista_ques)
     
-    for i in range(5):
+    num_containers = 3
+    num_colunas_por_container = 4
+    
+    for i in range(num_containers):
         with st.container():
-            st.subheader(f"Container {i+1}")  # título de cada container
+            st.subheader(f"Container {i+1}")
+            
+            # Cria as colunas dinamicamente
+            colunas = st.columns(num_colunas_por_container)
     
-            col1, col2, col3 = st.columns(3)
-    
-            with col1:
-                st.write(f"Coluna 1 do container {i+1}")
-                st.button(f"Botão 1 - C{i+1}", key=f"btn1_{i}")
-    
-            with col2:
-                st.write(f"Coluna 2 do container {i+1}")
-                st.button(f"Botão 2 - C{i+1}", key=f"btn2_{i}")
-    
-            with col3:
-                st.write(f"Coluna 3 do container {i+1}")
-                st.button(f"Botão 3 - C{i+1}", key=f"btn3_{i}")   
+            for j in range(num_colunas_por_container):
+                with colunas[j]:
+                    st.write(f"Container {i+1} - Coluna {j+1}")
+                    st.button(f"Botão C{i+1} - Col{j+1}", key=f"btn_{i}_{j}")  
     
         
     
