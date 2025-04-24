@@ -65,9 +65,10 @@ if st.session_state["pagina"] == "Log":
                         case "Deletar Questão":
                             save_questoes.deletar_ques()
                             pass
+                with tabs[1]:
+                    testea.aulas()    
         with tabs[1]:
-            testea.aulas()    
-            
+                st.markdown(f"###🎓 Cooking")
         with tabs[2]:
              
             questoes.read_questao()
