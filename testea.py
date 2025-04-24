@@ -111,6 +111,25 @@ def aulas():
     sheet = conn.read(worksheet="Videos", ttl=0)
     df = pd.DataFrame(sheet)
     
+    # Organiza as matérias
+    materias = df["Materia"].dropna().unique().tolist()
+    materias.sort()
+    materias.insert(0, "Todas")
+    
+    # Selectbox de filtro
+    materia_selecionada = st.selectbox("Selecione um assunto:", materias)
+    
+    # Filtra os dados com base na seleção
+    if materia_selecionada == "Todas":
+        materias_dict = {
+            mat: df[df["Materia"] == mat].to_dict(orient="records")
+            for mat in df["Materia"].unique()
+        }
+    else:
+        materias_dict = {
+            materia_selecionada: df[df["Materia"] == materia_selecionada].to_dict(orient="records")
+        }
+    
     st.markdown("""
         <style>
             .scroll-container {
@@ -134,24 +153,6 @@ def aulas():
             }
         </style>
     """, unsafe_allow_html=True)
-    # Organiza as matérias
-    materias = df["Materia"].dropna().unique().tolist()
-    materias.sort()
-    materias.insert(0, "Todas")
-    
-    # Selectbox de filtro
-    materia_selecionada = st.selectbox("Selecione um assunto:", materias)
-    
-    # Filtra os dados com base na seleção
-    if materia_selecionada == "Todas":
-        materias_dict = {
-            mat: df[df["Materia"] == mat].to_dict(orient="records")
-            for mat in df["Materia"].unique()
-        }
-    else:
-        materias_dict = {
-            materia_selecionada: df[df["Materia"] == materia_selecionada].to_dict(orient="records")
-        }
     
     # Exibe estilo card com miniatura clicável
     for materia, videos in materias_dict.items():
@@ -160,7 +161,7 @@ def aulas():
     
         with st.container():
             st.subheader(f"🎓 {materia}")
-            
+            st.markdown('<div class="scroll-container">', unsafe_allow_html=True)
             max_por_linha = 3
             linhas = [videos[i:i + max_por_linha] for i in range(0, len(videos), max_por_linha)]
     
