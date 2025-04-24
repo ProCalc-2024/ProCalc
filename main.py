@@ -68,9 +68,10 @@ if st.session_state["pagina"] == "Log":
                 with tabs[1]:
                     testea.aulas()    
         #else:
-        with tabs[1]:
+                with tabs[1]:
 
-                st.subheader("Carregando...")
+                        st.subheader("Carregando...")
+                        
         with tabs[2]:
              
             questoes.read_questao()
