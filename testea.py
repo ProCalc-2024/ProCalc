@@ -111,15 +111,15 @@ def aulas():
     sheet = conn.read(worksheet="Videos", ttl=0)
     df = pd.DataFrame(sheet)
     
-    # Lista de matérias únicas
+    # Organiza as matérias
     materias = df["Materia"].dropna().unique().tolist()
     materias.sort()
     materias.insert(0, "Todas")
     
-    # Filtro
+    # Selectbox de filtro
     materia_selecionada = st.selectbox("Selecione um assunto:", materias)
     
-    # Filtragem de dados
+    # Filtra os dados com base na seleção
     if materia_selecionada == "Todas":
         materias_dict = {
             mat: df[df["Materia"] == mat].to_dict(orient="records")
@@ -130,55 +130,30 @@ def aulas():
             materia_selecionada: df[df["Materia"] == materia_selecionada].to_dict(orient="records")
         }
     
-    # Estilo para scroll lateral
-    st.markdown("""
-        <style>
-            .video-scroll {
-                display: flex;
-                overflow-x: auto;
-                padding: 10px 0;
-            }
-            .video-card {
-                flex: 0 0 auto;
-                width: 220px;
-                margin-right: 16px;
-                text-align: center;
-            }
-            .video-card img {
-                width: 100%;
-                border-radius: 8px;
-            }
-            .video-title {
-                font-size: 14px;
-                font-weight: bold;
-                margin-top: 5px;
-            }
-        </style>
-    """, unsafe_allow_html=True)
-    
-    # Renderização dos vídeos
+    # Exibe estilo card com miniatura clicável
     for materia, videos in materias_dict.items():
         if not videos:
             continue
     
-        st.markdown(f"### 🎓 {materia}")
-        html_cards = '<div class="video-scroll">'
+        with st.container():
+            st.markdown(f"### 🎓 {materia}")
+            
+            max_por_linha = 3
+            linhas = [videos[i:i + max_por_linha] for i in range(0, len(videos), max_por_linha)]
     
-        for video in videos:
-            link = video.get("Link", "")
-            titulo = video.get("Titulo", "Sem título")
-    
-            if "v=" in link:
-                video_id = link.split("v=")[-1].split("&")[0]
-                thumbnail_url = f"http://img.youtube.com/vi/{video_id}/0.jpg"
-    
-                html_cards += f"""
-                    <div class="video-card">
-                        <a href="{link}" target="_blank">
-                            <img src="{thumbnail_url}" alt="{titulo}">
-                            <div class="video-title">{titulo}</div>
-                        </a>
-                    </div>
-                """
-        html_cards += '</div>'
-        st.markdown(html_cards, unsafe_allow_html=True)
+            for linha in linhas:
+                cols = st.columns(len(linha))
+                for col, video in zip(cols, linha):
+                    with col:
+                        link = video.get("Link", "")
+                        titulo = video.get("Titulo", "Sem título")
+                        if "v=" in link:
+                            video_id = link.split("v=")[-1].split("&")[0]
+                            thumbnail_url = f"http://img.youtube.com/vi/{video_id}/0.jpg"
+                            st.markdown(
+                                f"[![{titulo}]({thumbnail_url})]({link})",
+                                unsafe_allow_html=True
+                            )
+                            st.markdown(f"**{titulo}**")
+                        else:
+                            st.warning("Link do vídeo inválido")    
