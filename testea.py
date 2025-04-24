@@ -133,7 +133,7 @@ def aulas():
     # Renderiza os containers e colunas dinamicamente
     for materia, videos in materias_dict.items():
         with st.container():
-            st.subheader(f"Matéria: {materia}")
+            st.subheader(f"{materia}")
             
             colunas = st.columns(len(videos))
     
