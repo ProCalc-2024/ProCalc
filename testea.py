@@ -111,15 +111,15 @@ def aulas():
     sheet = conn.read(worksheet="Videos", ttl=0)
     df = pd.DataFrame(sheet)
     
-    # Organiza as matérias
+    # Lista de matérias únicas
     materias = df["Materia"].dropna().unique().tolist()
     materias.sort()
     materias.insert(0, "Todas")
     
-    # Selectbox de filtro
+    # Filtro
     materia_selecionada = st.selectbox("Selecione um assunto:", materias)
     
-    # Filtra os dados com base na seleção
+    # Filtragem de dados
     if materia_selecionada == "Todas":
         materias_dict = {
             mat: df[df["Materia"] == mat].to_dict(orient="records")
@@ -130,54 +130,55 @@ def aulas():
             materia_selecionada: df[df["Materia"] == materia_selecionada].to_dict(orient="records")
         }
     
-    # Estilo para rolagem horizontal
+    # Estilo para scroll lateral
     st.markdown("""
         <style>
-            .scroll-container {
+            .video-scroll {
                 display: flex;
                 overflow-x: auto;
                 padding: 10px 0;
             }
             .video-card {
                 flex: 0 0 auto;
-                width: 200px;
+                width: 220px;
                 margin-right: 16px;
+                text-align: center;
             }
             .video-card img {
                 width: 100%;
-                border-radius: 10px;
+                border-radius: 8px;
             }
-            .video-card-title {
+            .video-title {
+                font-size: 14px;
                 font-weight: bold;
                 margin-top: 5px;
-                font-size: 14px;
             }
         </style>
     """, unsafe_allow_html=True)
     
-    # Renderiza os vídeos como "cards" em linha com scroll
+    # Renderização dos vídeos
     for materia, videos in materias_dict.items():
         if not videos:
             continue
     
         st.markdown(f"### 🎓 {materia}")
-        st.markdown('<div class="scroll-container">', unsafe_allow_html=True)
+        html_cards = '<div class="video-scroll">'
     
         for video in videos:
             link = video.get("Link", "")
             titulo = video.get("Titulo", "Sem título")
+    
             if "v=" in link:
                 video_id = link.split("v=")[-1].split("&")[0]
                 thumbnail_url = f"http://img.youtube.com/vi/{video_id}/0.jpg"
-                st.markdown(f"""
+    
+                html_cards += f"""
                     <div class="video-card">
                         <a href="{link}" target="_blank">
                             <img src="{thumbnail_url}" alt="{titulo}">
-                            <div class="video-card-title">{titulo}</div>
+                            <div class="video-title">{titulo}</div>
                         </a>
                     </div>
-                """, unsafe_allow_html=True)
-            else:
-                st.warning("Link do vídeo inválido")
-    
-        st.markdown('</div>', unsafe_allow_html=True)
+                """
+        html_cards += '</div>'
+        st.markdown(html_cards, unsafe_allow_html=True)
