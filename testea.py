@@ -136,7 +136,7 @@ def aulas():
             continue
     
         with st.container():
-            st.markdown(f"### 🎓 {materia}")
+            st.markdown(f"{materia}")
             
             # Definindo quantidade de colunas por linha
             max_por_linha = 3
