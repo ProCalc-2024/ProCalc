@@ -136,7 +136,7 @@ def aulas():
             continue
     
         with st.container():
-            st.subheader(f"### 🎓 {materia}")
+            st.subheader(f"🎓 {materia}")
             
             max_por_linha = 3
             linhas = [videos[i:i + max_por_linha] for i in range(0, len(videos), max_por_linha)]
