@@ -105,7 +105,7 @@ def login_usuario():
    
         
 def aulas():
-    
+    st.markdown(f'[![Assista no YouTube](http://img.youtube.com/vi/dQw4w9WgXcQ/0.jpg)](https://www.youtube.com/watch?v=d075cooe68s&list=RDqeQ5Ek9qC24&index=5)')
     # Conexão com o Google Sheets
     conn = st.connection("gsheets", type=GSheetsConnection)
     sheet = conn.read(worksheet="Videos", ttl=0)
