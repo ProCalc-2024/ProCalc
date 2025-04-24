@@ -127,12 +127,9 @@ def aulas():
         lista_ques = [linha for linha in df.iloc]
     else:
         lista_ques = [linha for linha in df.iloc if linha["Materia"] == materia]
-    st.write(n)
     
     n_coluna = len(lista_ques)
-    
-    num_containers = 3
-    num_colunas_por_container = 4
+
     
     for i in range(n_container):
         with st.container():
