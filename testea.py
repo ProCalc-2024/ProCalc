@@ -130,7 +130,7 @@ def aulas():
             materia_selecionada: df[df["Materia"] == materia_selecionada].to_dict(orient="records")
         }
     
-    # Exibe estilo card com miniatura clicável
+    # Exibe estilo card com miniatura à esquerda e título à direita
     for materia, videos in materias_dict.items():
         if not videos:
             continue
@@ -138,7 +138,7 @@ def aulas():
         with st.container():
             st.subheader(f"🎓 {materia}")
     
-            max_por_linha = 3
+            max_por_linha = 1  # agora 1 por linha, pois imagem e texto estão lado a lado
             linhas = [videos[i:i + max_por_linha] for i in range(0, len(videos), max_por_linha)]
     
             for linha in linhas:
@@ -152,13 +152,18 @@ def aulas():
                             thumbnail_url = f"http://img.youtube.com/vi/{video_id}/0.jpg"
                             st.markdown(
                                 f"""
-                                <a href="{link}" target="_blank">
-                                    <img src="{thumbnail_url}" alt="{titulo}" style="width:200px; border-radius: 10px;">
-                                </a>
+                                <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 15px;">
+                                    <a href="{link}" target="_blank">
+                                        <img src="{thumbnail_url}" alt="{titulo}" style="width: 150px; border-radius: 8px;">
+                                    </a>
+                                    <div style="flex: 1;">
+                                        <a href="{link}" target="_blank" style="text-decoration: none;">
+                                            <p style="margin: 0; font-weight: bold; color: #333; font-size: 16px;">{titulo}</p>
+                                        </a>
+                                    </div>
+                                </div>
                                 """,
                                 unsafe_allow_html=True
                             )
-                            st.markdown(f"**{titulo}**")
                         else:
                             st.warning("Link do vídeo inválido")
-
