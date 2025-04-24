@@ -130,30 +130,6 @@ def aulas():
             materia_selecionada: df[df["Materia"] == materia_selecionada].to_dict(orient="records")
         }
     
-    st.markdown("""
-        <style>
-            .scroll-container {
-                display: flex;
-                overflow-x: auto;
-                padding: 10px 0;
-            }
-            .video-card {
-                flex: 0 0 auto;
-                width: 200px;
-                margin-right: 16px;
-            }
-            .video-card img {
-                width: 100%;
-                border-radius: 10px;
-            }
-            .video-card-title {
-                font-weight: bold;
-                margin-top: 5px;
-                font-size: 14px;
-            }
-        </style>
-    """, unsafe_allow_html=True)
-    
     # Exibe estilo card com miniatura clicável
     for materia, videos in materias_dict.items():
         if not videos:
@@ -161,7 +137,7 @@ def aulas():
     
         with st.container():
             st.subheader(f"🎓 {materia}")
-            st.markdown('<div class="scroll-container">', unsafe_allow_html=True)
+
             max_por_linha = 3
             linhas = [videos[i:i + max_por_linha] for i in range(0, len(videos), max_por_linha)]
     
