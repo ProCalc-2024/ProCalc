@@ -129,6 +129,17 @@ def aulas():
         materias_dict = {
             materia_selecionada: df[df["Materia"] == materia_selecionada].to_dict(orient="records")
         }
+
+    st.markdown("""
+        <style>
+        .main-container {
+            max-width: 1000px;
+            margin: auto;
+            padding: 2rem;
+        }
+        </style>
+        <div class="main-container">
+    """, unsafe_allow_html=True)
     
     # Exibe estilo card com miniatura clicável
     for materia, videos in materias_dict.items():
@@ -156,4 +167,5 @@ def aulas():
                             )
                             st.markdown(f"**{titulo}**")
                         else:
-                            st.warning("Link do vídeo inválido")    
+                            st.warning("Link do vídeo inválido")  
+        st.markdown("</div>", unsafe_allow_html=True)
