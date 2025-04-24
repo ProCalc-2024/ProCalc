@@ -130,7 +130,22 @@ def aulas():
             materia_selecionada: df[df["Materia"] == materia_selecionada].to_dict(orient="records")
         }
     
-    # Exibe estilo card com miniatura clicável
+    # Estilo dos cards horizontais
+    card_style = """
+    <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 15px;">
+        <a href='{url}' target='_blank'>
+            <img src='http://img.youtube.com/vi/{id}/0.jpg' width='160' style='border-radius: 8px;'/>
+        </a>
+        <div style="flex: 1;">
+            <a href='{url}' target='_blank' style='text-decoration: none; color: black;'>
+                <h4 style='margin: 0;'>{titulo}</h4>
+            </a>
+            <p style='color: gray; margin: 0;'>Matéria: {materia}</p>
+        </div>
+    </div>
+    """
+    
+    # Exibe os cards
     for materia, videos in materias_dict.items():
         if not videos:
             continue
@@ -138,22 +153,18 @@ def aulas():
         with st.container():
             st.markdown(f"### 🎓 {materia}")
             
-            max_por_linha = 3
-            linhas = [videos[i:i + max_por_linha] for i in range(0, len(videos), max_por_linha)]
-    
-            for linha in linhas:
-                cols = st.columns(len(linha))
-                for col, video in zip(cols, linha):
-                    with col:
-                        link = video.get("Link", "")
-                        titulo = video.get("Titulo", "Sem título")
-                        if "v=" in link:
-                            video_id = link.split("v=")[-1].split("&")[0]
-                            thumbnail_url = f"http://img.youtube.com/vi/{video_id}/0.jpg"
-                            st.markdown(
-                                f"[![{titulo}]({thumbnail_url})]({link})",
-                                unsafe_allow_html=True
-                            )
-                            st.markdown(f"**{titulo}**")
-                        else:
-                            st.warning("Link do vídeo inválido")
+            for video in videos:
+                link = video.get("Link", "")
+                titulo = video.get("Titulo", "Sem título")
+                materia_nome = video.get("Materia", "")
+                if "v=" in link:
+                    video_id = link.split("v=")[-1].split("&")[0]
+                    html = card_style.format(
+                        url=link,
+                        id=video_id,
+                        titulo=titulo,
+                        materia=materia_nome
+                    )
+                    st.markdown(html, unsafe_allow_html=True)
+                else:
+                    st.warning("Link do vídeo inválido")
