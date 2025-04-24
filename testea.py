@@ -111,6 +111,29 @@ def aulas():
     sheet = conn.read(worksheet="Videos", ttl=0)
     df = pd.DataFrame(sheet)
     
+    st.markdown("""
+        <style>
+            .scroll-container {
+                display: flex;
+                overflow-x: auto;
+                padding: 10px 0;
+            }
+            .video-card {
+                flex: 0 0 auto;
+                width: 200px;
+                margin-right: 16px;
+            }
+            .video-card img {
+                width: 100%;
+                border-radius: 10px;
+            }
+            .video-card-title {
+                font-weight: bold;
+                margin-top: 5px;
+                font-size: 14px;
+            }
+        </style>
+    """, unsafe_allow_html=True)
     # Organiza as matérias
     materias = df["Materia"].dropna().unique().tolist()
     materias.sort()
