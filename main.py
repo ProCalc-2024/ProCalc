@@ -67,7 +67,7 @@ if st.session_state["pagina"] == "Log":
                             pass
                 with tabs[1]:
                     testea.aulas()    
-        #else:
+        else:
                 with tabs[1]:
 
                         st.subheader("Carregando...")
