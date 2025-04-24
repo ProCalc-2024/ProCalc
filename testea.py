@@ -116,7 +116,7 @@ def aulas():
     
     lista.sort()
     lista.insert(0, "Todas")
-    
+    st.write(lista)
     #lista =  [linha for linha in df["Materia"]]
     
     materia = st.selectbox("Selecione um assunto:", lista)
@@ -130,7 +130,6 @@ def aulas():
     
     n_coluna = len(lista_ques)
 
-    
     for i in range(n_container):
         with st.container():
             st.subheader(f"Container {i+1}")
