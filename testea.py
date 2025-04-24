@@ -130,7 +130,7 @@ def aulas():
             materia_selecionada: df[df["Materia"] == materia_selecionada].to_dict(orient="records")
         }
     
-    # Exibe estilo card com miniatura à esquerda e título à direita
+    # Exibe estilo card com miniatura clicável
     for materia, videos in materias_dict.items():
         if not videos:
             continue
@@ -138,32 +138,29 @@ def aulas():
         with st.container():
             st.subheader(f"🎓 {materia}")
     
-            max_por_linha = 1  # agora 1 por linha, pois imagem e texto estão lado a lado
+            max_por_linha = 3
             linhas = [videos[i:i + max_por_linha] for i in range(0, len(videos), max_por_linha)]
     
             for linha in linhas:
-                cols = st.columns(len(linha))
-                for col, video in zip(cols, linha):
-                    with col:
-                        link = video.get("Link", "")
-                        titulo = video.get("Descrição", "Sem título")
-                        if "v=" in link:
-                            video_id = link.split("v=")[-1].split("&")[0]
-                            thumbnail_url = f"http://img.youtube.com/vi/{video_id}/0.jpg"
-                            st.markdown(
-                                f"""
-                                <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 15px;">
+                cols = st.columns(max_por_linha)  # Sempre cria 3 colunas
+                for idx in range(max_por_linha):
+                    with cols[idx]:
+                        if idx < len(linha):
+                            video = linha[idx]
+                            link = video.get("Link", "")
+                            titulo = video.get("Descrição", "Sem título")
+                            if "v=" in link:
+                                video_id = link.split("v=")[-1].split("&")[0]
+                                thumbnail_url = f"http://img.youtube.com/vi/{video_id}/0.jpg"
+                                st.markdown(
+                                    f"""
                                     <a href="{link}" target="_blank">
-                                        <img src="{thumbnail_url}" alt="{titulo}" style="width: 150px; border-radius: 8px;">
+                                        <img src="{thumbnail_url}" alt="{titulo}" style="width:200px; border-radius: 10px;">
                                     </a>
-                                    <div style="flex: 1;">
-                                        <a href="{link}" target="_blank" style="text-decoration: none;">
-                                            <p style="margin: 0; font-weight: bold; color: #333; font-size: 16px;">{titulo}</p>
-                                        </a>
-                                    </div>
-                                </div>
-                                """,
-                                unsafe_allow_html=True
-                            )
-                        else:
-                            st.warning("Link do vídeo inválido")
+                                    """,
+                                    unsafe_allow_html=True
+                                )
+                                st.markdown(f"**{titulo}**")
+                            else:
+                                st.warning("Link do vídeo inválido")
+
