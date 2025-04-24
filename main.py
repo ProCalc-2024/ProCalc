@@ -67,15 +67,15 @@ if st.session_state["pagina"] == "Log":
                             pass
                 with tabs[1]:
                     testea.aulas()    
-        else:
-                with tabs[1]:
-                        # HTML para ícone estático de carregamento
-                        st.markdown("""
-                            <i class="fa fa-spinner" style="font-size: 50px; color: #3498db;"></i>
-                        """, unsafe_allow_html=True)
+        #else:
+        with tabs[1]:
+                # HTML para ícone estático de carregamento
+                st.markdown("""
+                        <i class="fa fa-spinner" style="font-size: 50px; color: #3498db;"></i>
+                """, unsafe_allow_html=True)
                         
-                        # Mensagem
-                        st.write("Carregando...")
+                # Mensagem
+                st.write("Carregando...")
         with tabs[2]:
              
             questoes.read_questao()
