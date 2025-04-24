@@ -133,7 +133,7 @@ def aulas():
     st.markdown("""
         <style>
         .main-container {
-            max-width: 500px;
+            max-width: 100px;
             margin: auto;
             padding: 2rem;
         }
