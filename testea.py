@@ -129,17 +129,6 @@ def aulas():
         materias_dict = {
             materia_selecionada: df[df["Materia"] == materia_selecionada].to_dict(orient="records")
         }
-
-    st.markdown("""
-        <style>
-        .main-container {
-            max-width: 100px;
-            margin: auto;
-            padding: 2rem;
-        }
-        </style>
-        <div class="main-container">
-    """, unsafe_allow_html=True)
     
     # Exibe estilo card com miniatura clicável
     for materia, videos in materias_dict.items():
@@ -148,7 +137,7 @@ def aulas():
     
         with st.container():
             st.subheader(f"🎓 {materia}")
-
+    
             max_por_linha = 3
             linhas = [videos[i:i + max_por_linha] for i in range(0, len(videos), max_por_linha)]
     
@@ -162,10 +151,14 @@ def aulas():
                             video_id = link.split("v=")[-1].split("&")[0]
                             thumbnail_url = f"http://img.youtube.com/vi/{video_id}/0.jpg"
                             st.markdown(
-                                f"[![{titulo}]({thumbnail_url})]({link})",
+                                f"""
+                                <a href="{link}" target="_blank">
+                                    <img src="{thumbnail_url}" alt="{titulo}" style="width:200px; border-radius: 10px;">
+                                </a>
+                                """,
                                 unsafe_allow_html=True
                             )
                             st.markdown(f"**{titulo}**")
                         else:
-                            st.warning("Link do vídeo inválido")  
-        st.markdown("</div>", unsafe_allow_html=True)
+                            st.warning("Link do vídeo inválido")
+
