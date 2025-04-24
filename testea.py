@@ -146,7 +146,7 @@ def aulas():
                 for col, video in zip(cols, linha):
                     with col:
                         link = video.get("Link", "")
-                        titulo = video.get("Titulo", "Sem título")
+                        titulo = video.get("Descrição", "Sem título")
                         if "v=" in link:
                             video_id = link.split("v=")[-1].split("&")[0]
                             thumbnail_url = f"http://img.youtube.com/vi/{video_id}/0.jpg"
