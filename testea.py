@@ -105,21 +105,21 @@ def login_usuario():
    
         
 def aulas():
-    st.markdown(f'[![Assista no YouTube](http://img.youtube.com/vi/dQw4w9WgXcQ/0.jpg)](https://www.youtube.com/watch?v=d075cooe68s&list=RDqeQ5Ek9qC24&index=5)')
-    # Conexão com o Google Sheets
+
+    # Conexão com Google Sheets
     conn = st.connection("gsheets", type=GSheetsConnection)
     sheet = conn.read(worksheet="Videos", ttl=0)
     df = pd.DataFrame(sheet)
     
-    # Organiza as matérias
+    # Tratamento inicial
     materias = df["Materia"].dropna().unique().tolist()
     materias.sort()
     materias.insert(0, "Todas")
     
-    # Selectbox de filtro
+    # Filtro de matéria
     materia_selecionada = st.selectbox("Selecione um assunto:", materias)
     
-    # Filtra os dados com base na seleção
+    # Filtrando os dados
     if materia_selecionada == "Todas":
         materias_dict = {
             mat: df[df["Materia"] == mat].to_dict(orient="records")
@@ -130,18 +130,27 @@ def aulas():
             materia_selecionada: df[df["Materia"] == materia_selecionada].to_dict(orient="records")
         }
     
-    # Renderiza os containers e colunas dinamicamente
+    # Exibindo os cards estilo YouTube
     for materia, videos in materias_dict.items():
-        with st.container():
-            st.subheader(f"{materia}")
-            
-            colunas = st.columns(len(videos))
+        if not videos:
+            continue
     
-            for i, video in enumerate(videos):
-                with colunas[i]:
-                    st.write(f"📚 **{video.get('Titulo', 'Sem título')}**")
-                    st.caption(f"🔖 {video.get('Materia', '')}")
-                    st.button("Assistir", key=f"{materia}_{i}")
+        with st.container():
+            st.markdown(f"### 🎓 {materia}")
+            
+            # Definindo quantidade de colunas por linha
+            max_por_linha = 3
+            linhas = [videos[i:i + max_por_linha] for i in range(0, len(videos), max_por_linha)]
+    
+            for linha in linhas:
+                cols = st.columns(len(linha))
+                for col, video in zip(cols, linha):
+                    with col:
+                        st.image("https://img.youtube.com/vi/" + video["Link"].split("v=")[-1] + "/0.jpg", use_column_width=True)
+                        st.markdown(f"**{video.get('Titulo', 'Sem título')}**")
+                        st.caption(video.get("Materia", ""))
+                        st.link_button("📺 Assistir", video["Link"])
+
     
         
     
