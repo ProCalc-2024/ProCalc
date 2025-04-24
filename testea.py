@@ -120,7 +120,8 @@ def aulas():
     #lista =  [linha for linha in df["Materia"]]
     
     materia = st.selectbox("Selecione um assunto:", lista)
-    n = len(lista)-1
+    
+    n_container = len(lista)-1
     
     if materia == "Todas":
         lista_ques = [linha for linha in df.iloc]
@@ -128,19 +129,19 @@ def aulas():
         lista_ques = [linha for linha in df.iloc if linha["Materia"] == materia]
     st.write(n)
     
-    n = len(lista_ques)
+    n_coluna = len(lista_ques)
     
     num_containers = 3
     num_colunas_por_container = 4
     
-    for i in range(num_containers):
+    for i in range(n_container):
         with st.container():
             st.subheader(f"Container {i+1}")
             
             # Cria as colunas dinamicamente
-            colunas = st.columns(num_colunas_por_container)
+            colunas = st.columns(n_coluna)
     
-            for j in range(num_colunas_por_container):
+            for j in range(n_coluna):
                 with colunas[j]:
                     st.write(f"Container {i+1} - Coluna {j+1}")
                     st.button(f"Botão C{i+1} - Col{j+1}", key=f"btn_{i}_{j}")  
