@@ -116,7 +116,7 @@ def aulas():
     
     lista.sort()
     lista.insert(0, "Todas")
-    st.write(lista)
+    
     #lista =  [linha for linha in df["Materia"]]
     
     materia = st.selectbox("Selecione um assunto:", lista)
@@ -128,6 +128,7 @@ def aulas():
     else:
         lista_ques = [linha for linha in df.iloc if linha["Materia"] == materia]
     
+    st.write(lista_ques)
     n_coluna = len(lista_ques)
 
     for i in range(n_container):
