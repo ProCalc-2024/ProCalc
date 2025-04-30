@@ -43,7 +43,7 @@ def read_questao():
 
     lista = list(set(dict["Materia"]))
     lista.sort()
-    lista.insert(0, "Todas")  # Adiciona a opção "Todas" no topo
+    lista.insert(0, "Todas")
 
     with col1:
         materia = st.selectbox("Selecione um assunto:", lista, disabled=disabled3)
@@ -73,7 +73,6 @@ def read_questao():
 
     botao = st.session_state["botao"]
 
-    # Verificação de inicialização
     if "ques" not in st.session_state or st.session_state.get("materia_atual") != materia:
         st.session_state["save"] = {}
         st.session_state["numero"] = 0
@@ -83,7 +82,7 @@ def read_questao():
         st.rerun()
 
     b1 = st.session_state["ques"]
-    #certo
+
     for i in range(numero):
         j = i + 1
         with tabs[j]:
@@ -121,24 +120,24 @@ def read_questao():
 
             opcoes[i] = [questao[embaralho[j]] for j in range(5)]
             alternativa[i] = st.radio("", options=opcoes[i], index=None, key=f"key{i}", disabled=disabled2)
-            
-            st.session_state["resposta"] = questao["Alternativa_A"]
-            resul.update(st.session_state["save"])
-            st.session_state["save"] = {st.session_state["numero"] + 1: st.session_state["ques"]}
-            sequencia = st.session_state["save"]
-            resul.update(sequencia)
-            st.session_state["save"] = resul
-            resposta[i] = alternativa[i] == questao["Alternativa_A"]
+
+            # <<< ALTERAÇÃO AQUI >>>
+            alternativa_correta_embaralhada = None
+            for alt in embaralho:
+                if questao[alt] == questao["Alternativa_A"]:
+                    alternativa_correta_embaralhada = questao[alt]
+                    break
+            resposta[i] = alternativa[i] == alternativa_correta_embaralhada
 
             if botao and alternativa[i] is None:
                 st.warning('Nenhuma das alternativas foi selecionada.', icon="⚠️")
             else:
                 if botao and alternativa[i] is not None:
                     if resposta[i]:
-                        st.success(f'A resposta correta é {questao["Alternativa_A"]}', icon="✅")
+                        st.success(f'A resposta correta é {alternativa_correta_embaralhada}', icon="✅")
                     else:
-                        st.error(f'A resposta correta é {questao["Alternativa_A"]}', icon="🚨")
-    
+                        st.error(f'A resposta correta é {alternativa_correta_embaralhada}', icon="🚨")
+
     with tabs[numero + 1]:
         if botao:
             acertos = sum(resposta[i] for i in resposta)
@@ -150,7 +149,7 @@ def read_questao():
                 st.toast(f':red-background[Você Acertou {round(porcen * 100, 1)}%]', icon="⚠️")
             else:
                 st.toast(f':green-background[Você Acertou {round(porcen * 100, 1)}%]', icon='🎉')
-    #errado
+
     for i in range(numero):
         y = i + 1
         with tabs[numero + 1]:
@@ -169,11 +168,11 @@ def read_questao():
                 if botao and alternativa[i] is not None:
                     index2 = opcoes[i].index(alternativa[i])
                     st.radio(tab_names[y], options=opcoes[i], index=index2, key=f"cha3{y}", disabled=True, horizontal=True)
-                    
+
                     if resposta[i]:
-                        st.success(f'A resposta correta é {resposta[i]}', icon="✅")
+                        st.success(f'A resposta correta é {alternativa_correta_embaralhada}', icon="✅")
                     else:
-                        st.error(f'A resposta correta é {alternativa[i]}', icon="🚨")
+                        st.error(f'A resposta correta é {alternativa_correta_embaralhada}', icon="🚨")
                     res[i] = True
 
     with tabs[numero + 1]:
@@ -248,5 +247,4 @@ def read_questao():
             if st.button("Iniciar questionário", on_click=new_questionario):
                 pass
 
-        
 
