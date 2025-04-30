@@ -121,7 +121,7 @@ def read_questao():
 
             opcoes[i] = [questao[embaralho[j]] for j in range(5)]
             alternativa[i] = st.radio("", options=opcoes[i], index=None, key=f"key{i}", disabled=disabled2)
-
+            st.write(questao)
             st.session_state["resposta"] = questao["Alternativa_A"]
             resul.update(st.session_state["save"])
             st.session_state["save"] = {st.session_state["numero"] + 1: st.session_state["ques"]}
