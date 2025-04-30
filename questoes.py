@@ -135,9 +135,9 @@ def read_questao():
             else:
                 if botao and alternativa[i] is not None:
                     if resposta[i]:
-                        st.success(f'A resposta correta é {questao["Alternativa_A"]}', icon="✅")
+                        st.success(f'A resposta correta é {alternativa[i]}', icon="✅")
                     else:
-                        st.error(f'A resposta correta é {questao["Alternativa_A"]}', icon="🚨")
+                        st.error(f'A resposta correta é {alternativa[i]}', icon="🚨")
     
     with tabs[numero + 1]:
         if botao:
