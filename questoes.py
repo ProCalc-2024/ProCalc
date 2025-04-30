@@ -83,7 +83,7 @@ def read_questao():
         st.rerun()
 
     b1 = st.session_state["ques"]
-
+    #certo
     for i in range(numero):
         j = i + 1
         with tabs[j]:
@@ -121,7 +121,7 @@ def read_questao():
 
             opcoes[i] = [questao[embaralho[j]] for j in range(5)]
             alternativa[i] = st.radio("", options=opcoes[i], index=None, key=f"key{i}", disabled=disabled2)
-            st.write(questao)
+            
             st.session_state["resposta"] = questao["Alternativa_A"]
             resul.update(st.session_state["save"])
             st.session_state["save"] = {st.session_state["numero"] + 1: st.session_state["ques"]}
@@ -138,7 +138,7 @@ def read_questao():
                         st.success(f'A resposta correta é {questao["Alternativa_A"]}', icon="✅")
                     else:
                         st.error(f'A resposta correta é {questao["Alternativa_A"]}', icon="🚨")
-
+    
     with tabs[numero + 1]:
         if botao:
             acertos = sum(resposta[i] for i in resposta)
@@ -150,7 +150,7 @@ def read_questao():
                 st.toast(f':red-background[Você Acertou {round(porcen * 100, 1)}%]', icon="⚠️")
             else:
                 st.toast(f':green-background[Você Acertou {round(porcen * 100, 1)}%]', icon='🎉')
-
+    #errado
     for i in range(numero):
         y = i + 1
         with tabs[numero + 1]:
@@ -168,6 +168,7 @@ def read_questao():
 
                 if botao and alternativa[i] is not None:
                     index2 = opcoes[i].index(alternativa[i])
+                    st.write(alternativa)
                     st.radio(tab_names[y], options=opcoes[i], index=index2, key=f"cha3{y}", disabled=True, horizontal=True)
                     
                     if resposta[i]:
