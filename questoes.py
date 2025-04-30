@@ -135,9 +135,9 @@ def read_questao():
             else:
                 if botao and alternativa[i] is not None:
                     if resposta[i]:
-                        st.success(f'A resposta correta é {alternativa[i]}', icon="✅")
+                        st.success(f'A resposta correta é {questao["Alternativa_A"]}', icon="✅")
                     else:
-                        st.error(f'A resposta correta é {alternativa[i]}', icon="🚨")
+                        st.error(f'A resposta correta é {questao["Alternativa_A"]}', icon="🚨")
     
     with tabs[numero + 1]:
         if botao:
@@ -172,9 +172,9 @@ def read_questao():
                     st.radio(tab_names[y], options=opcoes[i], index=index2, key=f"cha3{y}", disabled=True, horizontal=True)
                     
                     if resposta[i]:
-                        st.success(f'A resposta correta é {questao["Alternativa_A"]}', icon="✅")
+                        st.success(f'A resposta correta é {alternativa[i]}', icon="✅")
                     else:
-                        st.error(f'A resposta correta é {questao["Alternativa_A"]}', icon="🚨")
+                        st.error(f'A resposta correta é {alternativa[i]}', icon="🚨")
                     res[i] = True
 
     with tabs[numero + 1]:
