@@ -119,22 +119,25 @@ def read_questao():
 
             st.subheader('', divider='gray')
 
-            # Garantir que as alternativas sejam exibidas corretamente
             opcoes[i] = [questao[embaralho[j]] for j in range(5)]
             alternativa[i] = st.radio("", options=opcoes[i], index=None, key=f"key{i}", disabled=disabled2)
-
-            # Resposta correta agora vinculada à questão específica
-            resposta_correta = questao["Alternativa_A"]  # Atualize com a coluna que tem a resposta correta para a questão
-            resposta[i] = alternativa[i] == resposta_correta  # Comparando a resposta escolhida com a correta
+            
+            st.session_state["resposta"] = questao["Alternativa_A"]
+            resul.update(st.session_state["save"])
+            st.session_state["save"] = {st.session_state["numero"] + 1: st.session_state["ques"]}
+            sequencia = st.session_state["save"]
+            resul.update(sequencia)
+            st.session_state["save"] = resul
+            resposta[i] = alternativa[i] == questao["Alternativa_A"]
 
             if botao and alternativa[i] is None:
                 st.warning('Nenhuma das alternativas foi selecionada.', icon="⚠️")
             else:
                 if botao and alternativa[i] is not None:
                     if resposta[i]:
-                        st.success(f'A resposta correta é: {resposta_correta}', icon="✅")
+                        st.success(f'A resposta correta é {questao["Alternativa_A"]}', icon="✅")
                     else:
-                        st.error(f'A resposta correta é: {resposta_correta}', icon="🚨")
+                        st.error(f'A resposta correta é {questao["Alternativa_A"]}', icon="🚨")
     
     with tabs[numero + 1]:
         if botao:
@@ -147,7 +150,6 @@ def read_questao():
                 st.toast(f':red-background[Você Acertou {round(porcen * 100, 1)}%]', icon="⚠️")
             else:
                 st.toast(f':green-background[Você Acertou {round(porcen * 100, 1)}%]', icon='🎉')
-
     #errado
     for i in range(numero):
         y = i + 1
@@ -169,9 +171,9 @@ def read_questao():
                     st.radio(tab_names[y], options=opcoes[i], index=index2, key=f"cha3{y}", disabled=True, horizontal=True)
                     
                     if resposta[i]:
-                        st.success(f'A resposta correta é: {resposta_correta}', icon="✅")
+                        st.success(f'A resposta correta é {resposta[i]}', icon="✅")
                     else:
-                        st.error(f'A resposta correta é: {alternativa[i]}', icon="🚨")
+                        st.error(f'A resposta correta é {alternativa[i]}', icon="🚨")
                     res[i] = True
 
     with tabs[numero + 1]:
