@@ -169,6 +169,7 @@ def read_questao():
                 if botao and alternativa[i] is not None:
                     index2 = opcoes[i].index(alternativa[i])
                     st.radio(tab_names[y], options=opcoes[i], index=index2, key=f"cha3{y}", disabled=True, horizontal=True)
+                    st.write(questao)
                     if resposta[i]:
                         st.success(f'A resposta correta é {questao["Alternativa_A"]}', icon="✅")
                     else:
