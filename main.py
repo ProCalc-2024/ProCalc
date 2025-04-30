@@ -66,7 +66,8 @@ if st.session_state["pagina"] == "Log":
                             save_questoes.deletar_ques()
                             pass
                 with tabs[1]:
-                    testea.aulas()    
+                    #testea.aulas()
+                        st.subheader("Carregando...")
         else:
                 with tabs[1]:
 
