@@ -172,7 +172,7 @@ def read_questao():
                     st.radio(tab_names[y], options=opcoes[i], index=index2, key=f"cha3{y}", disabled=True, horizontal=True)
                     
                     if resposta[i]:
-                        st.success(f'A resposta correta é {alternativa[i]}', icon="✅")
+                        st.success(f'A resposta correta é {resposta[i]}', icon="✅")
                     else:
                         st.error(f'A resposta correta é {alternativa[i]}', icon="🚨")
                     res[i] = True
