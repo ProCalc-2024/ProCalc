@@ -99,7 +99,7 @@ def read_questao():
             embaralho = st.session_state[f"embaralho{i}{materia}"]
             questao = lista_ques[questao_index]
 
-            st.write(questao)
+            st.write(questao["Enunciado"])
 
             file_name = questao["Imagem"]
             if pd.notna(file_name) and file_name != "":
