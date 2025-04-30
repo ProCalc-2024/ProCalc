@@ -123,8 +123,8 @@ def read_questao():
             opcoes[i] = [questao[embaralho[j]] for j in range(5)]
             alternativa[i] = st.radio("", options=opcoes[i], index=None, key=f"key{i}", disabled=disabled2)
 
-            # Verificar a resposta correta
-            resposta_correta = questao["Alternativa_A"]  # Aqui você pode atualizar para usar a coluna que contém a alternativa correta
+            # Resposta correta agora vinculada à questão específica
+            resposta_correta = questao["Alternativa_A"]  # Atualize com a coluna que tem a resposta correta para a questão
             resposta[i] = alternativa[i] == resposta_correta  # Comparando a resposta escolhida com a correta
 
             if botao and alternativa[i] is None:
@@ -132,9 +132,9 @@ def read_questao():
             else:
                 if botao and alternativa[i] is not None:
                     if resposta[i]:
-                        st.success(f'A resposta correta é {resposta_correta}', icon="✅")
+                        st.success(f'A resposta correta para a questão {i+1} é {resposta_correta}', icon="✅")
                     else:
-                        st.error(f'A resposta correta é {resposta_correta}', icon="🚨")
+                        st.error(f'A resposta correta para a questão {i+1} é {resposta_correta}', icon="🚨")
     
     with tabs[numero + 1]:
         if botao:
@@ -147,6 +147,7 @@ def read_questao():
                 st.toast(f':red-background[Você Acertou {round(porcen * 100, 1)}%]', icon="⚠️")
             else:
                 st.toast(f':green-background[Você Acertou {round(porcen * 100, 1)}%]', icon='🎉')
+
     #errado
     for i in range(numero):
         y = i + 1
@@ -168,9 +169,9 @@ def read_questao():
                     st.radio(tab_names[y], options=opcoes[i], index=index2, key=f"cha3{y}", disabled=True, horizontal=True)
                     
                     if resposta[i]:
-                        st.success(f'A resposta correta é {resposta_correta}', icon="✅")
+                        st.success(f'A resposta correta para a questão {y} é {resposta_correta}', icon="✅")
                     else:
-                        st.error(f'A resposta correta é {alternativa[i]}', icon="🚨")
+                        st.error(f'A resposta correta para a questão {y} é {alternativa[i]}', icon="🚨")
                     res[i] = True
 
     with tabs[numero + 1]:
@@ -244,5 +245,3 @@ def read_questao():
         if st.session_state["disabled"] in [True, False]:
             if st.button("Iniciar questionário", on_click=new_questionario):
                 pass
-
-
