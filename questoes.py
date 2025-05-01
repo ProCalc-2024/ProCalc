@@ -150,6 +150,7 @@ def read_questao():
             resul.update(sequencia)
             st.session_state["save"] = resul
             resposta[i] = alternativa[i] == questao["Alternativa_A"]
+            resposta_correta[i] = questao["Alternativa_A"]
 
             # Exibe aviso se nenhuma alternativa for selecionada
             if botao and alternativa[i] is None:
@@ -196,9 +197,9 @@ def read_questao():
                     st.radio(tab_names[y], options=opcoes[i], index=index2, key=f"cha3{y}", disabled=True, horizontal=True)
                     
                     if resposta[i]:
-                        st.success(f'A resposta correta é {resposta[i]}', icon="✅")
+                        st.success(f'A resposta correta é {resposta_correta[i]}', icon="✅")
                     else:
-                        st.error(f'A resposta correta é {alternativa[i]}', icon="🚨")
+                        st.error(f'A resposta correta é {resposta_correta[i]}', icon="🚨")
                     res[i] = True
 
     # Botões de interação final
