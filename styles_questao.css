@@ -58,3 +58,34 @@
 .st-dd {
     margin-bottom: 60px;
 }
+body {
+    background-color: #f9f9f9;
+    font-family: 'Segoe UI', sans-serif;
+    color: #333;
+}
+
+/* Títulos bonitos e bem destacados */
+h1, h2, h3 {
+    color: #2c3e50;
+    text-align: center;
+}
+
+/* Texto de feedback */
+.feedback-text {
+    font-size: 18px;
+    margin-top: 20px;
+    text-align: center;
+}
+
+/* Expander com aparência personalizada */
+.st-expander {
+    background-color: #eaeaea;
+    border-radius: 8px;
+    padding: 10px;
+}
+
+/* Barra de progresso mais suave */
+div[role="progressbar"] {
+    background-color: #d0d0d0;
+    border-radius: 10px;
+}
