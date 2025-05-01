@@ -42,7 +42,7 @@ def read_questao():
     alternativa = {}
     res = {}
     opcoes = {}
-
+    resposta_correta = {}
     # Inicializa estados da sessão, se necessário
     if "botao" not in st.session_state:
         st.session_state["botao"] = False
