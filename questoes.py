@@ -53,7 +53,7 @@ def read_questao():
     else:
         lista_ques = [linha for linha in dict.iloc if linha["Materia"] == materia]
     n = len(lista_ques)
-    st.write(lista_ques)
+    st.write(lista_ques["Alternativa_A"])
     with col1:
         numero = st.number_input("Quantas questões você gostaria de fazer?", min_value=1, max_value=n, value=1, disabled=disabled3)
 
