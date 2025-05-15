@@ -13,13 +13,13 @@ import requests
 import testea
 import pag_inicial
 
-
+st.divider()
 def local_css(file_name):
         with open(file_name) as f:
             st.markdown(f"<style>{f.read()}</style>", unsafe_allow_html=True)
             
 local_css(r"styles.css")
-st.divider()
+
 col1, col2, col3 = st.columns([1, 4, 1])
 
 testea.main()
