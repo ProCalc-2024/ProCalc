@@ -67,7 +67,7 @@ if st.session_state["pagina"] == "Log":
                             pass
                 with tabs[1]:
                     #testea.aulas()
-                        st.subheader("Em Construção", divider="yellow")
+                        st.subheader("Em Construção", divider="red")
 
         else:
                 with tabs[1]:
