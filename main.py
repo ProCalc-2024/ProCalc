@@ -19,7 +19,7 @@ def local_css(file_name):
             st.markdown(f"<style>{f.read()}</style>", unsafe_allow_html=True)
             
 local_css(r"styles.css")
-
+st.divider()
 col1, col2, col3 = st.columns([1, 4, 1])
 
 testea.main()
