@@ -67,7 +67,6 @@ if st.session_state["pagina"] == "Log":
                             pass
                 with tabs[1]:
                     #testea.aulas()
-                        st.subheader("Em Construção")
 
                         # Centraliza tudo com markdown
                         st.markdown(
@@ -83,7 +82,15 @@ if st.session_state["pagina"] == "Log":
         else:
                 with tabs[1]:
 
-                        st.subheader("Em Construção")
+                        st.markdown(
+                            """
+                            <div style="text-align: center; margin-top: 100px;">
+                                <h1 style="font-size: 60px;">🚧 Em Construção 🚧</h1>
+                                <p style="font-size: 24px;">Estamos trabalhando para trazer novidades em breve.</p>
+                            </div>
+                            """,
+                            unsafe_allow_html=True
+                        )
                         
         with tabs[2]:
              
