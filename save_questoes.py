@@ -250,6 +250,44 @@ def editar_ques():
     uploaded_file = st.file_uploader("Atualizar imagem:", type=["jpg", "png", "jpeg"])
 
     # aqui
+    with st.expander("Visualizar questão"):
+        st.subheader('', divider = 'gray')
+
+        # embaralha as alternativas independente da questão 
+        lista = ["Alternativa_A","Alternativa_B","Alternativa_C","Alternativa_D","Alternativa_E"]
+
+        if "embaralho" not in st.session_state:
+
+            st.session_state["embaralho"] = np.random.choice(lista, 5, replace = False)
+
+        if "ques" not in st.session_state:
+            st.session_state["save"] = {}
+            st.session_state["numero"] = 0
+
+        embaralho = st.session_state["embaralho"]
+
+        # escolha de questão aleatoria
+        for linha in novo.iloc: 
+            lista_ques.append(linha)
+
+        #comando da questão  
+        questao = lista_ques[0]
+
+        st.write("")
+        st.write(questao["Enunciado"])
+
+
+        if uploaded_file is not None:
+            st.subheader('', divider = 'gray')
+            st.image(uploaded_file, caption="Imagem carregada", use_column_width=True)
+        st.subheader('', divider = 'gray')
+
+        opções = [questao[embaralho[0]], questao[embaralho[1]], questao[embaralho[2]], questao[embaralho[3]], questao[embaralho[4]]]    
+
+        alternativa = st.radio("", options = opções, index=None)
+
+        st.session_state["resposta"] = questao["Alternativa_A"]
+
 
     if st.button("Salvar alterações"):
         with st.spinner("Salvando..."):
@@ -324,4 +362,5 @@ def deletar_ques():
 
         st.toast(':green-background[Questão deletada com sucesso]', icon='✔️')
         st.rerun()
+
 
