@@ -266,13 +266,23 @@ def editar_ques():
     uploaded_file = st.file_uploader("Atualizar imagem:", type=["jpg", "png", "jpeg"])
     
     with st.expander("Visualizar questão"):
-        st.write("")
-        st.write(enunciado)
         st.subheader('', divider='gray')
+        
+        # Enunciado
+        st.write(f"**{enunciado}**")
+    
+        # Imagem (se existir)
+        if imagem_atual:
+            st.image(
+                f"https://raw.githubusercontent.com/{st.secrets['github']['repo_owner']}/{st.secrets['github']['repo_name']}/main/imagens/{imagem_atual}",
+                caption="Imagem da Questão"
+            )
+    
+        # Alternativas embaralhadas
         embaralho = st.session_state["embaralho"]
         opcoes = [alternativas[embaralho[i]] for i in range(5)]
-        st.radio("", options=opcoes, index=None)
-    
+        st.radio("Escolha uma opção:", options=opcoes, index=None)
+        
     if st.button("Salvar alterações"):
         with st.spinner("Salvando..."):
             existing_data.at[index, "Descrição"] = descricao
@@ -356,6 +366,7 @@ def deletar_ques():
 
         st.toast(':green-background[Questão deletada com sucesso]', icon='✔️')
         st.rerun()
+
 
 
 
