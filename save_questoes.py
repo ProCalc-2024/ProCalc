@@ -182,12 +182,6 @@ def editar_ques():
     import requests
     import numpy as np
 
-    # Carregar configurações do secrets para o github
-    GITHUB_TOKEN = st.secrets["github"]["token"]
-    REPO_OWNER = st.secrets["github"]["repo_owner"]
-    REPO_NAME = st.secrets["github"]["repo_name"]
-    BRANCH = st.secrets["github"]["branch"]
-    
     conn = st.connection("gsheets", type=GSheetsConnection)
     existing_data = conn.read(worksheet="Questões", ttl=0)
 
@@ -216,28 +210,15 @@ def editar_ques():
 
     descricao = st.text_input("Descrição", value=questao_atual["Descrição"], key=f"descricao_{index}")
     enunciado = st.text_area("Enunciado", value=questao_atual["Enunciado"], key=f"enunciado_{index}")
-    
-    letra_a = st.text_input("Resposta 1", value=questao_atual["Alternativa_A"], key=f"a_{index}")
-    letra_b = st.text_input("Resposta 2", value=questao_atual["Alternativa_B"], key=f"b_{index}")
-    letra_c = st.text_input("Resposta 3", value=questao_atual["Alternativa_C"], key=f"c_{index}")
-    letra_d = st.text_input("Resposta 4", value=questao_atual["Alternativa_D"], key=f"d_{index}")
-    letra_e = st.text_input("Resposta 5", value=questao_atual["Alternativa_E"], key=f"e_{index}")
-
+    alternativas = {
+        "Alternativa_A": st.text_input("Resposta 1", value=questao_atual["Alternativa_A"], key=f"a_{index}"),
+        "Alternativa_B": st.text_input("Resposta 2", value=questao_atual["Alternativa_B"], key=f"b_{index}"),
+        "Alternativa_C": st.text_input("Resposta 3", value=questao_atual["Alternativa_C"], key=f"c_{index}"),
+        "Alternativa_D": st.text_input("Resposta 4", value=questao_atual["Alternativa_D"], key=f"d_{index}"),
+        "Alternativa_E": st.text_input("Resposta 5", value=questao_atual["Alternativa_E"], key=f"e_{index}")
+    }
 
     st.subheader("Imagem da Questão")
-        
-    existing_data = conn.read(worksheet="Questões")
-    novo = pd.DataFrame({
-        'Materia': [materia],
-        'Descrição': [descricao],
-        'Enunciado': [enunciado],
-        'Alternativa_A': [letra_a],
-        'Alternativa_B': [letra_b],
-        'Alternativa_C': [letra_c],
-        'Alternativa_D': [letra_d],
-        'Alternativa_E': [letra_e]
-    })
-
     imagem_atual = questao_atual.get("Imagem", "")
 
     if imagem_atual:
@@ -268,97 +249,34 @@ def editar_ques():
 
     uploaded_file = st.file_uploader("Atualizar imagem:", type=["jpg", "png", "jpeg"])
 
-    # aqui
     with st.expander("Visualizar questão"):
-        st.subheader('', divider = 'gray')
-
-        # embaralha as alternativas independente da questão 
-        lista = ["Alternativa_A","Alternativa_B","Alternativa_C","Alternativa_D","Alternativa_E"]
-
-        if "embaralho" not in st.session_state:
-
-            st.session_state["embaralho"] = np.random.choice(lista, 5, replace = False)
-
-        if "ques" not in st.session_state:
-            st.session_state["save"] = {}
-            st.session_state["numero"] = 0
-
+        st.subheader('', divider='gray')
         embaralho = st.session_state["embaralho"]
-       
-        #comando da questão  
-        
+        opcoes = [alternativas[embaralho[i]] for i in range(5)]
+        st.radio("", options=opcoes, index=None)
 
-        st.write("")
-        st.write(questao_atual["Enunciado"])
-
-
-        if uploaded_file is not None:
-            st.subheader('', divider = 'gray')
-            st.image(uploaded_file, caption="Imagem carregada", use_column_width=True)
-        st.subheader('', divider = 'gray')
-
-        opções = [questao_atual[embaralho[0]], questao_atual[embaralho[1]], questao_atual[embaralho[2]], questao_atual[embaralho[3]], questao_atual[embaralho[4]]]    
-
-        alternativa = st.radio("", options = opções, index=None)
-
-        st.session_state["resposta"] = questao_atual["Alternativa_A"]
-        
     if st.button("Salvar alterações"):
         with st.spinner("Salvando..."):
+            existing_data.at[index, "Descrição"] = descricao
+            existing_data.at[index, "Enunciado"] = enunciado
+            for alt_key in alternativas:
+                existing_data.at[index, alt_key] = alternativas[alt_key]
 
-            if uploaded_file is not None:
+            if uploaded_file:
+                image_data = uploaded_file.getvalue()
 
-                image_data = uploaded_file.getvalue()  # Lê os bytes da imagem
-                image_base64 = base64.b64encode(image_data).decode()  # Converte para Base64
-    
-                file_path = f"imagens/{uploaded_file.name}"  # Caminho no repositório
-    
-                novo['Imagem'] = [f"{uploaded_file.name}"]
-    
-                url = f"https://api.github.com/repos/{REPO_OWNER}/{REPO_NAME}/contents/{file_path}"
-    
-                payload = {
-                    "message": f"Adicionando {uploaded_file.name} via Streamlit",
-                    "content": image_base64,
-                    "branch": BRANCH
-                }
-    
-                headers = {"Authorization": f"token {GITHUB_TOKEN}"}
-    
                 response = requests.put(url, json=payload, headers=headers)
-    
+
                 if response.status_code == 201:
-                    combined_data = pd.concat([existing_data, novo], ignore_index=True)
-                    conn.update(worksheet="Questões", data=combined_data)
-    
-                    conn.read(
-                    worksheet="Questões",  # Nome da planilha
-                    ttl=0                  # Cache de 1 segundo
-                    )
-    
-                    st.success(':green-background[Questão salva]', icon='✔️')
-    
-                    st.rerun()
-    
-                    st.success(f"Imagem Salva no GITHUB! 📤")
+                    existing_data.at[index, "Imagem"] = uploaded_file.name
+
+                    st.success("Imagem atualizada com sucesso! 📤")
                 else:
-                    #st.error(f"Erro ao enviar a imagem: {response.json()}")
-                    st.error(f"A imagem já existe")
-    
-    
-            else:
-                combined_data = pd.concat([novo], ignore_index=True)
-    
-                conn.update(worksheet="Questões", data=combined_data)
-    
-                conn.read(
-                worksheet="Questões",  # Nome da planilha
-                ttl=0                  # Cache de 1 segundo
-                )
-    
-                st.success(':green-background[Questão salva]', icon='✔️')
-    
-                st.rerun()
+                    st.error("Erro ao atualizar a imagem.")
+
+            conn.update(worksheet="Questões", data=existing_data)
+            st.success("Questão editada com sucesso! ✅")
+            st.rerun()
 
 def deletar_ques():
     # Conexão com o Google Sheets
@@ -410,6 +328,7 @@ def deletar_ques():
 
         st.toast(':green-background[Questão deletada com sucesso]', icon='✔️')
         st.rerun()
+
 
 
 
