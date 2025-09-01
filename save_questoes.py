@@ -306,30 +306,59 @@ def editar_ques():
     if st.button("Salvar alterações"):
         with st.spinner("Salvando..."):
 
-            image_data = uploaded_file.getvalue()  # Lê os bytes da imagem
-            image_base64 = base64.b64encode(image_data).decode()  # Converte para Base64
+            if uploaded_file is not None:
 
-            file_path = f"imagens/{uploaded_file.name}"  # Caminho no repositório
-
-            novo['Imagem'] = [f"{uploaded_file.name}"]
-
-            url = f"https://api.github.com/repos/{REPO_OWNER}/{REPO_NAME}/contents/{file_path}"
-
-            payload = {
-                "message": f"Adicionando {uploaded_file.name} via Streamlit",
-                "content": image_base64,
-                "branch": BRANCH
-            }
-
-            headers = {"Authorization": f"token {GITHUB_TOKEN}"}
-
-            response = requests.put(url, json=payload, headers=headers)
-            
-
-
-            conn.update(worksheet="Questões", data=existing_data)
-            st.success("Questão editada com sucesso! ✅")
-            st.rerun()
+                image_data = uploaded_file.getvalue()  # Lê os bytes da imagem
+                image_base64 = base64.b64encode(image_data).decode()  # Converte para Base64
+    
+                file_path = f"imagens/{uploaded_file.name}"  # Caminho no repositório
+    
+                novo['Imagem'] = [f"{uploaded_file.name}"]
+    
+                url = f"https://api.github.com/repos/{REPO_OWNER}/{REPO_NAME}/contents/{file_path}"
+    
+                payload = {
+                    "message": f"Adicionando {uploaded_file.name} via Streamlit",
+                    "content": image_base64,
+                    "branch": BRANCH
+                }
+    
+                headers = {"Authorization": f"token {GITHUB_TOKEN}"}
+    
+                response = requests.put(url, json=payload, headers=headers)
+    
+                if response.status_code == 201:
+                    combined_data = pd.concat([existing_data, novo], ignore_index=True)
+                    conn.update(worksheet="Questões", data=combined_data)
+    
+                    conn.read(
+                    worksheet="Questões",  # Nome da planilha
+                    ttl=0                  # Cache de 1 segundo
+                    )
+    
+                    st.success(':green-background[Questão salva]', icon='✔️')
+    
+                    st.rerun()
+    
+                    st.success(f"Imagem Salva no GITHUB! 📤")
+                else:
+                    #st.error(f"Erro ao enviar a imagem: {response.json()}")
+                    st.error(f"A imagem já existe")
+    
+    
+            else:
+                combined_data = pd.concat([existing_data, novo], ignore_index=True)
+    
+                conn.update(worksheet="Questões", data=combined_data)
+    
+                conn.read(
+                worksheet="Questões",  # Nome da planilha
+                ttl=0                  # Cache de 1 segundo
+                )
+    
+                st.success(':green-background[Questão salva]', icon='✔️')
+    
+                st.rerun()
 
 def deletar_ques():
     # Conexão com o Google Sheets
@@ -381,6 +410,7 @@ def deletar_ques():
 
         st.toast(':green-background[Questão deletada com sucesso]', icon='✔️')
         st.rerun()
+
 
 
 
