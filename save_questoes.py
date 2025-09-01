@@ -216,15 +216,28 @@ def editar_ques():
 
     descricao = st.text_input("Descrição", value=questao_atual["Descrição"], key=f"descricao_{index}")
     enunciado = st.text_area("Enunciado", value=questao_atual["Enunciado"], key=f"enunciado_{index}")
-    alternativas = {
-        "Alternativa_A": st.text_input("Resposta 1", value=questao_atual["Alternativa_A"], key=f"a_{index}"),
-        "Alternativa_B": st.text_input("Resposta 2", value=questao_atual["Alternativa_B"], key=f"b_{index}"),
-        "Alternativa_C": st.text_input("Resposta 3", value=questao_atual["Alternativa_C"], key=f"c_{index}"),
-        "Alternativa_D": st.text_input("Resposta 4", value=questao_atual["Alternativa_D"], key=f"d_{index}"),
-        "Alternativa_E": st.text_input("Resposta 5", value=questao_atual["Alternativa_E"], key=f"e_{index}")
-    }
+    
+    letra_a = st.text_input("Resposta 1", value=questao_atual["Alternativa_A"], key=f"a_{index}")
+    letra_b = st.text_input("Resposta 2", value=questao_atual["Alternativa_B"], key=f"b_{index}")
+    letra_c = st.text_input("Resposta 3", value=questao_atual["Alternativa_C"], key=f"c_{index}")
+    letra_d = st.text_input("Resposta 4", value=questao_atual["Alternativa_D"], key=f"d_{index}")
+    letra_e = st.text_input("Resposta 5", value=questao_atual["Alternativa_E"], key=f"e_{index}")
+
 
     st.subheader("Imagem da Questão")
+        
+    existing_data = conn.read(worksheet="Questões")
+    novo = pd.DataFrame({
+        'Materia': [materia],
+        'Descrição': [descricao],
+        'Enunciado': [enunciado],
+        'Alternativa_A': [letra_a],
+        'Alternativa_B': [letra_b],
+        'Alternativa_C': [letra_c],
+        'Alternativa_D': [letra_d],
+        'Alternativa_E': [letra_e]
+    })
+
     imagem_atual = questao_atual.get("Imagem", "")
 
     if imagem_atual:
@@ -289,7 +302,7 @@ def editar_ques():
         alternativa = st.radio("", options = opções, index=None)
 
         st.session_state["resposta"] = questao_atual["Alternativa_A"]
-    novo = {}    
+        
     if st.button("Salvar alterações"):
         with st.spinner("Salvando..."):
 
@@ -383,6 +396,7 @@ def deletar_ques():
 
         st.toast(':green-background[Questão deletada com sucesso]', icon='✔️')
         st.rerun()
+
 
 
 
