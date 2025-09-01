@@ -181,33 +181,46 @@ def editar_ques():
     import base64
     import requests
     import numpy as np
-
+    import streamlit as st
+    from streamlit_gsheets import GSheetsConnection
+    import random
+    
+    # Conexão com a planilha
     conn = st.connection("gsheets", type=GSheetsConnection)
     existing_data = conn.read(worksheet="Questões", ttl=0)
-
+    
     if existing_data.empty:
         st.warning("Nenhuma questão disponível para editar.")
-        return
-
+        st.stop()
+    
+    # Inicializa embaralho se não existir
+    if "embaralho" not in st.session_state:
+        st.session_state["embaralho"] = random.sample(
+            ["Alternativa_A", "Alternativa_B", "Alternativa_C", "Alternativa_D", "Alternativa_E"], 5
+        )
+    
     materias_unicas = existing_data["Materia"].unique()
-
+    
     col1, col2 = st.columns(2)
-
+    
     with col1:
         materia = st.selectbox("Matéria", options=materias_unicas)
-
+    
     questoes_filtradas = existing_data[existing_data["Materia"] == materia]
-
+    
     if questoes_filtradas.empty:
         st.warning(f"Nenhuma questão disponível para a matéria '{materia}'.")
-        return
-
+        st.stop()
+    
     with col2:
-        questao_selecionada = st.selectbox("Selecione a questão a editar:", options=questoes_filtradas["Descrição"].tolist())
-
+        questao_selecionada = st.selectbox(
+            "Selecione a questão a editar:", 
+            options=questoes_filtradas["Descrição"].tolist()
+        )
+    
     index = questoes_filtradas.index[questoes_filtradas["Descrição"] == questao_selecionada][0]
     questao_atual = questoes_filtradas.loc[index]
-
+    
     descricao = st.text_input("Descrição", value=questao_atual["Descrição"], key=f"descricao_{index}")
     enunciado = st.text_area("Enunciado", value=questao_atual["Enunciado"], key=f"enunciado_{index}")
     alternativas = {
@@ -217,13 +230,16 @@ def editar_ques():
         "Alternativa_D": st.text_input("Resposta 4", value=questao_atual["Alternativa_D"], key=f"d_{index}"),
         "Alternativa_E": st.text_input("Resposta 5", value=questao_atual["Alternativa_E"], key=f"e_{index}")
     }
-
+    
     st.subheader("Imagem da Questão")
     imagem_atual = questao_atual.get("Imagem", "")
-
+    
     if imagem_atual:
-        st.image(f"https://raw.githubusercontent.com/{st.secrets['github']['repo_owner']}/{st.secrets['github']['repo_name']}/main/imagens/{imagem_atual}", caption="Imagem Atual")
-
+        st.image(
+            f"https://raw.githubusercontent.com/{st.secrets['github']['repo_owner']}/{st.secrets['github']['repo_name']}/main/imagens/{imagem_atual}",
+            caption="Imagem Atual"
+        )
+    
         if st.button("Apagar imagem"):
             url = f"https://api.github.com/repos/{st.secrets['github']['repo_owner']}/{st.secrets['github']['repo_name']}/contents/imagens/{imagem_atual}"
             get_response = requests.get(url, headers={"Authorization": f"token {st.secrets['github']['token']}"})
@@ -246,37 +262,47 @@ def editar_ques():
                 st.warning("Imagem já não está presente no GitHub.")
     else:
         st.info("Questão sem imagem")
-
+    
     uploaded_file = st.file_uploader("Atualizar imagem:", type=["jpg", "png", "jpeg"])
-
+    
     with st.expander("Visualizar questão"):
         st.subheader('', divider='gray')
         embaralho = st.session_state["embaralho"]
         opcoes = [alternativas[embaralho[i]] for i in range(5)]
         st.radio("", options=opcoes, index=None)
-
+    
     if st.button("Salvar alterações"):
         with st.spinner("Salvando..."):
             existing_data.at[index, "Descrição"] = descricao
             existing_data.at[index, "Enunciado"] = enunciado
             for alt_key in alternativas:
                 existing_data.at[index, alt_key] = alternativas[alt_key]
-
+    
+            # Upload da imagem
             if uploaded_file:
                 image_data = uploaded_file.getvalue()
-
+                b64_content = base64.b64encode(image_data).decode("utf-8")
+    
+                url = f"https://api.github.com/repos/{st.secrets['github']['repo_owner']}/{st.secrets['github']['repo_name']}/contents/imagens/{uploaded_file.name}"
+                payload = {
+                    "message": f"Atualizando {uploaded_file.name} via Streamlit",
+                    "content": b64_content,
+                    "branch": st.secrets['github']['branch']
+                }
+                headers = {"Authorization": f"token {st.secrets['github']['token']}"}
+    
                 response = requests.put(url, json=payload, headers=headers)
-
-                if response.status_code == 201:
+    
+                if response.status_code in (200, 201):  # 200 overwrite, 201 novo arquivo
                     existing_data.at[index, "Imagem"] = uploaded_file.name
-
                     st.success("Imagem atualizada com sucesso! 📤")
                 else:
-                    st.error("Erro ao atualizar a imagem.")
-
+                    st.error(f"Erro ao atualizar a imagem: {response.json()}")
+    
             conn.update(worksheet="Questões", data=existing_data)
             st.success("Questão editada com sucesso! ✅")
             st.rerun()
+
 
 def deletar_ques():
     # Conexão com o Google Sheets
@@ -328,6 +354,7 @@ def deletar_ques():
 
         st.toast(':green-background[Questão deletada com sucesso]', icon='✔️')
         st.rerun()
+
 
 
 
