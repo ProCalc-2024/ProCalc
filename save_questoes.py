@@ -347,7 +347,7 @@ def editar_ques():
     
     
             else:
-                combined_data = pd.concat([existing_data, novo], ignore_index=True)
+                combined_data = pd.concat([novo], ignore_index=True)
     
                 conn.update(worksheet="Questões", data=combined_data)
     
@@ -410,6 +410,7 @@ def deletar_ques():
 
         st.toast(':green-background[Questão deletada com sucesso]', icon='✔️')
         st.rerun()
+
 
 
 
