@@ -182,6 +182,12 @@ def editar_ques():
     import requests
     import numpy as np
 
+    # Carregar configurações do secrets para o github
+    GITHUB_TOKEN = st.secrets["github"]["token"]
+    REPO_OWNER = st.secrets["github"]["repo_owner"]
+    REPO_NAME = st.secrets["github"]["repo_name"]
+    BRANCH = st.secrets["github"]["branch"]
+    
     conn = st.connection("gsheets", type=GSheetsConnection)
     existing_data = conn.read(worksheet="Questões", ttl=0)
 
@@ -283,8 +289,7 @@ def editar_ques():
         alternativa = st.radio("", options = opções, index=None)
 
         st.session_state["resposta"] = questao_atual["Alternativa_A"]
-
-
+        
     if st.button("Salvar alterações"):
         with st.spinner("Salvando..."):
             existing_data.at[index, "Descrição"] = descricao
@@ -358,6 +363,7 @@ def deletar_ques():
 
         st.toast(':green-background[Questão deletada com sucesso]', icon='✔️')
         st.rerun()
+
 
 
 
