@@ -267,17 +267,16 @@ def editar_ques():
     
     with st.expander("Visualizar questão"):
         st.subheader('', divider='gray')
-        
         # Enunciado
         st.write(f"**{enunciado}**")
-    
+        
         # Imagem (se existir)
         if imagem_atual:
             st.image(
                 f"https://raw.githubusercontent.com/{st.secrets['github']['repo_owner']}/{st.secrets['github']['repo_name']}/main/imagens/{imagem_atual}",
                 caption="Imagem da Questão"
             )
-    
+        st.subheader('', divider='gray')
         # Alternativas embaralhadas
         embaralho = st.session_state["embaralho"]
         opcoes = [alternativas[embaralho[i]] for i in range(5)]
@@ -366,6 +365,7 @@ def deletar_ques():
 
         st.toast(':green-background[Questão deletada com sucesso]', icon='✔️')
         st.rerun()
+
 
 
 
