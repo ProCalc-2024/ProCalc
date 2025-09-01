@@ -249,11 +249,7 @@ def editar_ques():
 
     uploaded_file = st.file_uploader("Atualizar imagem:", type=["jpg", "png", "jpeg"])
 
-    with st.expander("Visualizar questão"):
-        st.subheader('', divider='gray')
-        embaralho = st.session_state["embaralho"]
-        opcoes = [alternativas[embaralho[i]] for i in range(5)]
-        st.radio("", options=opcoes, index=None)
+    # aqui
 
     if st.button("Salvar alterações"):
         with st.spinner("Salvando..."):
@@ -328,3 +324,4 @@ def deletar_ques():
 
         st.toast(':green-background[Questão deletada com sucesso]', icon='✔️')
         st.rerun()
+
