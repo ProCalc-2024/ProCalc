@@ -266,14 +266,11 @@ def editar_ques():
 
         embaralho = st.session_state["embaralho"]
        
-        # escolha de questão aleatoria
-        for linha in novo.iloc: 
-            lista_ques.append(linha)
         #comando da questão  
-        questao = lista_ques[0]
+        
 
         st.write("")
-        st.write(questao["Enunciado"])
+        st.write(questao_atual["Enunciado"])
 
 
         if uploaded_file is not None:
@@ -281,11 +278,11 @@ def editar_ques():
             st.image(uploaded_file, caption="Imagem carregada", use_column_width=True)
         st.subheader('', divider = 'gray')
 
-        opções = [questao[embaralho[0]], questao[embaralho[1]], questao[embaralho[2]], questao[embaralho[3]], questao[embaralho[4]]]    
+        opções = [questao_atual[embaralho[0]], questao_atual[embaralho[1]], questao_atual[embaralho[2]], questao_atual[embaralho[3]], questao_atual[embaralho[4]]]    
 
         alternativa = st.radio("", options = opções, index=None)
 
-        st.session_state["resposta"] = questao["Alternativa_A"]
+        st.session_state["resposta"] = questao_atual["Alternativa_A"]
 
 
     if st.button("Salvar alterações"):
@@ -361,6 +358,7 @@ def deletar_ques():
 
         st.toast(':green-background[Questão deletada com sucesso]', icon='✔️')
         st.rerun()
+
 
 
 
