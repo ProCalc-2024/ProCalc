@@ -266,6 +266,8 @@ def editar_ques():
     uploaded_file = st.file_uploader("Atualizar imagem:", type=["jpg", "png", "jpeg"])
     
     with st.expander("Visualizar questão"):
+        st.write("")
+        st.write(enunciado)
         st.subheader('', divider='gray')
         embaralho = st.session_state["embaralho"]
         opcoes = [alternativas[embaralho[i]] for i in range(5)]
@@ -354,6 +356,7 @@ def deletar_ques():
 
         st.toast(':green-background[Questão deletada com sucesso]', icon='✔️')
         st.rerun()
+
 
 
 
