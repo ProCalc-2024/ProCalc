@@ -289,7 +289,7 @@ def editar_ques():
         alternativa = st.radio("", options = opções, index=None)
 
         st.session_state["resposta"] = questao_atual["Alternativa_A"]
-        
+    novo = []    
     if st.button("Salvar alterações"):
         with st.spinner("Salvando..."):
 
@@ -383,6 +383,7 @@ def deletar_ques():
 
         st.toast(':green-background[Questão deletada com sucesso]', icon='✔️')
         st.rerun()
+
 
 
 
