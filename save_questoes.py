@@ -266,10 +266,6 @@ def editar_ques():
 
         embaralho = st.session_state["embaralho"]
 
-        # escolha de questão aleatoria
-        for linha in novo.iloc: 
-            lista_ques.append(linha)
-
         #comando da questão  
         questao = lista_ques[0]
 
@@ -362,5 +358,6 @@ def deletar_ques():
 
         st.toast(':green-background[Questão deletada com sucesso]', icon='✔️')
         st.rerun()
+
 
 
