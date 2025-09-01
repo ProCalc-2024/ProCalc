@@ -325,22 +325,7 @@ def editar_ques():
 
             response = requests.put(url, json=payload, headers=headers)
             
-            existing_data.at[index, "Descrição"] = descricao
-            existing_data.at[index, "Enunciado"] = enunciado
-            for alt_key in alternativas:
-                existing_data.at[index, alt_key] = alternativas[alt_key]
 
-            if uploaded_file:
-                image_data = uploaded_file.getvalue()
-
-                response = requests.put(url, json=payload, headers=headers)
-
-                if response.status_code == 201:
-                    existing_data.at[index, "Imagem"] = uploaded_file.name
-
-                    st.success("Imagem atualizada com sucesso! 📤")
-                else:
-                    st.error("Erro ao atualizar a imagem.")
 
             conn.update(worksheet="Questões", data=existing_data)
             st.success("Questão editada com sucesso! ✅")
@@ -396,6 +381,7 @@ def deletar_ques():
 
         st.toast(':green-background[Questão deletada com sucesso]', icon='✔️')
         st.rerun()
+
 
 
 
