@@ -292,6 +292,26 @@ def editar_ques():
         
     if st.button("Salvar alterações"):
         with st.spinner("Salvando..."):
+
+            image_data = uploaded_file.getvalue()  # Lê os bytes da imagem
+            image_base64 = base64.b64encode(image_data).decode()  # Converte para Base64
+
+            file_path = f"imagens/{uploaded_file.name}"  # Caminho no repositório
+
+            novo['Imagem'] = [f"{uploaded_file.name}"]
+
+            url = f"https://api.github.com/repos/{REPO_OWNER}/{REPO_NAME}/contents/{file_path}"
+
+            payload = {
+                "message": f"Adicionando {uploaded_file.name} via Streamlit",
+                "content": image_base64,
+                "branch": BRANCH
+            }
+
+            headers = {"Authorization": f"token {GITHUB_TOKEN}"}
+
+            response = requests.put(url, json=payload, headers=headers)
+            
             existing_data.at[index, "Descrição"] = descricao
             existing_data.at[index, "Enunciado"] = enunciado
             for alt_key in alternativas:
@@ -363,6 +383,7 @@ def deletar_ques():
 
         st.toast(':green-background[Questão deletada com sucesso]', icon='✔️')
         st.rerun()
+
 
 
 
