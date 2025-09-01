@@ -108,7 +108,7 @@ def inserir_ques():
             st.success(':green-background[Questão salva]', icon='✔️')
 
             st.rerun()
-
+    lista_ques = []
     with st.expander("Visualizar questão"):
 
         st.subheader('', divider = 'gray')
@@ -265,7 +265,10 @@ def editar_ques():
             st.session_state["numero"] = 0
 
         embaralho = st.session_state["embaralho"]
-
+       
+        # escolha de questão aleatoria
+        for linha in novo.iloc: 
+            lista_ques.append(linha)
         #comando da questão  
         questao = lista_ques[0]
 
@@ -358,6 +361,7 @@ def deletar_ques():
 
         st.toast(':green-background[Questão deletada com sucesso]', icon='✔️')
         st.rerun()
+
 
 
 
