@@ -82,8 +82,6 @@ def read_questao():
     
     with col1:
         st.title("Perguntas")
-    with col1:
-        st.title("Perguntas")
 
     # Aba de informações
     with tabs[0]:
@@ -284,6 +282,7 @@ def read_questao():
         if st.session_state["disabled"] in [True, False]:
             if st.button("Iniciar questionário", on_click=new_questionario):
                 pass
+
 
 
 
