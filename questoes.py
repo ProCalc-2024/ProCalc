@@ -55,29 +55,33 @@ def read_questao():
     lista = list(set(dict["Materia"]))
     lista.sort()
     lista.insert(0, "Todas")
-    with st.expander("Configurações"):
-        # Usuário escolhe o assunto
+    
+    # Usuário escolhe o assunto
+    with col1:
         materia = st.selectbox("Selecione um assunto:", lista, disabled=disabled3)
     
-        # Filtra questões conforme a matéria escolhida
-        if materia == "Todas":
-            lista_ques = [linha for linha in dict.iloc]
-        else:
-            lista_ques = [linha for linha in dict.iloc if linha["Materia"] == materia]
-        n = len(lista_ques)
+    # Filtra questões conforme a matéria escolhida
+    if materia == "Todas":
+        lista_ques = [linha for linha in dict.iloc]
+    else:
+        lista_ques = [linha for linha in dict.iloc if linha["Materia"] == materia]
+    n = len(lista_ques)
         
-        # Usuário escolhe quantas questões quer responder
+    # Usuário escolhe quantas questões quer responder
+    with col1:
         numero = st.number_input("Quantas questões você gostaria de fazer?", min_value=1, max_value=n, value=1, disabled=disabled3)
     
-        # Cria abas para cada questão + abas extras
-        tab_names = [f"Q{i}" for i in range(numero + 1)]
-        tab_names[0] = "Informações"
-        tab_names.append("Resposta")
-        tabs = st.tabs(tab_names)
+    # Cria abas para cada questão + abas extras
+    tab_names = [f"Q{i}" for i in range(numero + 1)]
+    tab_names[0] = "Informações"
+    tab_names.append("Resposta")
+    tabs = st.tabs(tab_names)
     
-        col_list = [1] * numero
-        coluna = st.columns(col_list)
+    col_list = [1] * numero
+    coluna = st.columns(col_list)
     
+    with col1:
+        st.title("Perguntas")
     with col1:
         st.title("Perguntas")
 
@@ -280,6 +284,7 @@ def read_questao():
         if st.session_state["disabled"] in [True, False]:
             if st.button("Iniciar questionário", on_click=new_questionario):
                 pass
+
 
 
 
