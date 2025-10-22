@@ -55,10 +55,10 @@ def read_questao():
     lista = list(set(dict["Materia"]))
     lista.sort()
     lista.insert(0, "Todas")
-    
-    # Usuário escolhe o assunto
-    with col1:
-        materia = st.selectbox("Selecione um assunto:", lista, disabled=disabled3)
+    with st.expander("Visualizar imagem"):
+        # Usuário escolhe o assunto
+        with col1:
+            materia = st.selectbox("Selecione um assunto:", lista, disabled=disabled3)
     
     # Filtra questões conforme a matéria escolhida
     if materia == "Todas":
@@ -282,6 +282,7 @@ def read_questao():
         if st.session_state["disabled"] in [True, False]:
             if st.button("Iniciar questionário", on_click=new_questionario):
                 pass
+
 
 
 
