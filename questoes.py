@@ -230,41 +230,41 @@ def read_questao():
         if st.session_state["botao"]:
             if st.button("Novas Perguntas", on_click=clicar_botao22):
                 pass
-
-    # Timer de resolução do questionário
-    with col2:
-        min_question = st.slider("Tempo de resolução do formulário minutos:", 0, 59, 0, disabled=disabled3)
-        hor_question = st.slider("Tempo de resolução do formulário horas:", 0, 6, 0, disabled=disabled3)
-        total_time = hor_question * 60 * 60 + min_question * 60
-
-        if not disabled3:
-            st.write(f"⏳ {hor_question:02}:{min_question:02}:00")
-
-        # Inicialização do tempo
-        if "time_left" not in st.session_state:
-            st.session_state.time_left = total_time
-        if "start_time" not in st.session_state:
-            st.session_state.start_time = None
-        if "running" not in st.session_state:
-            st.session_state.running = False
-
-        # Função para iniciar cronômetro
-        def start_timer():
-            st.session_state.running = True
-            st.session_state.start_time = time.time()
-
-        # Atualiza o tempo restante
-        def update_timer():
-            if st.session_state.running:
-                elapsed_time = int(time.time() - st.session_state.start_time)
-                st.session_state.time_left = max(0, total_time - elapsed_time)
-
-                if st.session_state["botao"]:
-                    st.session_state.time_left = 0
-
-                if st.session_state.time_left == 0:
-                    st.session_state.running = False
-                    clicar_botao()
+    with st.expander("vi"):
+        # Timer de resolução do questionário
+        with col2:
+            min_question = st.slider("Tempo de resolução do formulário minutos:", 0, 59, 0, disabled=disabled3)
+            hor_question = st.slider("Tempo de resolução do formulário horas:", 0, 6, 0, disabled=disabled3)
+            total_time = hor_question * 60 * 60 + min_question * 60
+    
+            if not disabled3:
+                st.write(f"⏳ {hor_question:02}:{min_question:02}:00")
+    
+            # Inicialização do tempo
+            if "time_left" not in st.session_state:
+                st.session_state.time_left = total_time
+            if "start_time" not in st.session_state:
+                st.session_state.start_time = None
+            if "running" not in st.session_state:
+                st.session_state.running = False
+    
+            # Função para iniciar cronômetro
+            def start_timer():
+                st.session_state.running = True
+                st.session_state.start_time = time.time()
+    
+            # Atualiza o tempo restante
+            def update_timer():
+                if st.session_state.running:
+                    elapsed_time = int(time.time() - st.session_state.start_time)
+                    st.session_state.time_left = max(0, total_time - elapsed_time)
+    
+                    if st.session_state["botao"]:
+                        st.session_state.time_left = 0
+    
+                    if st.session_state.time_left == 0:
+                        st.session_state.running = False
+                        clicar_botao()
 
         # Mostra cronômetro na interface
         if st.session_state.running:
@@ -282,6 +282,7 @@ def read_questao():
         if st.session_state["disabled"] in [True, False]:
             if st.button("Iniciar questionário", on_click=new_questionario):
                 pass
+
 
 
 
