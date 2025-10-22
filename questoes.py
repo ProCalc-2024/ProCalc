@@ -56,9 +56,9 @@ def read_questao():
     lista.sort()
     lista.insert(0, "Todas")
     with st.expander("Configurações"):
-         col3, col4 = st.columns([1, 1])
+         col1, col1 = st.columns([1, 1])
         # Usuário escolhe o assunto
-        with col3:
+        with col1:
             materia = st.selectbox("Selecione um assunto:", lista, disabled=disabled3)
     
         # Filtra questões conforme a matéria escolhida
@@ -69,7 +69,7 @@ def read_questao():
         n = len(lista_ques)
         
         # Usuário escolhe quantas questões quer responder
-        with col3:
+        with col1:
             numero = st.number_input("Quantas questões você gostaria de fazer?", min_value=1, max_value=n, value=1, disabled=disabled3)
     
         # Cria abas para cada questão + abas extras
@@ -283,5 +283,6 @@ def read_questao():
         if st.session_state["disabled"] in [True, False]:
             if st.button("Iniciar questionário", on_click=new_questionario):
                 pass
+
 
 
