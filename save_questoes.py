@@ -98,57 +98,72 @@ def inserir_video():
                 st.video(video_url_final)
 
 def galeria_videos():
-    st.header("Aulas")
+    st.header("🎥 Galeria de Aulas")
 
     conn = st.connection("gsheets", type=GSheetsConnection)
     
     try:
-        # ttl=0 evita cache para ver novos vídeos na hora
-        df_videos = conn.read(worksheet="Videos", ttl=0)
+        # Lê a aba "Videos" e limpa NaNs para evitar erro de float
+        df_videos = conn.read(worksheet="Videos", ttl=0).fillna("")
     except Exception:
-        st.error("Planilha 'Vídeos' não encontrada.")
+        st.error("Não foi possível carregar a aba 'Videos'.")
         return
 
     if df_videos.empty:
         st.info("Nenhum vídeo cadastrado.")
         return
 
-    # --- LIMPEZA DE DADOS ---
-    # Remove linhas onde a URL do vídeo está totalmente vazia
-    df_videos = df_videos.dropna(subset=['URL_Video'])
-    # ------------------------
+    # 1. Filtro de busca e Matéria (Estilo barra de busca do YouTube)
+    col_f1, col_f2 = st.columns([2, 1])
+    with col_f1:
+        busca = st.text_input("🔍 Pesquisar vídeo pelo título...", placeholder="Ex: Introdução à Álgebra")
+    with col_f2:
+        materias = ["Todas"] + sorted(df_videos["Materia"].unique().tolist())
+        selecao_materia = st.selectbox("Filtrar por Matéria", materias)
 
-    materias = ["Todos"] + sorted(df_videos["Materia"].unique().tolist())
-    selecao = st.selectbox("Filtrar por Matéria:", materias)
-
-    df_filtrado = df_videos if selecao == "Todos" else df_videos[df_videos["Materia"] == selecao]
+    # Filtragem lógica
+    df_filtrado = df_videos
+    if selecao_materia != "Todas":
+        df_filtrado = df_filtrado[df_filtrado["Materia"] == selecao_materia]
+    if busca:
+        df_filtrado = df_filtrado[df_filtrado["Titulo"].str.contains(busca, case=False)]
 
     st.divider()
 
-    for index, row in df_filtrado.iterrows():
-        # Verificação extra: garante que a URL é uma string e não está vazia
-        video_url = row['URL_Video']
-        
-        if isinstance(video_url, str) and video_url.strip() != "":
-            with st.container():
-                col_video, col_info = st.columns([1.5, 1])
-                
-                with col_video:
-                    st.video(video_url)
-                
-                with col_info:
-                    # Usando .get() ou verificação simples para evitar erros de nomes de colunas
-                    titulo = row.get('Titulo', 'Sem Título')
-                    desc = row.get('Descrição', '')
-                    
-                    st.subheader(titulo)
-                    st.caption(f"📚 {row['Materia']}")
-                    st.write(desc)
-                
-                st.divider()
-        else:
-            # Opcional: avisar que um vídeo está com link quebrado
-            st.warning(f"O vídeo '{row.get('Titulo', index)}' está sem um link válido.")
+    # 2. Grade de Vídeos (Estilo YouTube: 3 vídeos por linha)
+    if df_filtrado.empty:
+        st.warning("Nenhum vídeo encontrado para os filtros selecionados.")
+    else:
+        # Definimos quantas colunas queremos (3 é o padrão do YT em telas médias)
+        n_cols = 3
+        rows = [df_filtrado.iloc[i:i+n_cols] for i in range(0, len(df_filtrado), n_cols)]
+
+        for row_data in rows:
+            cols = st.columns(n_cols)
+            for i, (_, video) in enumerate(row_data.iterrows()):
+                with cols[i]:
+                    # Container para agrupar o vídeo e as infos como um "card"
+                    with st.container(border=True):
+                        # O player de vídeo (equivalente à Thumbnail)
+                        url = video['URL_Video']
+                        if url:
+                            st.video(url)
+                        else:
+                            st.error("Link indisponível")
+                        
+                        # Informações abaixo do vídeo
+                        st.subheader(video['Titulo'], divider="gray")
+                        st.caption(f"📚 {video['Materia']}")
+                        
+                        # Descrição com limite de caracteres para manter o alinhamento
+                        desc = video['Descrição']
+                        resumo = (desc[:75] + '...') if len(desc) > 75 else desc
+                        st.write(resumo)
+                        
+                        # Botão de detalhes (opcional)
+                        if st.button("Assistir em tela cheia", key=f"watch_{video.name}", use_container_width=True):
+                            st.toast(f"Abrindo: {video['Titulo']}")
+                            # Aqui você poderia abrir um modal ou expander com o vídeo maior
 
 def editar_video():
     st.header("✏️ Editar Vídeos com Pré-visualização")
@@ -471,6 +486,7 @@ def deletar_ques():
 
         st.toast(':green-background[Questão deletada com sucesso]', icon='✔️')
         st.rerun()
+
 
 
 
