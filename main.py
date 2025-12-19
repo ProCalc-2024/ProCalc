@@ -66,17 +66,18 @@ if st.session_state["pagina"] == "Log":
                             save_questoes.inserir_video()
                             pass
                 with tabs[1]:
+                     save_questoes.galeria_videos()    
                     #testea.aulas()
                         # Centraliza tudo com markdown
-                        st.markdown(
-                            """
-                            <div style="text-align: center; margin-top: 40px;">
-                                <h1 style="font-size: 50px;">🚧 Em Construção 🚧</h1>
-                                <p style="font-size: 24px;">Estamos trabalhando para trazer novidades em breve.</p>
-                            </div>
-                            """,
-                            unsafe_allow_html=True
-                        )
+                        #st.markdown(
+                        #    """
+                        #    <div style="text-align: center; margin-top: 40px;">
+                        #        <h1 style="font-size: 50px;">🚧 Em Construção 🚧</h1>
+                        #        <p style="font-size: 24px;">Estamos trabalhando para trazer novidades em breve.</p>
+                        #    </div>
+                        #    """,
+                        #    unsafe_allow_html=True
+                        #)
 
         else:
                 with tabs[1]:
@@ -102,4 +103,5 @@ if st.session_state["pagina"] == "Log":
 
                     st.rerun()
                     
+
 
