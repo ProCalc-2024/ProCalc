@@ -98,7 +98,7 @@ def inserir_video():
                 st.video(video_url_final)
 
 def galeria_videos():
-    st.header("🎥 Galeria de Aulas")
+    st.header("Aulas")
 
     conn = st.connection("gsheets", type=GSheetsConnection)
     
@@ -471,6 +471,7 @@ def deletar_ques():
 
         st.toast(':green-background[Questão deletada com sucesso]', icon='✔️')
         st.rerun()
+
 
 
 
