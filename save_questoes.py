@@ -256,149 +256,120 @@ def editar_video():
             del st.session_state["ultimo_video_selecionado"]
             st.rerun()
 
-def inserir_ques():   
-    # Carregar configurações do secrets para o github
-    GITHUB_TOKEN = st.secrets["github"]["token"]
-    REPO_OWNER = st.secrets["github"]["repo_owner"]
-    REPO_NAME = st.secrets["github"]["repo_name"]
-    BRANCH = st.secrets["github"]["branch"]
-
-    # Upload da imagem pelo usuário
-    uploaded_file = st.file_uploader("Insira uma imagem:", type=["jpg", "png", "jpeg"])
+def editar_video():
+    st.header("✏️ Editar Vídeos com Pré-visualização")
 
     conn = st.connection("gsheets", type=GSheetsConnection)
-    sheet = conn.read(worksheet="Materias")
-    dict = pd.DataFrame(sheet)
-    # adicionar uma nova pergunta
-    result = {}
 
-    col1, col2 = st.columns([1, 1])
+    # 1. Carregar Dados
+    try:
+        # Ler a aba correta "Videos" e limpar dados vazios
+        df_videos = conn.read(worksheet="Videos", ttl=0).fillna("")
+    except Exception as e:
+        st.error(f"Erro ao acessar a aba 'Videos'. Verifique a planilha. Erro: {e}")
+        return
 
-    lista =  [linha for linha in dict["Materia"]]
+    if df_videos.empty:
+        st.info("Nenhum vídeo disponível para edição.")
+        return
 
-    with col2:
-        materia = st.selectbox("Selecione uma matéria:", lista)
+    # 2. Seleção do Vídeo
+    titulos = df_videos["Titulo"].tolist()
+    video_selecionado = st.selectbox("Selecione o vídeo para editar:", titulos)
 
-    with col1:
-        descricao = st.text_input("Descrição:")
+    # Encontrar os dados originais na planilha
+    idx = df_videos[df_videos["Titulo"] == video_selecionado].index[0]
+    dados_atuais = df_videos.iloc[idx]
 
-    enunciado = st.text_area("Enunciado", placeholder= "Digite aqui o enunciado da questão", key = "enunciado")
-    letra_a = st.text_input("Resposta 1", placeholder= "Digite aqui a resposta correta", key = "letra_a") 
-    letra_b = st.text_input("Resposta 2", placeholder= "Digite aqui a resposta 2", key = "letra_b")
-    letra_c = st.text_input("Resposta 3", placeholder= "Digite aqui a resposta 3", key = "letra_c") 
-    letra_d = st.text_input("Resposta 4", placeholder= "Digite aqui a resposta 4", key = "letra_d") 
-    letra_e = st.text_input("Resposta 5", placeholder= "Digite aqui a resposta 5", key = "letra_e")
+    st.divider()
 
-    existing_data = conn.read(worksheet="Questões")
-    novo = pd.DataFrame({
-        'Materia': [materia],
-        'Descrição': [descricao],
-        'Enunciado': [enunciado],
-        'Alternativa_A': [letra_a],
-        'Alternativa_B': [letra_b],
-        'Alternativa_C': [letra_c],
-        'Alternativa_D': [letra_d],
-        'Alternativa_E': [letra_e]
-    })
-
-    lista_ques = []
-
-    if st.button("Salvar"):
-
-        if uploaded_file is not None:
-
-            image_data = uploaded_file.getvalue()  # Lê os bytes da imagem
-            image_base64 = base64.b64encode(image_data).decode()  # Converte para Base64
-
-            file_path = f"imagens/{uploaded_file.name}"  # Caminho no repositório
-
-            novo['Imagem'] = [f"{uploaded_file.name}"]
-
-            url = f"https://api.github.com/repos/{REPO_OWNER}/{REPO_NAME}/contents/{file_path}"
-
-            payload = {
-                "message": f"Adicionando {uploaded_file.name} via Streamlit",
-                "content": image_base64,
-                "branch": BRANCH
-            }
-
-            headers = {"Authorization": f"token {GITHUB_TOKEN}"}
-
-            response = requests.put(url, json=payload, headers=headers)
-
-            if response.status_code == 201:
-                combined_data = pd.concat([existing_data, novo], ignore_index=True)
-                conn.update(worksheet="Questões", data=combined_data)
-
-                conn.read(
-                worksheet="Questões",  # Nome da planilha
-                ttl=0                  # Cache de 1 segundo
-                )
-
-                st.success(':green-background[Questão salva]', icon='✔️')
-
-                st.rerun()
-
-                st.success(f"Imagem Salva no GITHUB! 📤")
-            else:
-                #st.error(f"Erro ao enviar a imagem: {response.json()}")
-                st.error(f"A imagem já existe")
-
-
+    # --- ÁREA DE PRÉ-VISUALIZAÇÃO DO VÍDEO ATUAL (BANCO DE DADOS) ---
+    with st.expander("📺 Ver o vídeo que está salvo atualmente", expanded=False):
+        if dados_atuais["URL_Video"]:
+            st.caption(f"Link atual: {dados_atuais['URL_Video']}")
+            st.video(dados_atuais["URL_Video"])
         else:
-            combined_data = pd.concat([existing_data, novo], ignore_index=True)
+            st.warning("Este vídeo não possui um link salvo atualmente.")
+    
+    st.divider()
 
-            conn.update(worksheet="Questões", data=combined_data)
+    # --- ÁREA DE EDIÇÃO COM PREVIEW AO VIVO ---
+    st.subheader(f"Editando: {video_selecionado}")
 
-            conn.read(
-            worksheet="Questões",  # Nome da planilha
-            ttl=0                  # Cache de 1 segundo
-            )
+    # Lógica de Estado: Se mudamos de vídeo no selectbox, recarregamos os dados originais nos campos
+    if "ultimo_video_selecionado" not in st.session_state or st.session_state["ultimo_video_selecionado"] != video_selecionado:
+        st.session_state["ultimo_video_selecionado"] = video_selecionado
+        st.session_state["draft_titulo"] = dados_atuais["Titulo"]
+        st.session_state["draft_materia"] = dados_atuais["Materia"]
+        st.session_state["draft_descricao"] = dados_atuais["Descrição"]
+        st.session_state["draft_url"] = dados_atuais["URL_Video"]
 
-            st.success(':green-background[Questão salva]', icon='✔️')
+    # Campos de Entrada (Vinculados ao Session State pelos 'keys')
+    # Ao digitar aqui e apertar Enter ou clicar fora, o Session State atualiza
+    col_form1, col_form2 = st.columns(2)
+    with col_form1:
+        st.text_input("Título:", key="draft_titulo")
+        
+        # Carregar matérias
+        try:
+            df_mat = conn.read(worksheet="Materias").fillna("")
+            lista_mats = df_mat["Materia"].tolist()
+            # Encontra o índice da matéria atual para deixar selecionado
+            try:
+                idx_mat_atual = lista_mats.index(st.session_state["draft_materia"])
+            except ValueError:
+                idx_mat_atual = 0
+            st.selectbox("Matéria:", lista_mats, index=idx_mat_atual, key="draft_materia")
+            
+    with col_form2:
+        st.text_area("Descrição:", height=100, key="draft_descricao")
 
+    st.subheader("Alteração de Link e Preview")
+    # O campo de URL crucial
+    url_input = st.text_input("URL do Vídeo (YouTube/Link Direto):", key="draft_url")
+
+    # --- O PREVIEW AO VIVO ---
+    # Este player usa o valor que está AGORA na caixa de texto (session state)
+    with st.container(border=True):
+        st.caption("Pré-visualização das alterações (O vídeo abaixo mostra o link que você digitou acima):")
+        if st.session_state["draft_url"].strip():
+             # Tenta exibir o vídeo. Se o link for inválido, o st.video geralmente mostra um erro amigável.
+            st.video(st.session_state["draft_url"])
+        else:
+            st.info("Digite uma URL acima para ver a pré-visualização.")
+
+    st.divider()
+
+    # 4. Botões de Ação (Fora de st.form para permitir o preview ao vivo acima)
+    col_actions1, col_actions2, _ = st.columns([1, 1, 2])
+    
+    with col_actions1:
+        if st.button("💾 Salvar Alterações", type="primary", use_container_width=True):
+            # Atualiza o DataFrame com os dados do Session State (drafts)
+            df_videos.at[idx, "Titulo"] = st.session_state["draft_titulo"]
+            df_videos.at[idx, "Materia"] = st.session_state["draft_materia"]
+            df_videos.at[idx, "Descrição"] = st.session_state["draft_descricao"]
+            df_videos.at[idx, "URL_Video"] = st.session_state["draft_url"]
+
+            with st.spinner("Salvando na planilha..."):
+                conn.update(worksheet="Videos", data=df_videos)
+            
+            st.success("Vídeo atualizado com sucesso!")
+            # Limpa o estado para forçar recarregamento na próxima vez
+            del st.session_state["ultimo_video_selecionado"]
             st.rerun()
-    lista_ques = []
-    with st.expander("Visualizar questão"):
 
-        st.subheader('', divider = 'gray')
-
-        # embaralha as alternativas independente da questão 
-        lista = ["Alternativa_A","Alternativa_B","Alternativa_C","Alternativa_D","Alternativa_E"]
-
-        if "embaralho" not in st.session_state:
-
-            st.session_state["embaralho"] = np.random.choice(lista, 5, replace = False)
-
-        if "ques" not in st.session_state:
-            st.session_state["save"] = {}
-            st.session_state["numero"] = 0
-
-        embaralho = st.session_state["embaralho"]
-
-        # escolha de questão aleatoria
-        for linha in novo.iloc: 
-            lista_ques.append(linha)
-
-        #comando da questão  
-        questao = lista_ques[0]
-
-        st.write("")
-        st.write(questao["Enunciado"])
-
-
-        if uploaded_file is not None:
-            st.subheader('', divider = 'gray')
-            st.image(uploaded_file, caption="Imagem carregada", use_column_width=True)
-        st.subheader('', divider = 'gray')
-
-        opções = [questao[embaralho[0]], questao[embaralho[1]], questao[embaralho[2]], questao[embaralho[3]], questao[embaralho[4]]]    
-
-        alternativa = st.radio("", options = opções, index=None)
-
-        st.session_state["resposta"] = questao["Alternativa_A"]
-
-
+    with col_actions2:
+        if st.button("🗑️ Excluir Vídeo", type="secondary", use_container_width=True):
+             with st.expander("Tem certeza?"):
+                 st.write("Essa ação não pode ser desfeita.")
+                 if st.button("Confirmar Exclusão Permanentemente", type="primary"):
+                    with st.spinner("Excluindo..."):
+                        df_videos = df_videos.drop(idx)
+                        conn.update(worksheet="Videos", data=df_videos)
+                    st.warning("Vídeo excluído.")
+                    del st.session_state["ultimo_video_selecionado"]
+                    st.rerun()
 
 def inserir_assun():    
 
@@ -615,6 +586,7 @@ def deletar_ques():
 
         st.toast(':green-background[Questão deletada com sucesso]', icon='✔️')
         st.rerun()
+
 
 
 
