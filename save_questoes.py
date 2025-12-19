@@ -157,7 +157,7 @@ def editar_video():
     
     # 1. Carrega os dados
     try:
-        df_videos = conn.read(worksheet="Vídeos", ttl=0)
+        df_videos = conn.read(worksheet="Videos", ttl=0)
         # Limpa NaNs para evitar o erro de float
         df_videos = df_videos.fillna("")
     except Exception:
@@ -214,14 +214,14 @@ def editar_video():
         df_videos.at[idx, "URL_Video"] = nova_url
 
         # Sobrescreve a planilha com o DataFrame atualizado
-        conn.update(worksheet="Vídeos", data=df_videos)
+        conn.update(worksheet="Videos", data=df_videos)
         st.success("Vídeo atualizado com sucesso!")
         st.rerun()
 
     if btn_excluir:
         # Remove a linha selecionada
         df_videos = df_videos.drop(idx)
-        conn.update(worksheet="Vídeos", data=df_videos)
+        conn.update(worksheet="Videos", data=df_videos)
         st.warning("Vídeo excluído com sucesso.")
         st.rerun()
 
@@ -584,6 +584,7 @@ def deletar_ques():
 
         st.toast(':green-background[Questão deletada com sucesso]', icon='✔️')
         st.rerun()
+
 
 
 
