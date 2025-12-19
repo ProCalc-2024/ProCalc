@@ -98,10 +98,25 @@ def inserir_video():
                 st.video(video_url_final)
 
 def galeria_videos():
-    # Estilização CSS para remover espaços extras e bordas
+    # CSS para arredondar cantos do vídeo e ajustar fontes
     st.markdown("""
         <style>
-        .stVideo { border-radius: 12px; } /* Arredonda os cantos do vídeo como no Shorts */
+        .stVideo { border-radius: 15px; overflow: hidden; }
+        .video-title { 
+            font-size: 14px; 
+            font-weight: bold; 
+            margin-top: 8px; 
+            line-height: 1.2;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+        .video-desc { 
+            font-size: 12px; 
+            color: #808080; 
+            margin-top: 4px;
+        }
         </style>
     """, unsafe_allow_html=True)
 
@@ -117,44 +132,35 @@ def galeria_videos():
         st.info("Nenhum vídeo disponível.")
         return
 
-    # Filtro por Matéria (Opcional, mas útil)
     materias = sorted(df_videos["Materia"].unique().tolist())
     
     for materia in materias:
-        # Título da Seção (Ex: Matemática, Shorts, etc)
-        st.subheader(f"🔴 {materia}", divider=None)
+        st.subheader(f"🔴 {materia}")
         
-        # Filtra os vídeos desta matéria específica
         videos_materia = df_videos[df_videos["Materia"] == materia]
         
-        # Define o número de vídeos por fila (5 para parecer Shorts)
-        n_videos = 5
-        # Cria as colunas sem container em volta
+        # 4 colunas costumam funcionar melhor para manter o formato vertical do Shorts
+        n_videos = 4 
         cols = st.columns(n_videos)
         
-        # Itera sobre os vídeos daquela matéria
         for i, (_, video) in enumerate(videos_materia.iterrows()):
-            # Usa o operador módulo (%) para distribuir nas colunas disponíveis
             col_idx = i % n_videos
             
             with cols[col_idx]:
                 url = video['URL_Video']
                 if url:
-                    # Exibe o vídeo
+                    # Exibimos apenas o player (a URL fica "escondida" dentro do componente)
                     st.video(url)
                     
-                    # Título e Visualizações (Estilo YouTube)
-                    # Usamos markdown para diminuir a fonte e aproximar do estilo da imagem
+                    # Título e Descrição formatados via HTML para controle total do visual
                     st.markdown(f"""
-                        <div style='line-height: 1.2;'>
-                            <strong style='font-size: 14px;'>{video['Titulo']}</strong><br>
-                            <span style='font-size: 12px; color: gray;'>{video['Descrição'][:40]}...</span>
-                        </div>
+                        <div class='video-title'>{video['Titulo']}</div>
+                        <div class='video-desc'>{video['Descrição'][:50]}...</div>
                     """, unsafe_allow_html=True)
                 
-        st.write("") # Espaço entre matérias
+        st.write("") 
         st.divider()
-
+        
 def editar_video():
     st.header("✏️ Editar Vídeos com Pré-visualização")
 
@@ -476,6 +482,7 @@ def deletar_ques():
 
         st.toast(':green-background[Questão deletada com sucesso]', icon='✔️')
         st.rerun()
+
 
 
 
