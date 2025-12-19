@@ -150,6 +150,81 @@ def galeria_videos():
             # Opcional: avisar que um vídeo está com link quebrado
             st.warning(f"O vídeo '{row.get('Titulo', index)}' está sem um link válido.")
 
+def editar_video():
+    st.header("✏️ Editar ou Excluir Vídeo")
+
+    conn = st.connection("gsheets", type=GSheetsConnection)
+    
+    # 1. Carrega os dados
+    try:
+        df_videos = conn.read(worksheet="Vídeos", ttl=0)
+        # Limpa NaNs para evitar o erro de float
+        df_videos = df_videos.fillna("")
+    except Exception:
+        st.error("Planilha 'Vídeos' não encontrada.")
+        return
+
+    if df_videos.empty:
+        st.info("Nenhum vídeo para editar.")
+        return
+
+    # 2. Seleção do Vídeo
+    # Criamos uma lista de títulos para o usuário escolher
+    titulos = df_videos["Titulo"].tolist()
+    video_selecionado = st.selectbox("Selecione o vídeo que deseja editar:", titulos)
+
+    # Localiza o índice e os dados atuais do vídeo selecionado
+    idx = df_videos[df_videos["Titulo"] == video_selecionado].index[0]
+    dados_atuais = df_videos.iloc[idx]
+
+    st.divider()
+
+    # 3. Formulário de Edição
+    with st.form("form_edicao_video"):
+        st.subheader(f"Editando: {video_selecionado}")
+        
+        novo_titulo = st.text_input("Título:", value=dados_atuais["Titulo"])
+        
+        # Para a matéria, carregamos as opções da aba Materias
+        df_mat = conn.read(worksheet="Materias")
+        lista_mats = df_mat["Materia"].tolist()
+        
+        # Tenta encontrar o índice da matéria atual na lista para deixar pré-selecionado
+        try:
+            index_mat = lista_mats.index(dados_atuais["Materia"])
+        except:
+            index_mat = 0
+            
+        nova_materia = st.selectbox("Matéria:", lista_mats, index=index_mat)
+        nova_descricao = st.text_area("Descrição:", value=dados_atuais["Descrição"])
+        nova_url = st.text_input("URL do Vídeo:", value=dados_atuais["URL_Video"])
+
+        col1, col2 = st.columns(2)
+        with col1:
+            btn_salvar = st.form_submit_button("Salvar Alterações", type="primary")
+        with col2:
+            btn_excluir = st.form_submit_button("🗑️ Excluir Vídeo")
+
+    # 4. Lógica de Salvamento e Exclusão
+    if btn_salvar:
+        # Atualiza a linha no DataFrame
+        df_videos.at[idx, "Titulo"] = novo_titulo
+        df_videos.at[idx, "Materia"] = nova_materia
+        df_videos.at[idx, "Descrição"] = nova_descricao
+        df_videos.at[idx, "URL_Video"] = nova_url
+
+        # Sobrescreve a planilha com o DataFrame atualizado
+        conn.update(worksheet="Vídeos", data=df_videos)
+        st.success("Vídeo atualizado com sucesso!")
+        st.rerun()
+
+    if btn_excluir:
+        # Remove a linha selecionada
+        df_videos = df_videos.drop(idx)
+        conn.update(worksheet="Vídeos", data=df_videos)
+        st.warning("Vídeo excluído com sucesso.")
+        st.rerun()
+
 def inserir_ques():   
     # Carregar configurações do secrets para o github
     GITHUB_TOKEN = st.secrets["github"]["token"]
@@ -509,6 +584,7 @@ def deletar_ques():
 
         st.toast(':green-background[Questão deletada com sucesso]', icon='✔️')
         st.rerun()
+
 
 
 
