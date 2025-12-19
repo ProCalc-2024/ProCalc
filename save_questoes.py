@@ -97,82 +97,64 @@ def inserir_video():
             elif video_url_final:
                 st.video(video_url_final)
 
-Entendido! Se você prefere a primeira versão da Galeria, vamos focar nela. Aquela versão era mais robusta para fins educacionais, pois apresentava os vídeos em uma lista clara com informações detalhadas ao lado, o que facilita a leitura de descrições mais longas.
-
-Abaixo, apresento o código daquela primeira versão, mas já com o ajuste crucial para não exibir a URL e utilizando o nome correto da aba ("Videos").
-
-Função galeria_videos (Versão Lista Organizada)
-Python
-
 def galeria_videos():
     st.header("🎥 Galeria de Aulas")
 
-    # 1. Conexão e Leitura Segura
+
     conn = st.connection("gsheets", type=GSheetsConnection)
-    
+
     try:
-        # Lendo a aba "Videos" e tratando células vazias imediatamente
-        df_videos = conn.read(worksheet="Videos", ttl=0).fillna("")
-    except Exception as e:
-        st.error(f"Erro ao carregar a aba 'Videos': {e}")
+        # ttl=0 evita cache para ver novos vídeos na hora
+        df_videos = conn.read(worksheet="Videos", ttl=0)
+    except Exception:
+        st.error("Planilha 'Vídeos' não encontrada.")
         return
 
     if df_videos.empty:
-        st.info("Nenhum vídeo cadastrado ainda.")
+        st.info("Nenhum vídeo cadastrado.")
         return
 
-    # 2. Filtros de Matéria
-    # Pegamos as matérias únicas para o filtro
-    materias_disponiveis = ["Todos"] + sorted(df_videos["Materia"].unique().tolist())
-    
-    col_filtro, _ = st.columns([1, 2])
-    with col_filtro:
-        selecao_materia = st.selectbox("Filtrar por Matéria:", materias_disponiveis)
+    # --- LIMPEZA DE DADOS ---
+    # Remove linhas onde a URL do vídeo está totalmente vazia
+    df_videos = df_videos.dropna(subset=['URL_Video'])
+    # ------------------------
 
-    # Filtragem dos dados
-    if selecao_materia != "Todos":
-        df_filtrado = df_videos[df_videos["Materia"] == selecao_materia]
-    else:
-        df_filtrado = df_videos
+
+
+    materias = ["Todos"] + sorted(df_videos["Materia"].unique().tolist())
+    selecao = st.selectbox("Filtrar por Matéria:", materias)
+
+    df_filtrado = df_videos if selecao == "Todos" else df_videos[df_videos["Materia"] == selecao]
+
 
     st.divider()
 
-    # 3. Exibição em Lista (Estilo que você preferiu)
-    if df_filtrado.empty:
-        st.warning("Nenhum vídeo encontrado para esta matéria.")
-    else:
-        for index, row in df_filtrado.iterrows():
-            # Criamos um container para cada item da lista
-            with st.container():
-                col_video, col_info = st.columns([1.6, 1])
-                
-                with col_video:
-                    # Exibição do vídeo (URL não é impressa, apenas processada pelo player)
-                    video_url = row['URL_Video']
-                    if video_url:
-                        try:
-                            st.video(video_url)
-                        except Exception:
-                            st.error("Erro ao carregar este vídeo.")
-                    else:
-                        st.warning("Link de vídeo não encontrado.")
-                
-                with col_info:
-                    # Informações textuais (Sem URL aqui)
-                    st.subheader(row['Titulo'])
-                    st.markdown(f"**📚 Matéria:** {row['Materia']}")
-                    st.write(row['Descrição'])
-                    
-                    # Espaçador para o botão ficar no final
-                    st.write("")
-                    if st.button(f"Concluir Aula", key=f"check_{index}", use_container_width=True):
-                        st.toast(f"Aula '{row['Titulo']}' marcada como vista!", icon="✅")
-                
-                # Linha separadora entre os vídeos da lista
-                st.divider()
+    for index, row in df_filtrado.iterrows():
+        # Verificação extra: garante que a URL é uma string e não está vazia
+        video_url = row['URL_Video']
+        
+        if isinstance(video_url, str) and video_url.strip() != "":
 
-# Para chamar no seu main.py:
-# galeria_videos()
+            with st.container():
+                col_video, col_info = st.columns([1.5, 1])
+
+                with col_video:
+                    st.video(video_url)
+
+
+                with col_info:
+                    # Usando .get() ou verificação simples para evitar erros de nomes de colunas
+                    titulo = row.get('Titulo', 'Sem Título')
+                    desc = row.get('Descrição', '')
+
+                    st.subheader(titulo)
+                    st.caption(f"📚 {row['Materia']}")
+                    st.write(desc)
+
+                st.divider()
+        else:
+            # Opcional: avisar que um vídeo está com link quebrado
+            st.warning(f"O vídeo '{row.get('Titulo', index)}' está sem um link válido.")
         
 def editar_video():
     st.header("✏️ Editar Vídeos com Pré-visualização")
