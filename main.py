@@ -51,7 +51,7 @@ if st.session_state["pagina"] == "Log":
         
                     with co1:
                 # Adiciona "Editar Questões" como uma opção no selectbox
-                        option = st.selectbox("", ("Adicionar Questões", "Adicionar Matérias", "Editar Questões", "Deletar Questão", "Inserir Video"), index=None, placeholder="Escolha uma ação")
+                        option = st.selectbox("", ("Adicionar Questões", "Adicionar Matérias", "Editar Questões", "Deletar Questão", "Inserir Vídeos", "Editar Vídeos"), index=None, placeholder="Escolha uma ação")
         
                     match option:
                         case "Adicionar Questões":
@@ -62,8 +62,10 @@ if st.session_state["pagina"] == "Log":
                             save_questoes.editar_ques()  # Chama a função para editar questões
                         case "Deletar Questão":
                             save_questoes.deletar_ques()
-                        case "Inserir Video":
+                        case "Inserir Vídeos":
                             save_questoes.inserir_video()
+                        case "Editar Vídeos":
+                            save_questoes.editar_video()
                             pass
                 with tabs[1]:
                      save_questoes.galeria_videos()    
@@ -103,5 +105,6 @@ if st.session_state["pagina"] == "Log":
 
                     st.rerun()
                     
+
 
 
