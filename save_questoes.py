@@ -155,74 +155,113 @@ def editar_video():
 
     conn = st.connection("gsheets", type=GSheetsConnection)
     
-    # 1. Carrega os dados
+    # 1. Carrega os dados da aba correta: "Videos"
     try:
+        # ttl=0 garante que pegamos a versão mais recente da planilha
         df_videos = conn.read(worksheet="Videos", ttl=0)
-        # Limpa NaNs para evitar o erro de float
+        
+        # IMPORTANTE: Previne erros de dados vazios (NaN/float)
         df_videos = df_videos.fillna("")
-    except Exception:
-        st.error("Planilha 'Vídeos' não encontrada.")
+    except Exception as e:
+        st.error(f"Erro ao acessar a aba 'Videos'. Verifique o nome na planilha. Erro: {e}")
         return
 
     if df_videos.empty:
-        st.info("Nenhum vídeo para editar.")
+        st.info("Nenhum vídeo encontrado na aba 'Videos'.")
         return
 
-    # 2. Seleção do Vídeo
-    # Criamos uma lista de títulos para o usuário escolher
-    titulos = df_videos["Titulo"].tolist()
-    video_selecionado = st.selectbox("Selecione o vídeo que deseja editar:", titulos)
+    # 2. Seleção do Vídeo para editar
+    # Cria lista de títulos para o selectbox
+    # Convertendo para string para garantir que não haja erro se um título for número
+    titulos = [str(t) for t in df_videos["Titulo"].tolist()]
+    
+    if not titulos:
+         st.warning("Não há títulos válidos para selecionar.")
+         return
+         
+    video_selecionado = st.selectbox("Selecione o vídeo que deseja modificar:", titulos)
 
-    # Localiza o índice e os dados atuais do vídeo selecionado
-    idx = df_videos[df_videos["Titulo"] == video_selecionado].index[0]
+    # Localiza o índice da linha e os dados atuais
+    # Usamos .astype(str) na comparação para garantir que estamos comparando textos
+    idx = df_videos[df_videos["Titulo"].astype(str) == video_selecionado].index[0]
     dados_atuais = df_videos.iloc[idx]
 
     st.divider()
 
+    # --- NOVO: PRÉ-VISUALIZAÇÃO ---
+    st.subheader(f"Editando: {video_selecionado}")
+    
+    # Pega a URL atual e remove espaços em branco extras
+    url_atual_preview = str(dados_atuais["URL_Video"]).strip()
+
+    if url_atual_preview:
+        # Usa um expander para o vídeo não ocupar muito espaço se não for necessário
+        with st.expander("📺 Pré-visualização do Vídeo Atual", expanded=True):
+            try:
+                st.video(url_atual_preview)
+                st.caption(f"Link atual: {url_atual_preview}")
+            except Exception:
+               st.warning("⚠️ Não foi possível carregar a pré-visualização. O link atual pode estar quebrado ou ser inválido.")
+    else:
+        st.info("ℹ️ Este cadastro ainda não possui um link de vídeo válido para pré-visualização.")
+    # ------------------------------
+
     # 3. Formulário de Edição
     with st.form("form_edicao_video"):
-        st.subheader(f"Editando: {video_selecionado}")
         
-        novo_titulo = st.text_input("Título:", value=dados_atuais["Titulo"])
+        novo_titulo = st.text_input("Título do Vídeo:", value=str(dados_atuais["Titulo"]))
         
-        # Para a matéria, carregamos as opções da aba Materias
-        df_mat = conn.read(worksheet="Materias")
-        lista_mats = df_mat["Materia"].tolist()
-        
-        # Tenta encontrar o índice da matéria atual na lista para deixar pré-selecionado
+        # Carrega matérias para o selectbox
         try:
-            index_mat = lista_mats.index(dados_atuais["Materia"])
+            df_mat = conn.read(worksheet="Materias").fillna("")
+            lista_mats = [str(m) for m in df_mat["Materia"].tolist() if str(m).strip() != ""]
         except:
-            index_mat = 0
+            lista_mats = ["Geral"]
+            st.warning("Não foi possível carregar a lista de matérias.")
+        
+        # Tenta pré-selecionar a matéria atual
+        materia_atual_str = str(dados_atuais["Materia"])
+        try:
+            index_mat = lista_mats.index(materia_atual_str)
+        except ValueError:
+            # Se a matéria atual não estiver na lista, usa o primeiro item ou 0
+            index_mat = 0 if lista_mats else None
             
         nova_materia = st.selectbox("Matéria:", lista_mats, index=index_mat)
-        nova_descricao = st.text_area("Descrição:", value=dados_atuais["Descrição"])
-        nova_url = st.text_input("URL do Vídeo:", value=dados_atuais["URL_Video"])
+        nova_descricao = st.text_area("Descrição:", value=str(dados_atuais["Descrição"]))
+        
+        st.markdown("---")
+        st.write("⬇️ *Se quiser trocar o vídeo, cole a nova URL abaixo:*")
+        nova_url = st.text_input("URL do Vídeo (Link direto ou YouTube):", value=str(dados_atuais["URL_Video"]))
 
         col1, col2 = st.columns(2)
         with col1:
-            btn_salvar = st.form_submit_button("Salvar Alterações", type="primary")
+            btn_salvar = st.form_submit_button("✅ Confirmar Alterações", type="primary")
         with col2:
-            btn_excluir = st.form_submit_button("🗑️ Excluir Vídeo")
+            # Botão de exclusão dentro do form com cor vermelha para destaque
+            btn_excluir = st.form_submit_button("🗑️ Excluir Vídeo Permanentemente", type="secondary")
 
-    # 4. Lógica de Salvamento e Exclusão
+    # 4. Lógica de Processamento
     if btn_salvar:
-        # Atualiza a linha no DataFrame
-        df_videos.at[idx, "Titulo"] = novo_titulo
-        df_videos.at[idx, "Materia"] = nova_materia
-        df_videos.at[idx, "Descrição"] = nova_descricao
-        df_videos.at[idx, "URL_Video"] = nova_url
+        if not novo_titulo.strip():
+             st.error("O título do vídeo não pode ficar vazio.")
+        else:
+            # Atualiza os valores no DataFrame
+            df_videos.at[idx, "Titulo"] = novo_titulo
+            df_videos.at[idx, "Materia"] = nova_materia
+            df_videos.at[idx, "Descrição"] = nova_descricao
+            df_videos.at[idx, "URL_Video"] = nova_url.strip() # Remove espaços ao salvar
 
-        # Sobrescreve a planilha com o DataFrame atualizado
-        conn.update(worksheet="Videos", data=df_videos)
-        st.success("Vídeo atualizado com sucesso!")
-        st.rerun()
+            # Envia o DataFrame atualizado de volta para a planilha "Videos"
+            conn.update(worksheet="Videos", data=df_videos)
+            st.toast("Vídeo atualizado com sucesso!", icon="🎉")
+            st.rerun()
 
     if btn_excluir:
-        # Remove a linha selecionada
+        # Remove a linha
         df_videos = df_videos.drop(idx)
         conn.update(worksheet="Videos", data=df_videos)
-        st.warning("Vídeo excluído com sucesso.")
+        st.toast("O vídeo foi removido da planilha.", icon="🗑️")
         st.rerun()
 
 def inserir_ques():   
@@ -584,6 +623,7 @@ def deletar_ques():
 
         st.toast(':green-background[Questão deletada com sucesso]', icon='✔️')
         st.rerun()
+
 
 
 
