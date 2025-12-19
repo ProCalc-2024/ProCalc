@@ -104,7 +104,7 @@ def galeria_videos():
     
     try:
         # ttl=0 evita cache para ver novos vídeos na hora
-        df_videos = conn.read(worksheet="Vídeos", ttl=0)
+        df_videos = conn.read(worksheet="Videos", ttl=0)
     except Exception:
         st.error("Planilha 'Vídeos' não encontrada.")
         return
@@ -509,6 +509,7 @@ def deletar_ques():
 
         st.toast(':green-background[Questão deletada com sucesso]', icon='✔️')
         st.rerun()
+
 
 
 
