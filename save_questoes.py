@@ -96,10 +96,8 @@ def inserir_video():
                 st.video(uploaded_video)
             elif video_url_final:
                 st.video(video_url_final)
-
 def galeria_videos():
     st.header("🎥 Galeria de Aulas")
-
 
     conn = st.connection("gsheets", type=GSheetsConnection)
 
@@ -119,28 +117,23 @@ def galeria_videos():
     df_videos = df_videos.dropna(subset=['URL_Video'])
     # ------------------------
 
-
-
     materias = ["Todos"] + sorted(df_videos["Materia"].unique().tolist())
     selecao = st.selectbox("Filtrar por Matéria:", materias)
 
     df_filtrado = df_videos if selecao == "Todos" else df_videos[df_videos["Materia"] == selecao]
-
 
     st.divider()
 
     for index, row in df_filtrado.iterrows():
         # Verificação extra: garante que a URL é uma string e não está vazia
         video_url = row['URL_Video']
-        
-        if isinstance(video_url, str) and video_url.strip() != "":
 
+        if isinstance(video_url, str) and video_url.strip() != "":
             with st.container():
                 col_video, col_info = st.columns([1.5, 1])
 
                 with col_video:
                     st.video(video_url)
-
 
                 with col_info:
                     # Usando .get() ou verificação simples para evitar erros de nomes de colunas
@@ -477,6 +470,7 @@ def deletar_ques():
 
         st.toast(':green-background[Questão deletada com sucesso]', icon='✔️')
         st.rerun()
+
 
 
 
