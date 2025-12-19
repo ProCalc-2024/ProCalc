@@ -264,6 +264,7 @@ def editar_video():
                     st.warning("Vídeo excluído.")
                     del st.session_state["ultimo_video_selecionado"]
                     st.rerun()
+
 def inserir_ques():   
     # Carregar configurações do secrets para o github
     GITHUB_TOKEN = st.secrets["github"]["token"]
@@ -623,6 +624,7 @@ def deletar_ques():
 
         st.toast(':green-background[Questão deletada com sucesso]', icon='✔️')
         st.rerun()
+
 
 
 
