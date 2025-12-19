@@ -71,7 +71,7 @@ def inserir_video():
 
         # Salvar no Google Sheets
         if video_url_final or uploaded_video:
-            existing_data = conn.read(worksheet="Vídeos")
+            existing_data = conn.read(worksheet="Videos")
             
             novo_video = pd.DataFrame({
                 'Materia': [materia],
@@ -81,7 +81,7 @@ def inserir_video():
             })
 
             combined_data = pd.concat([existing_data, novo_video], ignore_index=True)
-            conn.update(worksheet="Vídeos", data=combined_data)
+            conn.update(worksheet="Videos", data=combined_data)
             
             st.success("Dados salvos na planilha!", icon="✅")
             st.balloons()
@@ -456,6 +456,7 @@ def deletar_ques():
 
         st.toast(':green-background[Questão deletada com sucesso]', icon='✔️')
         st.rerun()
+
 
 
 
