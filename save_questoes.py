@@ -6,6 +6,97 @@ import numpy as np
 import requests
 import base64
 
+def inserir_video():
+    # 1. Configurações de acesso (GitHub)
+    GITHUB_TOKEN = st.secrets["github"]["token"]
+    REPO_OWNER = st.secrets["github"]["repo_owner"]
+    REPO_NAME = st.secrets["github"]["repo_name"]
+    BRANCH = st.secrets["github"]["branch"]
+
+    st.header("📹 Adicionar Novo Vídeo")
+
+    # 2. Conexão com Google Sheets
+    conn = st.connection("gsheets", type=GSheetsConnection)
+    
+    # Carregar matérias para o selectbox
+    df_materias = conn.read(worksheet="Materias")
+    lista_materias = df_materias["Materia"].tolist()
+
+    # 3. Interface de Usuário (Inputs)
+    col1, col2 = st.columns(2)
+    with col1:
+        materia = st.selectbox("Selecione a matéria:", lista_materias, key="video_materia")
+    with col2:
+        titulo = st.text_input("Título do Vídeo:", placeholder="Ex: Aula 01 - Introdução")
+
+    descricao = st.text_area("Descrição/Resumo:", placeholder="Sobre o que é este vídeo?")
+    
+    # Opção de Upload ou Link Externo (YouTube/Drive)
+    tipo_input = st.radio("Origem do vídeo:", ["Upload de Arquivo", "Link Externo (YouTube/URL)"], horizontal=True)
+
+    video_url_final = ""
+    uploaded_video = None
+
+    if tipo_input == "Upload de Arquivo":
+        uploaded_video = st.file_uploader("Selecione o vídeo (mp4, mov, avi):", type=["mp4", "mov", "avi"])
+    else:
+        video_url_final = st.text_input("Cole a URL do vídeo:")
+
+    # 4. Lógica de Salvamento
+    if st.button("Salvar Vídeo"):
+        # Lógica de Upload para GitHub (se houver arquivo)
+        if uploaded_video is not None:
+            video_bytes = uploaded_video.getvalue()
+            video_base64 = base64.b64encode(video_bytes).decode()
+            file_path = f"videos/{uploaded_video.name}"
+            
+            url_github = f"https://api.github.com/repos/{REPO_OWNER}/{REPO_NAME}/contents/{file_path}"
+            payload = {
+                "message": f"Adicionando vídeo {uploaded_video.name} via Streamlit",
+                "content": video_base64,
+                "branch": BRANCH
+            }
+            headers = {"Authorization": f"token {GITHUB_TOKEN}"}
+            
+            with st.spinner("Enviando vídeo para o GitHub..."):
+                response = requests.put(url_github, json=payload, headers=headers)
+            
+            if response.status_code in [201, 200]:
+                # Se for upload, salvamos o caminho do arquivo ou a URL bruta do GitHub
+                video_url_final = f"https://raw.githubusercontent.com/{REPO_OWNER}/{REPO_NAME}/{BRANCH}/{file_path}"
+                st.toast("Vídeo enviado ao GitHub com sucesso!", icon="📤")
+            else:
+                st.error("Erro ao enviar para o GitHub. Verifique o tamanho do arquivo.")
+                return
+
+        # Salvar no Google Sheets
+        if video_url_final or uploaded_video:
+            existing_data = conn.read(worksheet="Vídeos")
+            
+            novo_video = pd.DataFrame({
+                'Materia': [materia],
+                'Titulo': [titulo],
+                'Descrição': [descricao],
+                'URL_Video': [video_url_final]
+            })
+
+            combined_data = pd.concat([existing_data, novo_video], ignore_index=True)
+            conn.update(worksheet="Vídeos", data=combined_data)
+            
+            st.success("Dados salvos na planilha!", icon="✅")
+            st.balloons()
+            st.rerun()
+        else:
+            st.warning("Por favor, adicione um vídeo ou uma URL.")
+
+    # 5. Visualização Prévia
+    if video_url_final or uploaded_video:
+        with st.expander("Visualizar Prévia"):
+            if uploaded_video:
+                st.video(uploaded_video)
+            elif video_url_final:
+                st.video(video_url_final)
+                
 def inserir_ques():   
     # Carregar configurações do secrets para o github
     GITHUB_TOKEN = st.secrets["github"]["token"]
@@ -365,6 +456,7 @@ def deletar_ques():
 
         st.toast(':green-background[Questão deletada com sucesso]', icon='✔️')
         st.rerun()
+
 
 
 
