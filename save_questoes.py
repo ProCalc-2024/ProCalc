@@ -155,9 +155,8 @@ def editar_video():
 
     conn = st.connection("gsheets", type=GSheetsConnection)
 
-    # 1. Carregar Dados
+    # 1. Carregar Dados da aba "Videos"
     try:
-        # Ler a aba correta "Videos" e limpar dados vazios
         df_videos = conn.read(worksheet="Videos", ttl=0).fillna("")
     except Exception as e:
         st.error(f"Erro ao acessar a aba 'Videos'. Verifique a planilha. Erro: {e}")
@@ -171,26 +170,21 @@ def editar_video():
     titulos = df_videos["Titulo"].tolist()
     video_selecionado = st.selectbox("Selecione o vídeo para editar:", titulos)
 
-    # Encontrar os dados originais na planilha
     idx = df_videos[df_videos["Titulo"] == video_selecionado].index[0]
     dados_atuais = df_videos.iloc[idx]
 
     st.divider()
 
-    # --- ÁREA DE PRÉ-VISUALIZAÇÃO DO VÍDEO ATUAL (BANCO DE DADOS) ---
+    # --- ÁREA DE PRÉ-VISUALIZAÇÃO DO QUE ESTÁ SALVO ---
     with st.expander("📺 Ver o vídeo que está salvo atualmente", expanded=False):
         if dados_atuais["URL_Video"]:
-            st.caption(f"Link atual: {dados_atuais['URL_Video']}")
             st.video(dados_atuais["URL_Video"])
         else:
-            st.warning("Este vídeo não possui um link salvo atualmente.")
+            st.warning("Sem link salvo.")
     
     st.divider()
 
-    # --- ÁREA DE EDIÇÃO COM PREVIEW AO VIVO ---
-    st.subheader(f"Editando: {video_selecionado}")
-
-    # Lógica de Estado: Se mudamos de vídeo no selectbox, recarregamos os dados originais nos campos
+    # --- LÓGICA DE SESSION STATE ---
     if "ultimo_video_selecionado" not in st.session_state or st.session_state["ultimo_video_selecionado"] != video_selecionado:
         st.session_state["ultimo_video_selecionado"] = video_selecionado
         st.session_state["draft_titulo"] = dados_atuais["Titulo"]
@@ -198,72 +192,69 @@ def editar_video():
         st.session_state["draft_descricao"] = dados_atuais["Descrição"]
         st.session_state["draft_url"] = dados_atuais["URL_Video"]
 
-    # Campos de Entrada (Vinculados ao Session State pelos 'keys')
-    # Ao digitar aqui e apertar Enter ou clicar fora, o Session State atualiza
+    # --- FORMULÁRIO DE EDIÇÃO ---
     col_form1, col_form2 = st.columns(2)
+    
     with col_form1:
         st.text_input("Título:", key="draft_titulo")
         
-        # Carregar matérias
+        # Bloco Try/Except para carregar matérias (CORRIGIDO)
         try:
             df_mat = conn.read(worksheet="Materias").fillna("")
             lista_mats = df_mat["Materia"].tolist()
-            # Encontra o índice da matéria atual para deixar selecionado
             try:
                 idx_mat_atual = lista_mats.index(st.session_state["draft_materia"])
             except ValueError:
                 idx_mat_atual = 0
-            st.selectbox("Matéria:", lista_mats, index=idx_mat_atual, key="draft_materia")
             
+            st.selectbox("Matéria:", lista_mats, index=idx_mat_atual, key="draft_materia")
+        except Exception:
+            st.error("Erro ao carregar lista de matérias.")
+            # Fallback caso a planilha de matérias falhe
+            st.text_input("Matéria (digite manualmente):", key="draft_materia")
+
     with col_form2:
-        st.text_area("Descrição:", height=100, key="draft_descricao")
+        st.text_area("Descrição:", height=115, key="draft_descricao")
 
     st.subheader("Alteração de Link e Preview")
-    # O campo de URL crucial
-    url_input = st.text_input("URL do Vídeo (YouTube/Link Direto):", key="draft_url")
+    st.text_input("URL do Vídeo (YouTube/Link Direto):", key="draft_url")
 
-    # --- O PREVIEW AO VIVO ---
-    # Este player usa o valor que está AGORA na caixa de texto (session state)
+    # Preview em tempo real
     with st.container(border=True):
-        st.caption("Pré-visualização das alterações (O vídeo abaixo mostra o link que você digitou acima):")
-        if st.session_state["draft_url"].strip():
-             # Tenta exibir o vídeo. Se o link for inválido, o st.video geralmente mostra um erro amigável.
-            st.video(st.session_state["draft_url"])
+        st.caption("Pré-visualização do novo link:")
+        url_preview = st.session_state["draft_url"].strip()
+        if url_preview:
+            try:
+                st.video(url_preview)
+            except Exception:
+                st.error("Não foi possível carregar o vídeo com este link.")
         else:
-            st.info("Digite uma URL acima para ver a pré-visualização.")
+            st.info("Digite uma URL para ver o preview.")
 
     st.divider()
 
-    # 4. Botões de Ação (Fora de st.form para permitir o preview ao vivo acima)
-    col_actions1, col_actions2, _ = st.columns([1, 1, 2])
+    # 4. Botões de Ação
+    col_btn1, col_btn2, _ = st.columns([1, 1, 2])
     
-    with col_actions1:
+    with col_btn1:
         if st.button("💾 Salvar Alterações", type="primary", use_container_width=True):
-            # Atualiza o DataFrame com os dados do Session State (drafts)
             df_videos.at[idx, "Titulo"] = st.session_state["draft_titulo"]
             df_videos.at[idx, "Materia"] = st.session_state["draft_materia"]
             df_videos.at[idx, "Descrição"] = st.session_state["draft_descricao"]
             df_videos.at[idx, "URL_Video"] = st.session_state["draft_url"]
 
-            with st.spinner("Salvando na planilha..."):
-                conn.update(worksheet="Videos", data=df_videos)
-            
-            st.success("Vídeo atualizado com sucesso!")
-            # Limpa o estado para forçar recarregamento na próxima vez
+            conn.update(worksheet="Videos", data=df_videos)
+            st.success("Vídeo atualizado!")
             del st.session_state["ultimo_video_selecionado"]
             st.rerun()
 
-    with col_actions2:
-        if st.button("🗑️ Excluir Vídeo", type="secondary", use_container_width=True):
-             with st.expander("Tem certeza?"):
-                 st.write("Essa ação não pode ser desfeita.")
-                 if st.button("Confirmar Exclusão Permanentemente", type="primary"):
-                    with st.spinner("Excluindo..."):
-                        df_videos = df_videos.drop(idx)
-                        conn.update(worksheet="Videos", data=df_videos)
-                    st.warning("Vídeo excluído.")
-                    del st.session_state["ultimo_video_selecionado"]
-                    st.rerun()
+    with col_btn2:
+        if st.button("🗑️ Excluir Vídeo", use_container_width=True):
+            df_videos = df_videos.drop(idx)
+            conn.update(worksheet="Videos", data=df_videos)
+            st.warning("Vídeo excluído.")
+            del st.session_state["ultimo_video_selecionado"]
+            st.rerun()
 
 def inserir_ques():   
     # Carregar configurações do secrets para o github
@@ -624,6 +615,7 @@ def deletar_ques():
 
         st.toast(':green-background[Questão deletada com sucesso]', icon='✔️')
         st.rerun()
+
 
 
 
