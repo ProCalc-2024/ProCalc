@@ -100,58 +100,55 @@ def inserir_video():
 def galeria_videos():
     st.header("🎥 Galeria de Aulas")
 
-    # 1. Conexão e Leitura dos Dados
     conn = st.connection("gsheets", type=GSheetsConnection)
     
     try:
-        # Lê a aba de Vídeos (certifique-se que o nome está correto)
-        df_videos = conn.read(worksheet="Videos", ttl=0)
+        # ttl=0 evita cache para ver novos vídeos na hora
+        df_videos = conn.read(worksheet="Vídeos", ttl=0)
     except Exception:
-        st.error("Não foi possível carregar a planilha de vídeos. Verifique se a aba 'Vídeos' existe.")
+        st.error("Planilha 'Vídeos' não encontrada.")
         return
 
     if df_videos.empty:
-        st.info("Nenhum vídeo cadastrado ainda.")
+        st.info("Nenhum vídeo cadastrado.")
         return
 
-    # 2. Filtros na Barra Lateral ou no Topo
-    materias_disponiveis = ["Todos"] + sorted(df_videos["Materia"].unique().tolist())
-    
-    col_filtro, _ = st.columns([1, 2])
-    with col_filtro:
-        selecao_materia = st.selectbox("Filtrar por Matéria:", materias_disponiveis)
+    # --- LIMPEZA DE DADOS ---
+    # Remove linhas onde a URL do vídeo está totalmente vazia
+    df_videos = df_videos.dropna(subset=['URL_Video'])
+    # ------------------------
 
-    # Filtragem do DataFrame
-    if selecao_materia != "Todos":
-        df_filtrado = df_videos[df_videos["Materia"] == selecao_materia]
-    else:
-        df_filtrado = df_videos
+    materias = ["Todos"] + sorted(df_videos["Materia"].unique().tolist())
+    selecao = st.selectbox("Filtrar por Matéria:", materias)
+
+    df_filtrado = df_videos if selecao == "Todos" else df_videos[df_videos["Materia"] == selecao]
 
     st.divider()
 
-    # 3. Exibição da Galeria
-    if df_filtrado.empty:
-        st.warning("Nenhum vídeo encontrado para esta matéria.")
-    else:
-        # Vamos exibir os vídeos em uma grade (grid) ou lista
-        for index, row in df_filtrado.iterrows():
+    for index, row in df_filtrado.iterrows():
+        # Verificação extra: garante que a URL é uma string e não está vazia
+        video_url = row['URL_Video']
+        
+        if isinstance(video_url, str) and video_url.strip() != "":
             with st.container():
                 col_video, col_info = st.columns([1.5, 1])
                 
                 with col_video:
-                    # O Streamlit já identifica se é YouTube ou arquivo direto
-                    st.video(row['URL_Video'])
+                    st.video(video_url)
                 
                 with col_info:
-                    st.subheader(row['Titulo'])
-                    st.caption(f"📚 Matéria: {row['Materia']}")
-                    st.write(row['Descrição'])
+                    # Usando .get() ou verificação simples para evitar erros de nomes de colunas
+                    titulo = row.get('Titulo', 'Sem Título')
+                    desc = row.get('Descrição', '')
                     
-                    # Botão opcional para marcar como visto (exemplo visual)
-                    if st.button(f"Concluir Aula", key=f"btn_{index}"):
-                        st.toast(f"Aula '{row['Titulo']}' marcada como concluída!")
+                    st.subheader(titulo)
+                    st.caption(f"📚 {row['Materia']}")
+                    st.write(desc)
                 
                 st.divider()
+        else:
+            # Opcional: avisar que um vídeo está com link quebrado
+            st.warning(f"O vídeo '{row.get('Titulo', index)}' está sem um link válido.")
 
 def inserir_ques():   
     # Carregar configurações do secrets para o github
@@ -512,6 +509,7 @@ def deletar_ques():
 
         st.toast(':green-background[Questão deletada com sucesso]', icon='✔️')
         st.rerun()
+
 
 
 
