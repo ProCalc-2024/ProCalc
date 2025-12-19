@@ -107,28 +107,29 @@ Python
 def galeria_videos():
     st.header("🎥 Galeria de Aulas")
 
-    # Conexão com o Google Sheets
+    # 1. Conexão e Leitura Segura
     conn = st.connection("gsheets", type=GSheetsConnection)
     
     try:
-        # Lê a aba "Videos" e remove valores nulos para evitar erro de float
+        # Lendo a aba "Videos" e tratando células vazias imediatamente
         df_videos = conn.read(worksheet="Videos", ttl=0).fillna("")
-    except Exception:
-        st.error("Não foi possível carregar a aba 'Videos'. Verifique o nome na planilha.")
+    except Exception as e:
+        st.error(f"Erro ao carregar a aba 'Videos': {e}")
         return
 
     if df_videos.empty:
         st.info("Nenhum vídeo cadastrado ainda.")
         return
 
-    # 1. Filtros no Topo
+    # 2. Filtros de Matéria
+    # Pegamos as matérias únicas para o filtro
     materias_disponiveis = ["Todos"] + sorted(df_videos["Materia"].unique().tolist())
     
     col_filtro, _ = st.columns([1, 2])
     with col_filtro:
         selecao_materia = st.selectbox("Filtrar por Matéria:", materias_disponiveis)
 
-    # Lógica de filtragem
+    # Filtragem dos dados
     if selecao_materia != "Todos":
         df_filtrado = df_videos[df_videos["Materia"] == selecao_materia]
     else:
@@ -136,33 +137,42 @@ def galeria_videos():
 
     st.divider()
 
-    # 2. Exibição da Lista (Layout Limpo)
+    # 3. Exibição em Lista (Estilo que você preferiu)
     if df_filtrado.empty:
         st.warning("Nenhum vídeo encontrado para esta matéria.")
     else:
         for index, row in df_filtrado.iterrows():
+            # Criamos um container para cada item da lista
             with st.container():
-                # Criamos duas colunas: uma para o vídeo e outra para o texto
-                col_video, col_info = st.columns([1.5, 1])
+                col_video, col_info = st.columns([1.6, 1])
                 
                 with col_video:
-                    # Exibe apenas o player do vídeo (a URL não aparece escrita)
-                    if row['URL_Video']:
-                        st.video(row['URL_Video'])
+                    # Exibição do vídeo (URL não é impressa, apenas processada pelo player)
+                    video_url = row['URL_Video']
+                    if video_url:
+                        try:
+                            st.video(video_url)
+                        except Exception:
+                            st.error("Erro ao carregar este vídeo.")
                     else:
-                        st.warning("Vídeo sem link disponível.")
+                        st.warning("Link de vídeo não encontrado.")
                 
                 with col_info:
-                    # Informações textuais
+                    # Informações textuais (Sem URL aqui)
                     st.subheader(row['Titulo'])
-                    st.caption(f"📚 Matéria: {row['Materia']}")
+                    st.markdown(f"**📚 Matéria:** {row['Materia']}")
                     st.write(row['Descrição'])
                     
-                    # Botão de interação (opcional)
-                    if st.button(f"Marcar como assistido", key=f"check_{index}"):
-                        st.toast(f"Aula '{row['Titulo']}' concluída!")
+                    # Espaçador para o botão ficar no final
+                    st.write("")
+                    if st.button(f"Concluir Aula", key=f"check_{index}", use_container_width=True):
+                        st.toast(f"Aula '{row['Titulo']}' marcada como vista!", icon="✅")
                 
+                # Linha separadora entre os vídeos da lista
                 st.divider()
+
+# Para chamar no seu main.py:
+# galeria_videos()
         
 def editar_video():
     st.header("✏️ Editar Vídeos com Pré-visualização")
@@ -485,6 +495,7 @@ def deletar_ques():
 
         st.toast(':green-background[Questão deletada com sucesso]', icon='✔️')
         st.rerun()
+
 
 
 
