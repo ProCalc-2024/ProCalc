@@ -105,7 +105,7 @@ def galeria_videos():
     
     try:
         # Lê a aba de Vídeos (certifique-se que o nome está correto)
-        df_videos = conn.read(worksheet="Vídeos", ttl=0)
+        df_videos = conn.read(worksheet="Videos", ttl=0)
     except Exception:
         st.error("Não foi possível carregar a planilha de vídeos. Verifique se a aba 'Vídeos' existe.")
         return
@@ -512,6 +512,7 @@ def deletar_ques():
 
         st.toast(':green-background[Questão deletada com sucesso]', icon='✔️')
         st.rerun()
+
 
 
 
