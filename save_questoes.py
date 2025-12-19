@@ -97,69 +97,72 @@ def inserir_video():
             elif video_url_final:
                 st.video(video_url_final)
 
-def galeria_videos():
-    # CSS para arredondar cantos do vídeo e ajustar fontes
-    st.markdown("""
-        <style>
-        .stVideo { border-radius: 15px; overflow: hidden; }
-        .video-title { 
-            font-size: 14px; 
-            font-weight: bold; 
-            margin-top: 8px; 
-            line-height: 1.2;
-            display: -webkit-box;
-            -webkit-line-clamp: 2;
-            -webkit-box-orient: vertical;
-            overflow: hidden;
-        }
-        .video-desc { 
-            font-size: 12px; 
-            color: #808080; 
-            margin-top: 4px;
-        }
-        </style>
-    """, unsafe_allow_html=True)
+Entendido! Se você prefere a primeira versão da Galeria, vamos focar nela. Aquela versão era mais robusta para fins educacionais, pois apresentava os vídeos em uma lista clara com informações detalhadas ao lado, o que facilita a leitura de descrições mais longas.
 
+Abaixo, apresento o código daquela primeira versão, mas já com o ajuste crucial para não exibir a URL e utilizando o nome correto da aba ("Videos").
+
+Função galeria_videos (Versão Lista Organizada)
+Python
+
+def galeria_videos():
+    st.header("🎥 Galeria de Aulas")
+
+    # Conexão com o Google Sheets
     conn = st.connection("gsheets", type=GSheetsConnection)
     
     try:
+        # Lê a aba "Videos" e remove valores nulos para evitar erro de float
         df_videos = conn.read(worksheet="Videos", ttl=0).fillna("")
     except Exception:
-        st.error("Erro ao carregar a aba 'Videos'.")
+        st.error("Não foi possível carregar a aba 'Videos'. Verifique o nome na planilha.")
         return
 
     if df_videos.empty:
-        st.info("Nenhum vídeo disponível.")
+        st.info("Nenhum vídeo cadastrado ainda.")
         return
 
-    materias = sorted(df_videos["Materia"].unique().tolist())
+    # 1. Filtros no Topo
+    materias_disponiveis = ["Todos"] + sorted(df_videos["Materia"].unique().tolist())
     
-    for materia in materias:
-        st.subheader(f"🔴 {materia}")
-        
-        videos_materia = df_videos[df_videos["Materia"] == materia]
-        
-        # 4 colunas costumam funcionar melhor para manter o formato vertical do Shorts
-        n_videos = 4 
-        cols = st.columns(n_videos)
-        
-        for i, (_, video) in enumerate(videos_materia.iterrows()):
-            col_idx = i % n_videos
-            
-            with cols[col_idx]:
-                url = video['URL_Video']
-                if url:
-                    # Exibimos apenas o player (a URL fica "escondida" dentro do componente)
-                    st.video(url)
-                    
-                    # Título e Descrição formatados via HTML para controle total do visual
-                    st.markdown(f"""
-                        <div class='video-title'>{video['Titulo']}</div>
-                        <div class='video-desc'>{video['Descrição'][:50]}...</div>
-                    """, unsafe_allow_html=True)
+    col_filtro, _ = st.columns([1, 2])
+    with col_filtro:
+        selecao_materia = st.selectbox("Filtrar por Matéria:", materias_disponiveis)
+
+    # Lógica de filtragem
+    if selecao_materia != "Todos":
+        df_filtrado = df_videos[df_videos["Materia"] == selecao_materia]
+    else:
+        df_filtrado = df_videos
+
+    st.divider()
+
+    # 2. Exibição da Lista (Layout Limpo)
+    if df_filtrado.empty:
+        st.warning("Nenhum vídeo encontrado para esta matéria.")
+    else:
+        for index, row in df_filtrado.iterrows():
+            with st.container():
+                # Criamos duas colunas: uma para o vídeo e outra para o texto
+                col_video, col_info = st.columns([1.5, 1])
                 
-        st.write("") 
-        st.divider()
+                with col_video:
+                    # Exibe apenas o player do vídeo (a URL não aparece escrita)
+                    if row['URL_Video']:
+                        st.video(row['URL_Video'])
+                    else:
+                        st.warning("Vídeo sem link disponível.")
+                
+                with col_info:
+                    # Informações textuais
+                    st.subheader(row['Titulo'])
+                    st.caption(f"📚 Matéria: {row['Materia']}")
+                    st.write(row['Descrição'])
+                    
+                    # Botão de interação (opcional)
+                    if st.button(f"Marcar como assistido", key=f"check_{index}"):
+                        st.toast(f"Aula '{row['Titulo']}' concluída!")
+                
+                st.divider()
         
 def editar_video():
     st.header("✏️ Editar Vídeos com Pré-visualização")
@@ -482,6 +485,7 @@ def deletar_ques():
 
         st.toast(':green-background[Questão deletada com sucesso]', icon='✔️')
         st.rerun()
+
 
 
 
