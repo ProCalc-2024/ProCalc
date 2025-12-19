@@ -266,22 +266,23 @@ def read_questao():
                     st.session_state.running = False
                     clicar_botao()
 
-    # Mostra cronômetro na interface
-    if st.session_state.running:
-        update_timer()
-        hours, remainder = divmod(st.session_state.time_left, 3600)
-        minutes, seconds = divmod(remainder, 60)
-        formatted_time = f"{int(hours):02}:{int(minutes):02}:{int(seconds):02}"
-        st.write(f"⏳ {formatted_time}")
-        time.sleep(1)
-        st.rerun()
-    elif st.session_state.time_left == 0 and disabled3:
-        st.write("⏳ Tempo finalizado")
+        # Mostra cronômetro na interface
+        if st.session_state.running:
+            update_timer()
+            hours, remainder = divmod(st.session_state.time_left, 3600)
+            minutes, seconds = divmod(remainder, 60)
+            formatted_time = f"{int(hours):02}:{int(minutes):02}:{int(seconds):02}"
+            st.write(f"⏳ {formatted_time}")
+            time.sleep(1)
+            st.rerun()
+        elif st.session_state.time_left == 0 and disabled3:
+            st.write("⏳ Tempo finalizado")
 
-    # Botão para iniciar o questionário
-    if st.session_state["disabled"] in [True, False]:
-        if st.button("Iniciar questionário", on_click=new_questionario):
-            pass
+        # Botão para iniciar o questionário
+        if st.session_state["disabled"] in [True, False]:
+            if st.button("Iniciar questionário", on_click=new_questionario):
+                pass
+
 
 
 
