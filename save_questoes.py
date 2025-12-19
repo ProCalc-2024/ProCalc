@@ -98,72 +98,62 @@ def inserir_video():
                 st.video(video_url_final)
 
 def galeria_videos():
-    st.header("🎥 Galeria de Aulas")
+    # Estilização CSS para remover espaços extras e bordas
+    st.markdown("""
+        <style>
+        .stVideo { border-radius: 12px; } /* Arredonda os cantos do vídeo como no Shorts */
+        </style>
+    """, unsafe_allow_html=True)
 
     conn = st.connection("gsheets", type=GSheetsConnection)
     
     try:
-        # Lê a aba "Videos" e limpa NaNs para evitar erro de float
         df_videos = conn.read(worksheet="Videos", ttl=0).fillna("")
     except Exception:
-        st.error("Não foi possível carregar a aba 'Videos'.")
+        st.error("Erro ao carregar a aba 'Videos'.")
         return
 
     if df_videos.empty:
-        st.info("Nenhum vídeo cadastrado.")
+        st.info("Nenhum vídeo disponível.")
         return
 
-    # 1. Filtro de busca e Matéria (Estilo barra de busca do YouTube)
-    col_f1, col_f2 = st.columns([2, 1])
-    with col_f1:
-        busca = st.text_input("🔍 Pesquisar vídeo pelo título...", placeholder="Ex: Introdução à Álgebra")
-    with col_f2:
-        materias = ["Todas"] + sorted(df_videos["Materia"].unique().tolist())
-        selecao_materia = st.selectbox("Filtrar por Matéria", materias)
-
-    # Filtragem lógica
-    df_filtrado = df_videos
-    if selecao_materia != "Todas":
-        df_filtrado = df_filtrado[df_filtrado["Materia"] == selecao_materia]
-    if busca:
-        df_filtrado = df_filtrado[df_filtrado["Titulo"].str.contains(busca, case=False)]
-
-    st.divider()
-
-    # 2. Grade de Vídeos (Estilo YouTube: 3 vídeos por linha)
-    if df_filtrado.empty:
-        st.warning("Nenhum vídeo encontrado para os filtros selecionados.")
-    else:
-        # Definimos quantas colunas queremos (3 é o padrão do YT em telas médias)
-        n_cols = 3
-        rows = [df_filtrado.iloc[i:i+n_cols] for i in range(0, len(df_filtrado), n_cols)]
-
-        for row_data in rows:
-            cols = st.columns(n_cols)
-            for i, (_, video) in enumerate(row_data.iterrows()):
-                with cols[i]:
-                    # Container para agrupar o vídeo e as infos como um "card"
-                    with st.container(border=True):
-                        # O player de vídeo (equivalente à Thumbnail)
-                        url = video['URL_Video']
-                        if url:
-                            st.video(url)
-                        else:
-                            st.error("Link indisponível")
-                        
-                        # Informações abaixo do vídeo
-                        st.subheader(video['Titulo'], divider="gray")
-                        st.caption(f"📚 {video['Materia']}")
-                        
-                        # Descrição com limite de caracteres para manter o alinhamento
-                        desc = video['Descrição']
-                        resumo = (desc[:75] + '...') if len(desc) > 75 else desc
-                        st.write(resumo)
-                        
-                        # Botão de detalhes (opcional)
-                        if st.button("Assistir em tela cheia", key=f"watch_{video.name}", use_container_width=True):
-                            st.toast(f"Abrindo: {video['Titulo']}")
-                            # Aqui você poderia abrir um modal ou expander com o vídeo maior
+    # Filtro por Matéria (Opcional, mas útil)
+    materias = sorted(df_videos["Materia"].unique().tolist())
+    
+    for materia in materias:
+        # Título da Seção (Ex: Matemática, Shorts, etc)
+        st.subheader(f"🔴 {materia}", divider=None)
+        
+        # Filtra os vídeos desta matéria específica
+        videos_materia = df_videos[df_videos["Materia"] == materia]
+        
+        # Define o número de vídeos por fila (5 para parecer Shorts)
+        n_videos = 5
+        # Cria as colunas sem container em volta
+        cols = st.columns(n_videos)
+        
+        # Itera sobre os vídeos daquela matéria
+        for i, (_, video) in enumerate(videos_materia.iterrows()):
+            # Usa o operador módulo (%) para distribuir nas colunas disponíveis
+            col_idx = i % n_videos
+            
+            with cols[col_idx]:
+                url = video['URL_Video']
+                if url:
+                    # Exibe o vídeo
+                    st.video(url)
+                    
+                    # Título e Visualizações (Estilo YouTube)
+                    # Usamos markdown para diminuir a fonte e aproximar do estilo da imagem
+                    st.markdown(f"""
+                        <div style='line-height: 1.2;'>
+                            <strong style='font-size: 14px;'>{video['Titulo']}</strong><br>
+                            <span style='font-size: 12px; color: gray;'>{video['Descrição'][:40]}...</span>
+                        </div>
+                    """, unsafe_allow_html=True)
+                
+        st.write("") # Espaço entre matérias
+        st.divider()
 
 def editar_video():
     st.header("✏️ Editar Vídeos com Pré-visualização")
@@ -486,6 +476,7 @@ def deletar_ques():
 
         st.toast(':green-background[Questão deletada com sucesso]', icon='✔️')
         st.rerun()
+
 
 
 
